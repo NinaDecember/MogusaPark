@@ -1,16 +1,49 @@
+using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using random = UnityEngine.Random;
 
 public class CharaMove : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float speed = 2.0f;
+    Vector2 randomposition;
+    Vector2 ReverseP;
+    void Start()//初期位置設定
     {
-        
+        Camera cam = Camera.main;
+        if (random.value < 0.25f)
+        {
+            randomposition = new Vector2(random.Range(-0.5f, -0.1f), random.Range(-0.5f, -0.1f));
+        }
+        else if (random.value < 0.5f)
+        {
+            randomposition = new Vector2(random.Range(-0.5f, -0.1f), random.Range(1.1f, 1.5f));
+        }
+        else if (random.value < 0.75f)
+        {
+            randomposition = new Vector2(random.Range(1.1f, 1.5f), random.Range(1.1f, 1.5f));
+        }
+        else
+        {
+            randomposition = new Vector2(random.Range(1.1f, 1.5f), random.Range(-0.5f, -0.1f));
+        }
+        transform.position = cam.ViewportToWorldPoint(randomposition);
+
+        ReverseP = cam.ViewportToWorldPoint(new Vector2(1 - randomposition.x, 1 - randomposition.y));//中心に向かうベクトル計算
+        Debug.Log(ReverseP);
+        Debug.Log(randomposition);
+        StartCoroutine("Moving");//移動開始
+    }
+    IEnumerator Moving()
+    {
+        while (true)
+        {
+            transform.Translate(ReverseP * speed * Time.deltaTime);
+            yield return null;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
