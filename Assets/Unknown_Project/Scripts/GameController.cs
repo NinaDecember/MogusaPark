@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    private LevelData levelData;
+    [SerializeField] private LevelData levelData;
     private GameManager manager;
+    private ButtonController ctrlB;
     
     private double time;
     private double deltaTime;
@@ -12,8 +13,8 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        levelData = FindFirstObjectByType<LevelData>();
         manager = FindFirstObjectByType<GameManager>();
+        ctrlB = FindFirstObjectByType<ButtonController>();
 
 
         time = 0.0;
@@ -28,6 +29,11 @@ public class GameController : MonoBehaviour
         if(manager.GetGameState() == GameSceneState.Load)
         {
             Time.timeScale = 0;
+            manager.LoadSampleButton();
+            foreach(bool flg in manager.loadClear)
+            {
+                if(!flg)return;
+            }
             manager.SetGameState(GameSceneState.CountDown);
         }
         else if(manager.GetGameState() == GameSceneState.CountDown)
@@ -37,11 +43,13 @@ public class GameController : MonoBehaviour
         }
         else if(manager.GetGameState() == GameSceneState.Playing)
         {
+            Debug.Log("Playing");
             Time.timeScale = 1;
 
             deltaTime = Time.deltaTime;
             time += deltaTime;
-            
+
+            ctrlB.BCUpdate();
 
         }
         else if(manager.GetGameState() == GameSceneState.Pause)

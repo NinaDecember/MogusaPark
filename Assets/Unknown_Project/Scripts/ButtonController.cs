@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
 
 public class ButtonController : MonoBehaviour
 {
-    private LevelData levelData;
+    private ButtonManager managerB;
+    [SerializeField] private LevelData levelData;
 
     [SerializeField] private GameObject centorSampleBack;
+    [SerializeField] private GameObject sampleSpacePrefab;
+    [SerializeField] private Transform canvasTransform;
     private RectTransform rt;
 
     private double baseWidth;
@@ -22,46 +26,30 @@ public class ButtonController : MonoBehaviour
         public Vector2 center;
     }
 
-    private List<List<Vector2>>SamplePositions;
+    private List<SampleSpaceData> sampleSpaceList;
+    private List<List<Vector2>>samplePositions;
+    private List<GameObject>sampleBack;
 
 
     private void Start()
     {
-        levelData = FindFirstObjectByType<LevelData>();
+        managerB = FindFirstObjectByType<ButtonManager>();
 
         rt = centorSampleBack.GetComponent<RectTransform>();
         baseCenter = rt.anchoredPosition;
         baseHeight = rt.rect.height;
         baseWidth = rt.rect.width;
-        SamplePositions = CulcSamplePositions();
+        sampleSpaceList = CulcSampleSpaceData();
+        samplePositions = CulcSamplePositions();
+        DrawSampleSpace();
     }
 
-    const int SAMPLE_STEP_COUNT = 4;
-    const double BASE_SCALE = 0.8;
-    private List<List<Vector2>> CulcSamplePositions()
-    {
-        List<SampleSpaceData> sampleSpaceData = CulcSampleSpaceData();
 
-        List<List<Vector2>> posList = new List<List<Vector2>>();
 
-        for(int i=0; i<SAMPLE_STEP_COUNT; i++)
-        {
-            List<Vector2>rowPosList = new List<Vector2>();
 
-            double x = 0;
-            double y = sampleSpaceData[i].center.y;
-            double interval = sampleSpaceData[i].width/levelData.samplePerRow;
-            double leftSpace = interval/2;
-            for(int j=0; j<levelData.samplePerRow; j++)
-            {
-                x = leftSpace + interval*j;
-                rowPosList.Add(new Vector2((float)x,(float)y));
-            }
 
-            posList.Add(rowPosList);
-        }
-        return posList;
-    }
+    private int SAMPLE_STEP_COUNT = LevelData.SAMPLE_STEP_COUNT;
+    const double BASE_SCALE = 0.68;
     private List<SampleSpaceData> CulcSampleSpaceData()
     {
         List<SampleSpaceData> data = new List<SampleSpaceData>();
@@ -75,8 +63,10 @@ public class ButtonController : MonoBehaviour
         for(int i=1; i<SAMPLE_STEP_COUNT; i++)
         {
             SampleSpaceData ssd = new SampleSpaceData();
-            ssd.width = data[i-1].width * Math.Pow(BASE_SCALE,i);
-            ssd.height = data[i-1].height * Math.Pow(BASE_SCALE,i);
+            // ssd.width = data[i-1].width * Math.Pow(BASE_SCALE,i);
+            // ssd.height = data[i-1].height * Math.Pow(BASE_SCALE,i);
+            ssd.width = data[i-1].width * BASE_SCALE;
+            ssd.height = data[i-1].height * BASE_SCALE;
             
             double centerX = baseCenter.x;
             
@@ -85,8 +75,12 @@ public class ButtonController : MonoBehaviour
                 double lastHeight = data[i-1].height;
                 lastTopY = lastCenterY + lastHeight/2;
             }
+            Debug.Log(lastTopY);
             double currentHeightHalf = ssd.height/2;
+            Debug.Log(currentHeightHalf);
             double currentCentorY = lastTopY + currentHeightHalf;
+            Debug.Log(currentCentorY);
+            Debug.Log("--------------------");
 
             ssd.center = new Vector2((float)centerX,(float)currentCentorY);
 
@@ -97,15 +91,86 @@ public class ButtonController : MonoBehaviour
         }
         return data;
     }
-
-    private void Update()
+    private List<List<Vector2>> CulcSamplePositions()
     {
-        
+        List<List<Vector2>> posList = new List<List<Vector2>>();
+
+        for(int i=0; i<SAMPLE_STEP_COUNT; i++)
+        {
+            List<Vector2>rowPosList = new List<Vector2>();
+
+            double x = 0;
+            double y = sampleSpaceList[i].center.y;
+            double interval = sampleSpaceList[i].width/levelData.samplePerRow;
+            double leftSpace = interval/2;
+            double leftX = -sampleSpaceList[i].width/2;
+            for(int j=0; j<levelData.samplePerRow; j++)
+            {
+                x = leftX + leftSpace + interval*j;
+                rowPosList.Add(new Vector2((float)x,(float)y));
+            }
+
+            posList.Add(rowPosList);
+        }
+        return posList;
+    }
+
+    private void DrawSampleSpace()
+    {
+        sampleBack = new List<GameObject>();
+        for(int i=LevelData.SAMPLE_STEP_COUNT-1; i>0; i--)
+        {
+            Debug.Log(i);
+            GameObject back = Instantiate(sampleSpacePrefab,canvasTransform);
+            RectTransform rt = back.GetComponent<RectTransform>();
+            rt.anchoredPosition = sampleSpaceList[i].center;    
+            rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,i);
+            sampleBack.Add(back);
+        }
+
+    }
+
+
+
+
+
+
+
+
+    public void BCUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            managerB.UpdateButtons();
+        }
+
     }
 
     public Vector2 GetButtonPos(int step, int col)
     {
-        return SamplePositions[step][col];
+        return samplePositions[step][col];
+    }
+
+    public void ReDrawSample(Queue<List<GameObject>> buttons)
+    {
+        int rowCnt = 0;
+        foreach(var rowButtons in buttons)
+        {
+            int colCnt = 0;
+            foreach(var button in rowButtons)
+            {
+                RectTransform rt = button.GetComponent<RectTransform>();
+                
+                Vector2 pos = rt.anchoredPosition;
+                pos = samplePositions[rowCnt][colCnt];
+                rt.anchoredPosition = pos;
+
+                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE/* * 0.75*/,rowCnt);
+
+                colCnt++;
+            }
+            rowCnt++;
+        }
     }
 
 }

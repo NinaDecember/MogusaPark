@@ -13,4 +13,13 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   CourseDistance: 10
-  ButtonPrefabs: []
+  samplePerRow: 4
+  ButtonPrefabs:
+  - {fileID: 7963753578929149573, guid: 0136ff481a20f5f47a345fc366bf258d, type: 3}
+  - {fileID: 4130138806361674779, guid: 6d1e668a16b360e49a00a8000a49d4f4, type: 3}
+  - {fileID: 8780605389588522542, guid: 70039e01587b4b34b931436ad0f4e73d, type: 3}
+  - {fileID: 9123015030336360368, guid: a4707966bdaddfa4c9fb344f236c909e, type: 3}
+  - {fileID: 8317257064943374078, guid: 99daa759793053947a6ba212d78629b0, type: 3}
+  - {fileID: 5715816822959657182, guid: d10ad75ea36a98342b77c8ff598c825e, type: 3}
+  - {fileID: 2677703836171880631, guid: 4a8ea7cc13cd44d45ae267da79374fca, type: 3}
+  - {fileID: 2335511472961484232, guid: dd6dd2ec12eeebd49af111a560457d23, type: 3}

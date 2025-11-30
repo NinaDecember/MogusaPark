@@ -5,24 +5,48 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
-    private LevelData levelData;
+    [SerializeField] private LevelData levelData;
     private GameManager manager;
+    private ButtonController ctrlB;
     private ButtonSpawner spawner;
-    private Queue<List<Button>>sampleList;
+    private Queue<List<GameObject>>sampleGenList;
 
 
     private void Start()
     {
-        levelData = FindFirstObjectByType<LevelData>();
         manager = FindFirstObjectByType<GameManager>();
         spawner = FindFirstObjectByType<ButtonSpawner>();
+        ctrlB = FindFirstObjectByType<ButtonController>();
 
-        sampleList = new Queue<List<Button>>();
+        sampleGenList = new Queue<List<GameObject>>();
+
     }
 
-    public void AddSampleButton()
+
+    public void GenerateSampleButtonInit()
     {
-        List<Button> nowStepButton = spawner.SpawnSampleButton();
-        sampleList.Enqueue(nowStepButton);
+        for(int i=0; i<LevelData.SAMPLE_STEP_COUNT; i++)
+        {
+            List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton();
+            sampleGenList.Enqueue(nowStepButtonPrefabs);
+        }
+        ctrlB.ReDrawSample(sampleGenList);
+
+        manager.loadClear[0] = true;
     }
+
+    public void GenerateSampleButton()
+    {
+        List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton();
+        sampleGenList.Enqueue(nowStepButtonPrefabs);
+        ctrlB.ReDrawSample(sampleGenList);
+    }
+
+
+    public void UpdateButtons()
+    {
+        sampleGenList.Dequeue();
+        GenerateSampleButton();
+    }
+
 }

@@ -5,12 +5,13 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "LevelData", menuName = "MyGame/LevelData")]
 public class LevelData : ScriptableObject
 {
+    public const int SAMPLE_STEP_COUNT = 4;
     public int CourseDistance = 10;
     public int samplePerRow = 4;//3or4
 
 
 
-    public List<Button> ButtonPrefabs;
+    public List<GameObject> ButtonPrefabs;
 
 
     private void OnEnable()
@@ -18,16 +19,16 @@ public class LevelData : ScriptableObject
         //自動でAssets/Recources/UKS404/ButtonPrefabs/のファイルを代入してくれる
         if (ButtonPrefabs == null || ButtonPrefabs.Count == 0)
         {
-            ButtonPrefabs = new List<Button>();
+            ButtonPrefabs = new List<GameObject>();
             // Resources フォルダから初期Prefabをロードする場合
-            Button prefab1 = Resources.Load<Button>("UKS404/ButtonPrefabs/Bird");
-            Button prefab2 = Resources.Load<Button>("UKS404/ButtonPrefabs/Branch");
-            Button prefab3 = Resources.Load<Button>("UKS404/ButtonPrefabs/DeadLeaves");
-            Button prefab4 = Resources.Load<Button>("UKS404/ButtonPrefabs/FallenLeaves");
-            Button prefab5 = Resources.Load<Button>("UKS404/ButtonPrefabs/Maple");
-            Button prefab6 = Resources.Load<Button>("UKS404/ButtonPrefabs/Plum");
-            Button prefab7 = Resources.Load<Button>("UKS404/ButtonPrefabs/Rock");
-            Button prefab8 = Resources.Load<Button>("UKS404/ButtonPrefabs/Squirrel");
+            GameObject prefab1 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Bird");
+            GameObject prefab2 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Branch");
+            GameObject prefab3 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/DeadLeaves");
+            GameObject prefab4 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/FallenLeaves");
+            GameObject prefab5 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Maple");
+            GameObject prefab6 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Plum");
+            GameObject prefab7 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Rock");
+            GameObject prefab8 = Resources.Load<GameObject>("UKS404/ButtonPrefabs/Squirrel");
             
             ButtonPrefabs.Add(prefab1);
             ButtonPrefabs.Add(prefab2);
@@ -40,3 +41,8 @@ public class LevelData : ScriptableObject
         }
     }
 }
+
+// 便利
+        // if(spawner == null)Debug.Log("is null");
+        // else Debug.Log("not null");
+
