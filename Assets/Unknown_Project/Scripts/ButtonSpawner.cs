@@ -1,15 +1,30 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonSpawner : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private LevelData levelData;
+
+
+    private void Start()
     {
-        
+        levelData = FindFirstObjectByType<LevelData>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public List<Button> SpawnSampleButton()
+    {
+        int buttonCount = levelData.ButtonPrefabs.Count;
+        List<Button> buttons = new List<Button>();
+        for(int i=0; i<levelData.samplePerRow; i++)
+        {
+            int randomIndex = Random.Range(0,buttonCount);
+            buttons.Add(levelData.ButtonPrefabs[randomIndex]);
+        }
+        return buttons;
+    }
+
+    public void SpawnSelectionButton()
     {
         
     }

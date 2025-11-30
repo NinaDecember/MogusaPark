@@ -1,16 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private LevelData levelData;
+    private GameManager manager;
+    private ButtonSpawner spawner;
+    private Queue<List<Button>>sampleList;
+
+
+    private void Start()
     {
-        
+        levelData = FindFirstObjectByType<LevelData>();
+        manager = FindFirstObjectByType<GameManager>();
+        spawner = FindFirstObjectByType<ButtonSpawner>();
+
+        sampleList = new Queue<List<Button>>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddSampleButton()
     {
-        
+        List<Button> nowStepButton = spawner.SpawnSampleButton();
+        sampleList.Enqueue(nowStepButton);
     }
 }
