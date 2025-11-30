@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private LevelData levelData;
+    private GameSceneState state;   //enum
+    private int goalDistance;   //ゴールまでの段数
+
+    private void Start()
     {
-        
+        levelData = FindFirstObjectByType<LevelData>();
+
+
+        state = GameSceneState.Load;
+        goalDistance = levelData.CourseDistance;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetGameState(GameSceneState state)
     {
-        
+        this.state = state;
+    }
+
+    public GameSceneState GetGameState()
+    {
+        return state;
     }
 }
