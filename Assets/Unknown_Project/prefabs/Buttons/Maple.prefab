@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 3249372251122209725}
   m_Layer: 5
   m_Name: Maple
-  m_TagString: Untagged
+  m_TagString: Maple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

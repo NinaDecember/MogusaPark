@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 8999909168560476506}
   m_Layer: 5
   m_Name: DeadLeaves
-  m_TagString: Untagged
+  m_TagString: DeadLeaves
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

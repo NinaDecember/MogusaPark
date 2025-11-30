@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6313061015119080264}
   m_Layer: 5
   m_Name: Plum
-  m_TagString: Untagged
+  m_TagString: Plum
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
