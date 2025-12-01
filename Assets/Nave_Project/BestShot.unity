@@ -986,8 +986,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0
-  far clip plane: 2
+  near clip plane: -1
+  far clip plane: 1
   field of view: 10.000001
   orthographic: 1
   orthographic size: 5
@@ -1015,7 +1015,7 @@ Transform:
   m_GameObject: {fileID: 1504003054}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1514,7 +1514,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774734969}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
@@ -1564,7 +1564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2547643875711867872, guid: b02ab3fd65c13254aa430c53892d16f9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.88
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 2547643875711867872, guid: b02ab3fd65c13254aa430c53892d16f9, type: 3}
       propertyPath: m_LocalRotation.w
