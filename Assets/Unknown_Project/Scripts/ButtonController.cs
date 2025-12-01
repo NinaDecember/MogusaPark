@@ -29,6 +29,7 @@ public class ButtonController : MonoBehaviour
     private List<SampleSpaceData> sampleSpaceList;
     private List<List<Vector2>>samplePositions;
     private List<GameObject>sampleBack;
+    private List<Vector2> selectButtonPositions;
 
 
     private void Start()
@@ -41,6 +42,7 @@ public class ButtonController : MonoBehaviour
         baseWidth = rt.rect.width;
         sampleSpaceList = CulcSampleSpaceData();
         samplePositions = CulcSamplePositions();
+        selectButtonPositions = CulcSelectButtonPositions();
         DrawSampleSpace();
     }
 
@@ -115,6 +117,32 @@ public class ButtonController : MonoBehaviour
         return posList;
     }
 
+    private List<Vector2> CulcSelectButtonPositions()
+    {
+        int selectCount = LevelData.SELECTION_COUNT;
+        const double RIGHT_X = 880;
+        SampleSpaceData ssd = new SampleSpaceData();
+        ssd.center = new Vector2(0,-300);//この位置固定
+        ssd.width = RIGHT_X*2;
+        ssd.height = ssd.center.y;
+
+
+        List<Vector2> pos = new List<Vector2>();
+        double interval = ssd.width/selectCount;
+        double leftSpace = interval/2;
+        double leftX = -ssd.width/2;
+
+        double x = 0;
+        double y = ssd.height;
+        for(int i=0; i<selectCount; i++)
+        {
+            x = leftX + leftSpace + interval*i;
+            pos.Add(new Vector2((float)x,(float)y));
+        }
+
+        return pos;
+    }
+
     private void DrawSampleSpace()
     {
         sampleBack = new List<GameObject>();
@@ -137,7 +165,7 @@ public class ButtonController : MonoBehaviour
 
 
 
-    public void BCUpdate()
+    public void BCUpdate()//ButtonController:BC
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -165,11 +193,24 @@ public class ButtonController : MonoBehaviour
                 pos = samplePositions[rowCnt][colCnt];
                 rt.anchoredPosition = pos;
 
-                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE/* * 0.75*/,rowCnt);
+                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,rowCnt);
 
                 colCnt++;
             }
             rowCnt++;
+        }
+    }
+
+
+    public void ReDrawSelection(List<GameObject> selectButtons)
+    {
+        int cnt = 0;
+        Debug.Log("selectButtonSum:" + selectButtonPositions.Count);
+        foreach(var button in selectButtons)
+        {
+            RectTransform rt = button.GetComponent<RectTransform>();
+            rt.anchoredPosition = selectButtonPositions[cnt];
+            cnt++;
         }
     }
 

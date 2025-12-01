@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LevelData : ScriptableObject
 {
     public const int SAMPLE_STEP_COUNT = 4;
+    public const int SELECTION_COUNT = 8;
     public int CourseDistance = 10;
     public int samplePerRow = 4;//3or4
 

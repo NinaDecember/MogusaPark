@@ -22,14 +22,18 @@ public class GameController : MonoBehaviour
         deltaTime = 0.0;
     }
 
-
+    private bool loadStart = false;
     private void Update()
     {
 
         if(manager.GetGameState() == GameSceneState.Load)
         {
             Time.timeScale = 0;
-            manager.LoadSampleButton();
+            if (!loadStart)
+            {
+                loadStart = true;
+                manager.LoadSampleButton();
+            }
             foreach(bool flg in manager.loadClear)
             {
                 if(!flg)return;

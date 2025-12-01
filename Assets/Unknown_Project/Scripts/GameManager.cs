@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     private GameSceneState state;   //enum
     private int goalDistance;   //ゴールまでの段数
 
-    //0:ButtonMana:GenerateSampleButtonInit()
-    public List<bool> loadClear = new List<bool>{false};
+    //0:ButtonMana:GenerateSampleButtonInit() 1:ButtonNaba:GenerateSelectionButtonInit()
+    public List<bool> loadClear;
 
     private void Start()
     {
@@ -20,12 +20,14 @@ public class GameManager : MonoBehaviour
         state = GameSceneState.Load;
         goalDistance = levelData.CourseDistance;
 
+        loadClear  = new List<bool>{false,false};
         
     }
 
     public void LoadSampleButton()
     {
         managerB.GenerateSampleButtonInit();
+        managerB.GenerateSelectionButtonInit();
     }
 
     public void SetGameState(GameSceneState state)

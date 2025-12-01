@@ -12,11 +12,11 @@ public class ButtonSpawner : MonoBehaviour
     {
     }
 
-    public List<GameObject> SpawnSampleButton()
+    public List<GameObject> SpawnButton(int generateCount)
     {
-        int buttonCount = levelData.ButtonPrefabs.Count;
         List<GameObject> buttons = new List<GameObject>();
-        for(int i=0; i<levelData.samplePerRow; i++)
+        int buttonCount = levelData.ButtonPrefabs.Count;
+        for(int i=0; i<generateCount; i++)
         {
             int randomIndex = Random.Range(0,buttonCount);
             GameObject obj = Instantiate(levelData.ButtonPrefabs[randomIndex],canvasTrans);
