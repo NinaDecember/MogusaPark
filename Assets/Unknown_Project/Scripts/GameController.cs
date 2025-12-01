@@ -47,7 +47,7 @@ public class GameController : MonoBehaviour
         }
         else if(manager.GetGameState() == GameSceneState.Playing)
         {
-            Debug.Log("Playing");
+            // Debug.Log("Playing");
             Time.timeScale = 1;
 
             deltaTime = Time.deltaTime;

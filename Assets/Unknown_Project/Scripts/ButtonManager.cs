@@ -20,6 +20,7 @@ public class ButtonManager : MonoBehaviour
         ctrlB = FindFirstObjectByType<ButtonController>();
 
         sampleGenList = new Queue<List<GameObject>>();
+        currentSelectButton = new List<GameObject>();
 
     }
 
@@ -41,7 +42,7 @@ public class ButtonManager : MonoBehaviour
     {
         for(int i=0; i<LevelData.SAMPLE_STEP_COUNT; i++)
         {
-            List<GameObject> nowStepButtonPrefabs = spawner.SpawnButton(levelData.samplePerRow);
+            List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton(levelData.samplePerRow);
             sampleGenList.Enqueue(nowStepButtonPrefabs);
         }
         ctrlB.ReDrawSample(sampleGenList);
@@ -51,7 +52,7 @@ public class ButtonManager : MonoBehaviour
 
     public void GenerateSampleButton()
     {
-        List<GameObject> nowStepButtonPrefabs = spawner.SpawnButton(levelData.samplePerRow);
+        List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton(levelData.samplePerRow);
         sampleGenList.Enqueue(nowStepButtonPrefabs);
         ctrlB.ReDrawSample(sampleGenList);
     }
@@ -61,7 +62,7 @@ public class ButtonManager : MonoBehaviour
 
 
 
-    public void UpdateButtons()
+    public void UpdateSampleButtons()
     {
         sampleGenList.Dequeue();
         GenerateSampleButton();
@@ -81,15 +82,24 @@ public class ButtonManager : MonoBehaviour
     public void GenerateSelectionButtonInit()
     {
         
-        currentSelectButton = spawner.SpawnButton(LevelData.SELECTION_COUNT);
+        currentSelectButton.AddRange(spawner.SpawnSelectButtonInit(LevelData.SELECTION_COUNT));
+        
         ctrlB.ReDrawSelection(currentSelectButton);
 
         manager.loadClear[1] = true;
     }
 
-    public void GenerateSelectionButton()
+    public void GenerateSelectionButton(int delIndex)
     {
-        List<GameObject> spawnSelectButtons = spawner.SpawnButton(1);
-        ctrlB.ReDrawSample(sampleGenList);
+        currentSelectButton.Add(spawner.SpawnSelectButton(delIndex));
+        ctrlB.ReDrawSelection(currentSelectButton);
     }
+
+    public void UpdateSelectButtons()
+    {
+        // currentSelectButton remove task
+        int delIndex = 0;
+        GenerateSelectionButton(delIndex);
+    }
+
 }

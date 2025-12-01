@@ -32,6 +32,9 @@ public class ButtonController : MonoBehaviour
     private List<Vector2> selectButtonPositions;
 
 
+    private List<GameObject> activeButton;
+
+
     private void Start()
     {
         managerB = FindFirstObjectByType<ButtonManager>();
@@ -44,6 +47,7 @@ public class ButtonController : MonoBehaviour
         samplePositions = CulcSamplePositions();
         selectButtonPositions = CulcSelectButtonPositions();
         DrawSampleSpace();
+        activeButton = new List<GameObject>();
     }
 
 
@@ -77,12 +81,8 @@ public class ButtonController : MonoBehaviour
                 double lastHeight = data[i-1].height;
                 lastTopY = lastCenterY + lastHeight/2;
             }
-            Debug.Log(lastTopY);
             double currentHeightHalf = ssd.height/2;
-            Debug.Log(currentHeightHalf);
             double currentCentorY = lastTopY + currentHeightHalf;
-            Debug.Log(currentCentorY);
-            Debug.Log("--------------------");
 
             ssd.center = new Vector2((float)centerX,(float)currentCentorY);
 
@@ -148,7 +148,6 @@ public class ButtonController : MonoBehaviour
         sampleBack = new List<GameObject>();
         for(int i=LevelData.SAMPLE_STEP_COUNT-1; i>0; i--)
         {
-            Debug.Log(i);
             GameObject back = Instantiate(sampleSpacePrefab,canvasTransform);
             RectTransform rt = back.GetComponent<RectTransform>();
             rt.anchoredPosition = sampleSpaceList[i].center;    
@@ -167,12 +166,45 @@ public class ButtonController : MonoBehaviour
 
     public void BCUpdate()//ButtonController:BC
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     managerB.UpdateSampleButtons();
+        // }
+        // if (Input.GetKeyDown(KeyCode.A))
+        // {
+        //     managerB.UpdateSelectButtons();
+        // }
+
+        List<int> delActiveObj = new List<int>();
+        int cnt = 0;
+        foreach(var obj in activeButton)
         {
-            managerB.UpdateButtons();
+            if (!obj.GetComponent<ButtonPressDetector>().isPushed)
+            {
+                delActiveObj.Add(cnt);
+            }
+            else
+            {
+                TrackingPoint(obj);
+            }
+            
+            cnt++;
         }
 
+        foreach(var index in delActiveObj)
+        {
+            activeButton.RemoveAt(index);
+        }
+
+
     }
+
+    private void TrackingPoint(GameObject obj)
+    {
+        RectTransform rt = obj.GetComponent<RectTransform>();
+        rt.position = Input.mousePosition;
+    }
+
 
     public Vector2 GetButtonPos(int step, int col)
     {
@@ -205,13 +237,22 @@ public class ButtonController : MonoBehaviour
     public void ReDrawSelection(List<GameObject> selectButtons)
     {
         int cnt = 0;
-        Debug.Log("selectButtonSum:" + selectButtonPositions.Count);
         foreach(var button in selectButtons)
         {
             RectTransform rt = button.GetComponent<RectTransform>();
             rt.anchoredPosition = selectButtonPositions[cnt];
+
+            Button buttonCompo = button.GetComponent<Button>();
+            buttonCompo.interactable = true;
+
             cnt++;
         }
+    }
+
+
+    public void Pushed(GameObject button)
+    {
+        activeButton.Add(button);
     }
 
 }

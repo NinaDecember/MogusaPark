@@ -43,7 +43,4 @@ public class LevelData : ScriptableObject
     }
 }
 
-// 便利
-        // if(spawner == null)Debug.Log("is null");
-        // else Debug.Log("not null");
 
