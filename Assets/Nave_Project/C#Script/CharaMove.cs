@@ -16,23 +16,23 @@ public class CharaMove : MonoBehaviour
         Camera cam = Camera.main;
         if (random.value < 0.25f)
         {
-            randomposition = new Vector2(random.Range(-0.5f, -0.1f), random.Range(-0.5f, -0.1f));
+            randomposition = new Vector3(random.Range(-0.5f, -0.1f), random.Range(-0.5f, -0.1f), 0.5f);
         }
         else if (random.value < 0.5f)
         {
-            randomposition = new Vector2(random.Range(-0.5f, -0.1f), random.Range(1.1f, 1.5f));
+            randomposition = new Vector3(random.Range(-0.5f, -0.1f), random.Range(1.1f, 1.5f), 0.5f);
         }
         else if (random.value < 0.75f)
         {
-            randomposition = new Vector2(random.Range(1.1f, 1.5f), random.Range(1.1f, 1.5f));
+            randomposition = new Vector3(random.Range(1.1f, 1.5f), random.Range(1.1f, 1.5f), 0.5f);
         }
         else
         {
-            randomposition = new Vector2(random.Range(1.1f, 1.5f), random.Range(-0.5f, -0.1f));
+            randomposition = new Vector3(random.Range(1.1f, 1.5f), random.Range(-0.5f, -0.1f), 0.5f);
         }
         transform.position = cam.ViewportToWorldPoint(randomposition);
 
-        ReverseP = cam.ViewportToWorldPoint(new Vector2(1 - randomposition.x, 1 - randomposition.y));//中心に向かうベクトル計算
+        ReverseP = cam.ViewportToWorldPoint(new Vector3(1 - randomposition.x, 1 - randomposition.y, 0.5f));//中心に向かうベクトル計算
         Debug.Log(ReverseP);
         Debug.Log(randomposition);
         StartCoroutine("Moving");//移動開始
