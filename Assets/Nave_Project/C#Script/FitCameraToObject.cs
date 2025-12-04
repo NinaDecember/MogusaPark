@@ -4,7 +4,7 @@ public class FitCameraToObject : MonoBehaviour
 {
     public Camera cam;
     public RawImage target;
-    void Fit()
+    public void Fit()
     {
         if (cam == null) cam = Camera.main;
 
@@ -15,5 +15,14 @@ public class FitCameraToObject : MonoBehaviour
         RectTransform rt = target.rectTransform;
         rt.sizeDelta = new Vector2(width, height);
         rt.anchoredPosition = Vector2.zero; // 中央基準に
+    }
+    public void ShowUI()
+    {
+        target.gameObject.SetActive(true);
+    }
+
+    public void HideUI()
+    {
+        target.gameObject.SetActive(false);
     }
 }

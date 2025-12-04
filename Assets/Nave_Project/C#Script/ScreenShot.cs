@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class ScreenShot : MonoBehaviour
 {
-
     Camera cam;
     GameObject canvas;
     GameObject targetImage;
