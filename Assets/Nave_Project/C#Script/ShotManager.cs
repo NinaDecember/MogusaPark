@@ -10,10 +10,11 @@ public class ShotManager : MonoBehaviour
         fitCamera = GetComponent<FitCameraToObject>();
         
     }
-    void Update()
+    public void Shot()
     {
         
-        StartCoroutine(screenShot.CreateScreenShot());
-        
+        screenShot.ClickShootButton();
+        fitCamera.ShowUI();
+        fitCamera.Fit();
     }
 }
