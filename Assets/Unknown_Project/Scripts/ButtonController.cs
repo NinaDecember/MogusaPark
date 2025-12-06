@@ -193,6 +193,7 @@ public class ButtonController : MonoBehaviour
 
         foreach(var index in delActiveObj)
         {
+            activeButton[index].GetComponent<ButtonPressDetector>().ReturnInitPos();
             activeButton.RemoveAt(index);
         }
 
@@ -241,6 +242,7 @@ public class ButtonController : MonoBehaviour
         {
             RectTransform rt = button.GetComponent<RectTransform>();
             rt.anchoredPosition = selectButtonPositions[cnt];
+            button.GetComponent<ButtonPressDetector>().SetInitPos();
 
             Button buttonCompo = button.GetComponent<Button>();
             buttonCompo.interactable = true;

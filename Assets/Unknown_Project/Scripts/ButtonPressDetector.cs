@@ -8,10 +8,13 @@ public class ButtonPressDetector : MonoBehaviour, IPointerDownHandler, IPointerU
     private ButtonController ctrlB;
     public bool isPushed;
 
+    private Vector2 initPos;
+
     private void Start()
     {
         ctrlB = FindFirstObjectByType<ButtonController>();
         isPushed = false;
+        initPos = GetComponent<RectTransform>().anchoredPosition;
     } 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -24,5 +27,21 @@ public class ButtonPressDetector : MonoBehaviour, IPointerDownHandler, IPointerU
     {
         // Debug.Log("離された！");
         isPushed = false;
+    }
+
+
+    public void SetInitPos()
+    {
+        initPos = GetComponent<RectTransform>().anchoredPosition;
+    }
+
+    public Vector2 GetInitPos()
+    {
+        return initPos;
+    }
+
+    public void ReturnInitPos()
+    {
+        GetComponent<RectTransform>().anchoredPosition = initPos;
     }
 }
