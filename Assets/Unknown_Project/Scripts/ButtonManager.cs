@@ -250,6 +250,7 @@ public class ButtonManager : MonoBehaviour
     public void AddSetButtonsList(int target, GameObject selectedButton)
     {
         setButtons[target] = selectedButton;
+        selectedButton.GetComponent<Button>().interactable = false;
 
         int cnt = 0;
         foreach(var button in selectableButtons)
