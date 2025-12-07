@@ -31,6 +31,19 @@ public class ButtonManager : MonoBehaviour
 
 
 
+///////////////////////////////
+/// score等計算
+///////////////////////////////
+
+    private void CulcStepScore()
+    {
+        
+    }
+
+
+
+
+
 
 
 
@@ -65,7 +78,14 @@ public class ButtonManager : MonoBehaviour
 
     public void UpdateSampleButtons()
     {
-        sampleGenList.Dequeue();
+        //setされていたobjも破棄
+        ResetSetButtonsList();
+
+        foreach(var sample in sampleGenList.Dequeue())
+        {
+            Destroy(sample);
+        }
+        
         GenerateSampleButton();
     }
 
@@ -239,7 +259,18 @@ public class ButtonManager : MonoBehaviour
 
     public bool IsStepClear()
     {
+        foreach(var button in setButtons)
+        {
+            if(!button)return false;
+        }
+
+        CulcStepScore();
+
+
+        UpdateSampleButtons();
+
         return true;
+
     }
 
 
@@ -263,6 +294,10 @@ public class ButtonManager : MonoBehaviour
     }
     public void ResetSetButtonsList()
     {
+        foreach(var button in setButtons)
+        {
+            Destroy(button);
+        }
         setButtons = new GameObject[levelData.samplePerRow];
     }
 
