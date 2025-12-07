@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -76,8 +78,9 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
             if(isSaveComplete)break;
         }
-        Debug.Log("change Scene");
-        Debug.Log("time:"+ResultData.endTime);
+        // Debug.Log("change Scene");
+        // Debug.Log("time:"+ResultData.endTime);
+        SceneManager.LoadScene("ResultScene");
     }
 
 }
