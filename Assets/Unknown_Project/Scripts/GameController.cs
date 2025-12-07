@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
     private GameManager manager;
     private ButtonController ctrlB;
     private LinerMove lineAnime;
+    private SnapEffect snapEffect;
     
     private double time;
     private double deltaTime;
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour
         manager = FindFirstObjectByType<GameManager>();
         ctrlB = FindFirstObjectByType<ButtonController>();
         lineAnime = FindFirstObjectByType<LinerMove>();
+        snapEffect = FindFirstObjectByType<SnapEffect>();
 
 
         time = 0.0;
@@ -57,6 +59,7 @@ public class GameController : MonoBehaviour
 
             ctrlB.BCUpdate();
             lineAnime.LineMoveUpdate(deltaTime);
+            snapEffect.SnapUpdate(deltaTime);
 
         }
         else if(manager.GetGameState() == GameSceneState.Pause)

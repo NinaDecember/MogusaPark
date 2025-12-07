@@ -10,6 +10,7 @@ public class ButtonController : MonoBehaviour
 {
     private ButtonManager managerB;
     private LinerMove lineAnime;
+    private SnapEffect snapEffect;
 
     [SerializeField] private LevelData levelData;
 
@@ -41,6 +42,7 @@ public class ButtonController : MonoBehaviour
     {
         managerB = FindFirstObjectByType<ButtonManager>();
         lineAnime = FindFirstObjectByType<LinerMove>();
+        snapEffect = FindFirstObjectByType<SnapEffect>();
 
 
         rt = centorSampleBack.GetComponent<RectTransform>();
@@ -204,6 +206,8 @@ public class ButtonController : MonoBehaviour
                 rtSelect.anchoredPosition = rtTarget.anchoredPosition;
 
                 managerB.AddSetButtonsList(targetIndex,activeButton[index]);
+
+                snapEffect.AddAnimationSnap2D(activeButton[index],levelData.snapAnimeElapsedTime);
 
                 bool isStepClear = managerB.IsStepClear();
             }
