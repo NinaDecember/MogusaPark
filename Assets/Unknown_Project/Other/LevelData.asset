@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2756497442318704ca32a627412face6, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  CourseDistance: 10
+  CourseDistance: 5
   samplePerRow: 4
+  hitRate: 0.75
   ButtonPrefabs:
   - {fileID: 7963753578929149573, guid: 79761a0d6eca0a241b4d8b8f9255d3a1, type: 3}
   - {fileID: 4130138806361674779, guid: 70a8f0ce32a7af941843cc5c79c1e4c3, type: 3}
