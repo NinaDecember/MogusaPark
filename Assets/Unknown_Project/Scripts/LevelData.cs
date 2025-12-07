@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,9 @@ public class LevelData : ScriptableObject
 
 
 
+
+
+    public float hitRate = 0.75f;
     public List<GameObject> ButtonPrefabs;
 
 

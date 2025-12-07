@@ -27,7 +27,7 @@ public class ButtonController : MonoBehaviour
     }
 
     private List<SampleSpaceData> sampleSpaceList;
-    private List<List<Vector2>>samplePositions;
+    private List<List<Vector2>>sampleButtonPos;
     private List<GameObject>sampleBack;
     private List<Vector2> selectButtonPositions;
 
@@ -44,14 +44,16 @@ public class ButtonController : MonoBehaviour
         baseHeight = rt.rect.height;
         baseWidth = rt.rect.width;
         sampleSpaceList = CulcSampleSpaceData();
-        samplePositions = CulcSamplePositions();
+        sampleButtonPos = CulcSamplePositions();
         selectButtonPositions = CulcSelectButtonPositions();
         DrawSampleSpace();
         activeButton = new List<GameObject>();
     }
 
 
-
+/// <summary>
+/// 初期座標計算/初期処理
+/// </summary>
 
 
     private int SAMPLE_STEP_COUNT = LevelData.SAMPLE_STEP_COUNT;
@@ -159,7 +161,9 @@ public class ButtonController : MonoBehaviour
 
 
 
-
+/// <summary>
+/// update series
+/// </summary>
 
 
 
@@ -193,7 +197,20 @@ public class ButtonController : MonoBehaviour
 
         foreach(var index in delActiveObj)
         {
-            activeButton[index].GetComponent<ButtonPressDetector>().ReturnInitPos();
+            bool isSetFinished = false;
+            GameObject targetObj;
+            isSetFinished = managerB.IsPlaceable(activeButton[index], out targetObj);
+
+            if (isSetFinished)
+            {
+                RectTransform rtSelect = activeButton[index].GetComponent<RectTransform>();
+                RectTransform rtTarget = targetObj.GetComponent<RectTransform>();
+                rtSelect.anchoredPosition = rtTarget.anchoredPosition;
+            }
+            else
+            {
+                activeButton[index].GetComponent<ButtonPressDetector>().ReturnInitPos();
+            }
             activeButton.RemoveAt(index);
         }
 
@@ -207,12 +224,18 @@ public class ButtonController : MonoBehaviour
     }
 
 
-    public Vector2 GetButtonPos(int step, int col)
+
+
+/// <summary>
+///  外部呼出し関数
+/// </summary>
+
+    public Vector2 GetSampleButtonPos(int step, int col)
     {
-        return samplePositions[step][col];
+        return sampleButtonPos[step][col];
     }
 
-    public void ReDrawSample(Queue<List<GameObject>> buttons)
+    public void ReDrawSampleButtons(Queue<List<GameObject>> buttons)
     {
         int rowCnt = 0;
         foreach(var rowButtons in buttons)
@@ -223,7 +246,7 @@ public class ButtonController : MonoBehaviour
                 RectTransform rt = button.GetComponent<RectTransform>();
                 
                 Vector2 pos = rt.anchoredPosition;
-                pos = samplePositions[rowCnt][colCnt];
+                pos = sampleButtonPos[rowCnt][colCnt];
                 rt.anchoredPosition = pos;
 
                 rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,rowCnt);
@@ -235,7 +258,7 @@ public class ButtonController : MonoBehaviour
     }
 
 
-    public void ReDrawSelection(List<GameObject> selectButtons)
+    public void ReDrawSelectionButtons(List<GameObject> selectButtons)
     {
         int cnt = 0;
         foreach(var button in selectButtons)
