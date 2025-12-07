@@ -198,14 +198,19 @@ public class ButtonController : MonoBehaviour
         foreach(var index in delActiveObj)
         {
             bool isSetFinished = false;
-            GameObject targetObj;
-            isSetFinished = managerB.IsPlaceable(activeButton[index], out targetObj);
+            GameObject targetObj = null;
+            int targetIndex = 0;
+            isSetFinished = managerB.TrySet(activeButton[index], out targetObj, out targetIndex);
 
             if (isSetFinished)
             {
                 RectTransform rtSelect = activeButton[index].GetComponent<RectTransform>();
                 RectTransform rtTarget = targetObj.GetComponent<RectTransform>();
                 rtSelect.anchoredPosition = rtTarget.anchoredPosition;
+
+                managerB.AddSetButtonsList(targetIndex,activeButton[index]);
+
+                bool isStepClear = managerB.IsStepClear();
             }
             else
             {

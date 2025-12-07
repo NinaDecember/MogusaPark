@@ -71,9 +71,17 @@ public class ButtonSpawner : MonoBehaviour
         return buttons;
     }
 
-    public GameObject SpawnSelectButton(int addIndex)
+    public GameObject SpawnSelectButton(GameObject genObj)
     {
-        GameObject obj = Instantiate(levelData.ButtonPrefabs[addIndex],canvasTrans);
+        string genObjTag = genObj.tag;
+        GameObject obj = null;
+        foreach(var prefab in levelData.ButtonPrefabs)
+        {
+            if(prefab.tag == genObjTag)
+            {
+                obj = Instantiate(prefab,canvasTrans);
+            }
+        }
 
         Button buttonCompo = obj.GetComponent<Button>();
         buttonCompo.interactable = false;

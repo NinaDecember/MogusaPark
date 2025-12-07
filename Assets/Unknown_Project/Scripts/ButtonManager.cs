@@ -11,7 +11,8 @@ public class ButtonManager : MonoBehaviour
     private ButtonController ctrlB;
     private ButtonSpawner spawner;
     private Queue<List<GameObject>>sampleGenList;
-    private List<GameObject> currentSelectButton;
+    private List<GameObject> selectableButtons;
+    private GameObject[] setButtons;
 
 
     private void Start()
@@ -21,7 +22,8 @@ public class ButtonManager : MonoBehaviour
         ctrlB = FindFirstObjectByType<ButtonController>();
 
         sampleGenList = new Queue<List<GameObject>>();
-        currentSelectButton = new List<GameObject>();
+        selectableButtons = new List<GameObject>();
+        setButtons = new GameObject[levelData.samplePerRow];
 
     }
 
@@ -81,24 +83,19 @@ public class ButtonManager : MonoBehaviour
     public void GenerateSelectionButtonInit()
     {
         
-        currentSelectButton.AddRange(spawner.SpawnSelectButtonInit(LevelData.SELECTION_COUNT));
+        selectableButtons.AddRange(spawner.SpawnSelectButtonInit(LevelData.SELECTION_COUNT));
         
-        ctrlB.ReDrawSelectionButtons(currentSelectButton);
+        ctrlB.ReDrawSelectionButtons(selectableButtons);
 
         manager.loadClear[1] = true;
     }
 
-    public void GenerateSelectionButton(int delIndex)
+    public void UpdateSelectButtons(int delIndex, GameObject genObj)
     {
-        currentSelectButton.Add(spawner.SpawnSelectButton(delIndex));
-        ctrlB.ReDrawSelectionButtons(currentSelectButton);
-    }
-
-    public void UpdateSelectButtons()
-    {
-        // currentSelectButton remove task
-        int delIndex = 0;
-        GenerateSelectionButton(delIndex);
+        Debug.Log("delIndex:"+delIndex);
+    
+        selectableButtons[delIndex] = spawner.SpawnSelectButton(genObj);
+        ctrlB.ReDrawSelectionButtons(selectableButtons);
     }
 
 
@@ -108,30 +105,38 @@ public class ButtonManager : MonoBehaviour
 /// 外部呼出し関数
 /// </summary>
 
-    // public bool IsOverlap(GameObject selectedButton, out List<GameObject> targetObjects)
-    // {
-    //     List<GameObject> sampleButtons = sampleGenList.Peek();
-    //     targetObjects = new List<GameObject>();
-    //     bool isExist = false;
+    public bool TrySet(GameObject selectObj, out GameObject targetObj, out int targetIndex)
+    {
+        bool isPlaceable = IsPlaceableRange(selectObj, out targetObj, out targetIndex);
+        Debug.Log("Range:"+isPlaceable);
+        if (!isPlaceable)
+        {
+            return false;
+        }
 
-    //     for(int buttonCol=0; buttonCol<levelData.samplePerRow; buttonCol++)
-    //     {
-    //         GameObject sampleButton = sampleButtons[buttonCol];
-    //         if (sampleButton.GetComponent<RectTransform>().rect.Overlaps(selectedButton.GetComponent<RectTransform>().rect))
-    //         {
-    //             targetObjects.Add(sampleButton);
-    //             isExist = true;
-    //         }
-    //     }
+        isPlaceable = IsPlaceableType(selectObj,targetObj);
+        Debug.Log("Type:"+isPlaceable);
+        if (!isPlaceable)
+        {
+            return false;
+        }
 
-    //     return isExist;
-    // }
+        isPlaceable = IsNotDuplicated(targetIndex);
+        Debug.Log("Duplicated:"+isPlaceable);
+        if (!isPlaceable)
+        {
+            return false;
+        }
 
+        return true;
+
+    }
 
     const int RECT_CORNER_COUNT = 4;
-    public bool IsPlaceable(GameObject selectedObj, out GameObject targetObject)
+    public bool IsPlaceableRange(GameObject selectedObj, out GameObject targetObject, out int index)
     {
         targetObject = null;
+        index = 0;
 
         List<GameObject> targetObjects = sampleGenList.Peek();
 
@@ -142,6 +147,7 @@ public class ButtonManager : MonoBehaviour
 
         //重複部分の面積を求める
         float maxOverlapArea = 0;
+        int cnt = 0;
         foreach(var targetObj in targetObjects)
         {
             float currentOverlapArea = 0;
@@ -185,7 +191,12 @@ public class ButtonManager : MonoBehaviour
             }
 
             maxOverlapArea = Math.Max(maxOverlapArea,currentOverlapArea);
-            if(maxOverlapArea == currentOverlapArea)targetObject = targetObj;
+            if(maxOverlapArea == currentOverlapArea){
+                targetObject = targetObj;
+                index = cnt;
+            }
+
+            cnt++;
         }
 
 
@@ -197,8 +208,8 @@ public class ButtonManager : MonoBehaviour
 
         float buttonArea = worldWidth * worldHeight;
 
-        Debug.Log("buttonArea:"+buttonArea);
-        Debug.Log("maxOverlapArea:"+maxOverlapArea);
+        // Debug.Log("buttonArea:"+buttonArea);
+        // Debug.Log("maxOverlapArea:"+maxOverlapArea);
         return maxOverlapArea > buttonArea * (1f-levelData.hitRate);
     }
 
@@ -209,6 +220,49 @@ public class ButtonManager : MonoBehaviour
 
         // Rect の中にあるか判定
         return a.rect.Contains(localPos);
+    }
+
+
+    private bool IsPlaceableType(GameObject selectObj, GameObject targetObj)
+    {
+        if(selectObj.tag == targetObj.tag)return true;
+        return false;
+    }
+
+
+    private bool IsNotDuplicated(int targetIndex)
+    {
+        return !setButtons[targetIndex];
+    }
+
+
+
+    public bool IsStepClear()
+    {
+        return true;
+    }
+
+
+
+
+
+
+    public void AddSetButtonsList(int target, GameObject selectedButton)
+    {
+        setButtons[target] = selectedButton;
+
+        int cnt = 0;
+        foreach(var button in selectableButtons)
+        {
+            if(button == selectedButton)break;
+            cnt++;
+        }
+
+        UpdateSelectButtons(cnt,selectedButton);
+    }
+    public void ResetSetButtonsList()
+    {
+        setButtons = new GameObject[levelData.samplePerRow];
     }
 
 
