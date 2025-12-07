@@ -277,7 +277,9 @@ public class ButtonController : MonoBehaviour
 
     public void Pushed(GameObject button)
     {
-        activeButton.Add(button);
+        if(button.GetComponent<Button>().interactable){
+            activeButton.Add(button);
+        }
     }
 
 }
