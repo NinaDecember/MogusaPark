@@ -40,8 +40,8 @@ public class ButtonPressDetector : MonoBehaviour, IPointerDownHandler, IPointerU
         return initPos;
     }
 
-    public void ReturnInitPos()
+    public Vector2 GetReturnInitPos()
     {
-        GetComponent<RectTransform>().anchoredPosition = initPos;
+        return initPos;
     }
 }

@@ -5,6 +5,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private LevelData levelData;
     private GameManager manager;
     private ButtonController ctrlB;
+    private LinerMove lineAnime;
     
     private double time;
     private double deltaTime;
@@ -15,6 +16,7 @@ public class GameController : MonoBehaviour
     {
         manager = FindFirstObjectByType<GameManager>();
         ctrlB = FindFirstObjectByType<ButtonController>();
+        lineAnime = FindFirstObjectByType<LinerMove>();
 
 
         time = 0.0;
@@ -54,6 +56,7 @@ public class GameController : MonoBehaviour
             time += deltaTime;
 
             ctrlB.BCUpdate();
+            lineAnime.LineMoveUpdate(deltaTime);
 
         }
         else if(manager.GetGameState() == GameSceneState.Pause)

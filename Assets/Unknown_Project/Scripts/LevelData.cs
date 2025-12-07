@@ -16,6 +16,7 @@ public class LevelData : ScriptableObject
 
 
     public float hitRate = 0.75f;
+    public double lineAnimeElapsedTime = 0.2;
     public List<GameObject> ButtonPrefabs;
 
 

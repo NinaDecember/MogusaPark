@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class ButtonController : MonoBehaviour
 {
     private ButtonManager managerB;
+    private LinerMove lineAnime;
+
     [SerializeField] private LevelData levelData;
 
     [SerializeField] private GameObject centorSampleBack;
@@ -38,6 +40,8 @@ public class ButtonController : MonoBehaviour
     private void Start()
     {
         managerB = FindFirstObjectByType<ButtonManager>();
+        lineAnime = FindFirstObjectByType<LinerMove>();
+
 
         rt = centorSampleBack.GetComponent<RectTransform>();
         baseCenter = rt.anchoredPosition;
@@ -170,15 +174,6 @@ public class ButtonController : MonoBehaviour
 
     public void BCUpdate()//ButtonController:BC
     {
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     managerB.UpdateSampleButtons();
-        // }
-        // if (Input.GetKeyDown(KeyCode.A))
-        // {
-        //     managerB.UpdateSelectButtons();
-        // }
-
         List<int> delActiveObj = new List<int>();
         int cnt = 0;
         foreach(var obj in activeButton)
@@ -214,7 +209,8 @@ public class ButtonController : MonoBehaviour
             }
             else
             {
-                activeButton[index].GetComponent<ButtonPressDetector>().ReturnInitPos();
+                Vector2 returnPos = activeButton[index].GetComponent<ButtonPressDetector>().GetReturnInitPos();
+                lineAnime.AddALinerMove2D(activeButton[index],returnPos,levelData.lineAnimeElapsedTime);
             }
             activeButton.RemoveAt(index);
         }
