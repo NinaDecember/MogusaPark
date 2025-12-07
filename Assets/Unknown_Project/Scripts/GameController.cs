@@ -63,8 +63,9 @@ public class GameController : MonoBehaviour
         }
         else if(manager.GetGameState() == GameSceneState.Result)
         {
-            Time.timeScale = 0;
-            
+            Time.timeScale = 1;
+            ResultData.endTime = time;
+            manager.isSaveComplete = true;
         }
         else
         {

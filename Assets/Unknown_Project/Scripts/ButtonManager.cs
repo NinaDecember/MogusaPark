@@ -66,10 +66,12 @@ public class ButtonManager : MonoBehaviour
         manager.loadClear[0] = true;
     }
 
-    public void GenerateSampleButton()
+    public void GenerateSampleButton(int goalDistance)
     {
-        List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton(levelData.samplePerRow);
-        sampleGenList.Enqueue(nowStepButtonPrefabs);
+        if(goalDistance >= LevelData.SAMPLE_STEP_COUNT){
+            List<GameObject> nowStepButtonPrefabs = spawner.SpawnSampleButton(levelData.samplePerRow);
+            sampleGenList.Enqueue(nowStepButtonPrefabs);
+        }
         ctrlB.ReDrawSampleButtons(sampleGenList);
     }
 
@@ -86,7 +88,10 @@ public class ButtonManager : MonoBehaviour
             Destroy(sample);
         }
         
-        GenerateSampleButton();
+        manager.Advance();
+
+        GenerateSampleButton(manager.GetGoalDistance());
+
     }
 
 
