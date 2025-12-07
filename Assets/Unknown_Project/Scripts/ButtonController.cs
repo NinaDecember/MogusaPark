@@ -248,6 +248,13 @@ public class ButtonController : MonoBehaviour
             int colCnt = 0;
             foreach(var button in rowButtons)
             {
+                if(rowCnt == 0)
+                {
+                    Image image = button.GetComponent<Image>();
+                    Color color = image.color;
+                    color.a = 0.5f;
+                    image.color = color;
+                }
                 RectTransform rt = button.GetComponent<RectTransform>();
                 
                 Vector2 pos = rt.anchoredPosition;
@@ -284,6 +291,7 @@ public class ButtonController : MonoBehaviour
     {
         if(button.GetComponent<Button>().interactable){
             activeButton.Add(button);
+            button.transform.SetAsLastSibling();
         }
     }
 
