@@ -8,7 +8,7 @@ public class IdolController : MonoBehaviour
     [SerializeField] private Vector3[] movePoints = new Vector3[3];
     private int orderA;
     private int orderB;
-
+    [SerializeField] private Animator idolAnim;
     /// <summary>
     /// ’•¶‚ğó‚¯æ‚Á‚Ä‘¦1‚Â‚ğ‘I‚Ô
     /// </summary>
@@ -43,5 +43,6 @@ public class IdolController : MonoBehaviour
         }
 
         transform.position = target;
+        idolAnim.SetBool("IsLiftUp", true);
     }
 }

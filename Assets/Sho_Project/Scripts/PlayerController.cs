@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     public float moveTime = 0.15f;
 
+    [SerializeField] private Animator playerAnim;
+
     [Header("PickUp")]
     [SerializeField] private ItemManager itemManager;
 
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("PickUp:アイテムナンバー"+index);
         //アイテムマネージャーにアクセス
         itemManager.PlayerPick(index);
+        playerAnim.SetBool("IsLiftUp", true);
     }
     #endregion
 }
