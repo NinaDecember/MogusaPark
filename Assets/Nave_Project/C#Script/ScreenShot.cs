@@ -120,7 +120,7 @@ public class ScreenShot : MonoBehaviour
             Debug.Log("No Screenshot to Delete at: " + screenShotPath);
         }
     }
-    public void SavingSSImage()
+    public void SaveSSImage()
     {
         if (!String.IsNullOrEmpty(screenShotPath))
         {
