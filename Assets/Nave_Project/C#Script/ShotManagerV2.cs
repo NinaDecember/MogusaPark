@@ -25,6 +25,10 @@ public class ShotManagerV2 : MonoBehaviour
     {
         save.enabled = false;
         cancel.enabled = false;
+        fitCamera.HideUI();
+        save.gameObject.SetActive(false);
+        cancel.gameObject.SetActive(false);
+        shot.gameObject.SetActive(true);
     }
     private void Update() {
         shot.onClick.AddListener(Shot);   
@@ -33,6 +37,9 @@ public class ShotManagerV2 : MonoBehaviour
     {
         screenShot.ClickShootButton();
         fitCamera.ShowUI();
+        save.gameObject.SetActive(true);
+        cancel.gameObject.SetActive(true);
+        shot.gameObject.SetActive(false);
         fitCamera.Fit();
         screenShot.ShowSSImage();
         StartCoroutine(IfSave());
