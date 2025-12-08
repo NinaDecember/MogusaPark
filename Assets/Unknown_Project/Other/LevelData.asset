@@ -15,6 +15,8 @@ MonoBehaviour:
   CourseDistance: 5
   samplePerRow: 4
   hitRate: 0.75
+  lineAnimeElapsedTime: 0.05
+  snapAnimeElapsedTime: 0.1
   ButtonPrefabs:
   - {fileID: 7963753578929149573, guid: 79761a0d6eca0a241b4d8b8f9255d3a1, type: 3}
   - {fileID: 4130138806361674779, guid: 70a8f0ce32a7af941843cc5c79c1e4c3, type: 3}

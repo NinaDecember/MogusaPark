@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinerMove : MonoBehaviour
+public class AnimationManager : MonoBehaviour
 {
     private class AnimationProperty2D
     {

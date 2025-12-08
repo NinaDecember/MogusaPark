@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class SnapEffect : MonoBehaviour
+public class BounceEffect : MonoBehaviour
 {
     private class AnimationSnapProperty2D
     {
