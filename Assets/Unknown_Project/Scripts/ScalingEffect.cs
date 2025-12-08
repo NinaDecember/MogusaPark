@@ -12,6 +12,8 @@ public class ScalingEffect : AnimationManager
 
     public override bool AnimationUpdate(double deltaTime)
     {
+        if(obj == null)return true;
+
         time += Time.deltaTime * speed;
         rtObj.localScale = Vector3.Lerp(startScale, goalScale, (float)time);
         if(time >= 1f)

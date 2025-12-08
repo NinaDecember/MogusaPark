@@ -11,6 +11,8 @@ public class LinearMoveEffect : AnimationManager
 
     public override bool AnimationUpdate(double deltaTime)
     {
+        if(obj == null)return true;
+
         rtObj.anchoredPosition += vector * (float)deltaTime;
         time += deltaTime;
         if(time >= elapsedTime)
@@ -28,11 +30,9 @@ public class LinearMoveEffect : AnimationManager
         base.AddProps(obj,elapsedTime);
         startPos = rtObj.anchoredPosition;
         goalPos = goal;
-        time = 0f;
-        elapsedTime = time;
 
         Vector2 distance = goal-startPos;
-        vector = distance / (float)time;
+        vector = distance / (float)elapsedTime;
     }
 
 

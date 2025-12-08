@@ -14,7 +14,7 @@ public class AnimationController : MonoBehaviour
 
     private void Start()
     {
-        animeManager = FindFirstObjectByType<AnimationManager>();
+        animeManager = GetComponent<AnimationManager>();
     
         
         animes = new List<AnimationManager>();
@@ -24,11 +24,20 @@ public class AnimationController : MonoBehaviour
     }
 
 
+
+
+
     public void AnimetionUpdate(double deltaTime)
     {
         int cnt = 0;
         foreach(var anime in animes)
         {
+            if(anime == null)
+            {
+                delAnimationsIndex.Add(cnt);
+                continue;
+            }
+
             bool isEndAnimation = anime.AnimationUpdate(deltaTime);
             if(isEndAnimation)delAnimationsIndex.Add(cnt);
             cnt++;
@@ -44,17 +53,25 @@ public class AnimationController : MonoBehaviour
 
         //special
 
-        cnt = 0;
-        foreach(var popAnime in popEffectAnimations)
+        for (cnt = 0; cnt < popEffectAnimations.Count; cnt++)
         {
-            bool isEndAnimation = popAnime.Item1[popAnime.Item2].AnimationUpdate(deltaTime);
-            if(isEndAnimation && popAnime.Item2<popAnime.Item1.Count){
-                popEffectAnimations[cnt] = (popAnime.Item1,popAnime.Item2+1);
+            if(popEffectAnimations[cnt].Item1 == null)
+            {
+                delPopAnimeIndex.Add(cnt);
+                continue;
             }
-            else if(isEndAnimation)delPopAnimeIndex.Add(cnt);
-            cnt++;
-        }
+            var popAnime = popEffectAnimations[cnt];
+            bool isEndAnimation = popAnime.Item1[popAnime.Item2].AnimationUpdate(deltaTime);
 
+            if (isEndAnimation && popAnime.Item2 < popAnime.Item1.Count - 1)
+            {
+                popEffectAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
+            }
+            else if (isEndAnimation)
+            {
+                delPopAnimeIndex.Add(cnt);
+            }
+        }
 
         foreach(var delPopAnimeIndex in delPopAnimeIndex)
         {
@@ -70,14 +87,14 @@ public class AnimationController : MonoBehaviour
 
     public void AddLinearMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
     {
-        LinearMoveEffect lineAnime = new LinearMoveEffect();
+        LinearMoveEffect lineAnime = obj.AddComponent<LinearMoveEffect>();
         lineAnime.AddProps(start,goal,obj,elapsedTime);
 
         animes.Add(lineAnime);
     }
     public void AddLinearMoveAnimation(Vector2 goal, GameObject obj, double elapsedTime)
     {
-        LinearMoveEffect lineAnime = new LinearMoveEffect();
+        LinearMoveEffect lineAnime = obj.AddComponent<LinearMoveEffect>();
         Vector2 start = obj.GetComponent<RectTransform>().anchoredPosition;
         lineAnime.AddProps(start,goal,obj,elapsedTime);
 
@@ -88,7 +105,7 @@ public class AnimationController : MonoBehaviour
 
     public void AddScalingAnimation(Vector3 startScale, Vector3 goalScale, GameObject obj, double elapsedTime)
     {
-        ScalingEffect scalingAnime = new ScalingEffect();
+        ScalingEffect scalingAnime = obj.AddComponent<ScalingEffect>();
         scalingAnime.AddProps(startScale, goalScale, obj, elapsedTime);
 
         animes.Add(scalingAnime);
@@ -102,13 +119,13 @@ public class AnimationController : MonoBehaviour
         Vector3 bigScale = Vector3.one * 1.05f * (float)scaleRate;
         Vector3 normalScale = Vector3.one * (float)scaleRate;
 
-        ScalingEffect small = new ScalingEffect();
+        ScalingEffect small = obj.AddComponent<ScalingEffect>();
         small.AddProps(smallScale, bigScale, obj, elapsedTime);
 
         popEffectAnimation.Add(small);
 
 
-        ScalingEffect big = new ScalingEffect();
+        ScalingEffect big = obj.AddComponent<ScalingEffect>();
         big.AddProps(bigScale, normalScale, obj, elapsedTime);
 
         popEffectAnimation.Add(big);
