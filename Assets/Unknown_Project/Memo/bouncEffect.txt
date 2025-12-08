@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BounceEffect : MonoBehaviour
+public class BounceEffect : AnimationManager
 {
-    private class AnimationSnapProperty2D
-    {
-        public RectTransform rtObj;
-        public double time;
-        public double elapsedTime;
-        public Vector3 small = Vector3.one * 0.9f;
-        public Vector3 big = Vector3.one * 1.05f;
-        public Vector3 normal = Vector3.one;
-        public int mode = 0;
-
-    };
-    private List<AnimationSnapProperty2D>animations;
+    public Vector3 small = Vector3.one * 0.9f;
+    public Vector3 big = Vector3.one * 1.05f;
+    public Vector3 normal = Vector3.one;
+    public int mode = 0;
+    private List<BounceProps2D>animations;
     private List<int>delAnimationsIndex;
 
     private void Start()
     {
-        animations = new List<AnimationSnapProperty2D>();
+        animations = new List<BounceProps2D>();
         delAnimationsIndex = new List<int>();
     }
 
@@ -74,7 +67,7 @@ public class BounceEffect : MonoBehaviour
 
     public void AddAnimationSnap2D(GameObject obj, double time)
     {
-        AnimationSnapProperty2D animeProp = new AnimationSnapProperty2D();
+        BounceProps2D animeProp = new BounceProps2D();
         animeProp.rtObj = obj.GetComponent<RectTransform>();
         animeProp.time = 0f;
         animeProp.elapsedTime = time;

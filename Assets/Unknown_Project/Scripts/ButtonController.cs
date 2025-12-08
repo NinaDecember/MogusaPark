@@ -9,8 +9,7 @@ using UnityEngine.UI;
 public class ButtonController : MonoBehaviour
 {
     private ButtonManager managerB;
-    private LinerMove lineAnime;
-    private SnapEffect snapEffect;
+    private AnimationController animeCtrl;
 
     [SerializeField] private LevelData levelData;
 
@@ -41,8 +40,7 @@ public class ButtonController : MonoBehaviour
     private void Start()
     {
         managerB = FindFirstObjectByType<ButtonManager>();
-        lineAnime = FindFirstObjectByType<LinerMove>();
-        snapEffect = FindFirstObjectByType<SnapEffect>();
+        animeCtrl = FindFirstObjectByType<AnimationController>();
 
 
         rt = centorSampleBack.GetComponent<RectTransform>();
@@ -207,14 +205,14 @@ public class ButtonController : MonoBehaviour
 
                 managerB.AddSetButtonsList(targetIndex,activeButton[index]);
 
-                snapEffect.AddAnimationSnap2D(activeButton[index],levelData.snapAnimeElapsedTime);
+                animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
 
                 bool isStepClear = managerB.IsStepClear();
             }
             else
             {
                 Vector2 returnPos = activeButton[index].GetComponent<ButtonPressDetector>().GetReturnInitPos();
-                lineAnime.AddALinerMove2D(activeButton[index],returnPos,levelData.lineAnimeElapsedTime);
+                animeCtrl.AddLinearMoveAnimation(returnPos, activeButton[index],levelData.lineAnimeElapsedTime);
             }
             activeButton.RemoveAt(index);
         }

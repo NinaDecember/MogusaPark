@@ -1,66 +1,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinearMoveEffect : MonoBehaviour
+public class LinearMoveEffect : AnimationManager
 {
-    private class AnimationProperty2D
+    private Vector2 startPos;
+    private Vector2 goalPos;
+    private Vector2 vector;
+
+
+
+    public override bool AnimationUpdate(double deltaTime)
     {
-        public RectTransform rtObj;
-        public Vector2 goalPos;
-        public double time;
-        public double elapsedTime;
-        public Vector2 vector;
-    };
-
-    List<AnimationProperty2D>animations;
-    List<int>delAnimationsIndex;
-
-
-    private void Start()
-    {
-        animations = new List<AnimationProperty2D>();
-        delAnimationsIndex = new List<int>();
-    }
-
-
-    public void LineMoveUpdate(double deltaTime)
-    {
-        int cnt = 0;
-        foreach(var anime in animations)
+        rtObj.anchoredPosition += vector * (float)deltaTime;
+        time += deltaTime;
+        if(time >= elapsedTime)
         {
-            if(anime.time >= anime.elapsedTime)
-            {
-                anime.rtObj.anchoredPosition = anime.goalPos;
-                delAnimationsIndex.Add(cnt);
-                continue;
-            }
-            anime.rtObj.anchoredPosition += anime.vector * (float)deltaTime;
-            anime.time += deltaTime;
-
-            cnt++;
-
+            rtObj.anchoredPosition = goalPos;
+            return true;
         }
 
-        foreach(var delAnimeIndex in delAnimationsIndex)
-        {
-            animations.RemoveAt(delAnimeIndex);
-        }
-        delAnimationsIndex = new List<int>();
+        return false;
     }
 
 
-    public void AddALinerMove2D(GameObject obj, Vector2 goal, double time)
+    public void AddProps(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
     {
-        AnimationProperty2D animeProp = new AnimationProperty2D();
-        animeProp.rtObj = obj.GetComponent<RectTransform>();
-        Vector2 start = animeProp.rtObj.anchoredPosition;
-        animeProp.goalPos = goal;
-        animeProp.time = 0f;
-        animeProp.elapsedTime = time;
+        base.AddProps(obj,elapsedTime);
+        startPos = rtObj.anchoredPosition;
+        goalPos = goal;
+        time = 0f;
+        elapsedTime = time;
 
-        Vector2 distance = goal-start;
-        animeProp.vector = distance / (float)time;
-
-        animations.Add(animeProp);
+        Vector2 distance = goal-startPos;
+        vector = distance / (float)time;
     }
+
+
 }
