@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 public class ShotManagerV2 : MonoBehaviour
 {
     public static ShotManagerV2 Instance;
@@ -10,7 +12,9 @@ public class ShotManagerV2 : MonoBehaviour
     public Button shot;
     public Button save;
     public Button cancel;
-        private void Awake()
+    public Button Retry;
+    public Button GoToTitle;
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -23,12 +27,19 @@ public class ShotManagerV2 : MonoBehaviour
     }
     void Start()
     {
+        screenShot = GetComponent<ScreenShot>();
+        fitCamera = GetComponent<FitCameraToObject>();
         save.enabled = false;
         cancel.enabled = false;
+        Retry.enabled = false;
+        GoToTitle.enabled = false;
         fitCamera.HideUI();
         save.gameObject.SetActive(false);
         cancel.gameObject.SetActive(false);
+        Retry.gameObject.SetActive(false);
+        GoToTitle.gameObject.SetActive(false);
         shot.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
     }
     private void Update() {
         shot.onClick.AddListener(Shot);   
@@ -40,23 +51,54 @@ public class ShotManagerV2 : MonoBehaviour
         save.gameObject.SetActive(true);
         cancel.gameObject.SetActive(true);
         shot.gameObject.SetActive(false);
+        save.enabled = true;
+        cancel.enabled = true;
         fitCamera.Fit();
         screenShot.ShowSSImage();
-        StartCoroutine(IfSave());
-        screenShot.DeleteSSImage();
-
+        StartCoroutine(IfTitle());
+        EventSystem.current.SetSelectedGameObject(null);
     }
     private IEnumerator IfSave(){
-        
-        while(save.enabled ^ cancel.enabled){
-        yield return null;
-        }
-        if(save.enabled){
+        while (save.enabled && cancel.enabled){
+        if(EventSystem.current.currentSelectedGameObject == save.gameObject){
             screenShot.SaveSSImage();
-            yield break;
+            save.enabled = false;
+            cancel.enabled = false;
+            screenShot.DeleteSSImage();
+            break;
         }
-        else if(cancel.enabled){
-            yield break;
+        else if(EventSystem.current.currentSelectedGameObject == cancel.gameObject)
+        {
+            save.enabled = false;
+            cancel.enabled = false;
+            screenShot.DeleteSSImage();
+            break;
+        }
+            yield return null;
+
+        }
+    }
+    private IEnumerator IfTitle()
+    {
+        yield return StartCoroutine(IfSave());
+        while (Retry.enabled && GoToTitle.enabled)
+        {
+            if (EventSystem.current.currentSelectedGameObject == Retry.gameObject)
+            {
+                Retry.enabled = false;
+                GoToTitle.enabled = false;
+                SceneManager.LoadScene("BestShot_Game");
+                break;
+            }
+            else if (EventSystem.current.currentSelectedGameObject == GoToTitle.gameObject)
+            {
+                Retry.enabled = false;
+                GoToTitle.enabled = false;
+                SceneManager.LoadScene("BestShot_Title");
+                break;
+            }
+            yield return null;
+
         }
     }
 }
