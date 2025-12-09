@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756497442318704ca32a627412face6, type: 3}
+  m_Name: LevelData
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  CourseDistance: 5
+  samplePerRow: 4
+  hitRate: 0.75
+  lineAnimeElapsedTime: 0.05
+  snapAnimeElapsedTime: 0.1
+  ButtonPrefabs:
+  - {fileID: 7963753578929149573, guid: 79761a0d6eca0a241b4d8b8f9255d3a1, type: 3}
+  - {fileID: 4130138806361674779, guid: 70a8f0ce32a7af941843cc5c79c1e4c3, type: 3}
+  - {fileID: 8780605389588522542, guid: 63d4f2e9834c5594f8fd4d494ef7c28c, type: 3}
+  - {fileID: 9123015030336360368, guid: 9651554c61fd86843a4ed651a3e17e26, type: 3}
+  - {fileID: 8317257064943374078, guid: e1c6a074c098c70499478a6204467ed7, type: 3}
+  - {fileID: 5715816822959657182, guid: 4eb15df9b8b4f344f9ca3e7d40c4db28, type: 3}
+  - {fileID: 2677703836171880631, guid: fdee392f123750d45995b34e3efa62f1, type: 3}
+  - {fileID: 2335511472961484232, guid: 3413eb3c8098ed64d82e9a60316cf6e9, type: 3}
