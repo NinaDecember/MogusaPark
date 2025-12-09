@@ -1,45 +1,48 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-public class TrustGaugeManager : MonoBehaviour
+namespace Sho_Project
 {
-    public System.Action OnGameOver;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    [SerializeField] private Slider gaugeSlider;   // ← trustGauge → gaugeSlider（UI名として自然）
-    [SerializeField] private float startValue = 5; // ← startGaugeNum → startValue（初期値）
-    [SerializeField] private float gainAmount = 1; // ← addNum → gainAmount（増える量）
-    [SerializeField] private float lossAmount = 1; // ← subNum → lossAmount（減る量）
-
-    private float currentValue;                    // ← currentGaugeNum → currentValue（現在値）
-
-    void Start()
+    public class TrustGaugeManager : MonoBehaviour
     {
-        currentValue = startValue;
-        gaugeSlider.value = currentValue;
-    }
+        public System.Action OnGameOver;
 
-    public void AddGauge()
-    {
-        currentValue += gainAmount;
-        currentValue = Mathf.Clamp(currentValue, 0, gaugeSlider.maxValue);
-        UpdateGauge();
-    }
+        [SerializeField] private Slider gaugeSlider;   // ← trustGauge → gaugeSlider（UI名として自然）
+        [SerializeField] private float startValue = 5; // ← startGaugeNum → startValue（初期値）
+        [SerializeField] private float gainAmount = 1; // ← addNum → gainAmount（増える量）
+        [SerializeField] private float lossAmount = 1; // ← subNum → lossAmount（減る量）
 
-    public void SubGauge()
-    {
-        currentValue -= lossAmount;
-        currentValue = Mathf.Clamp(currentValue, 0, gaugeSlider.maxValue);
+        private float currentValue;                    // ← currentGaugeNum → currentValue（現在値）
 
-        if (currentValue <= 0)
+        void Start()
         {
-            OnGameOver?.Invoke();
+            currentValue = startValue;
+            gaugeSlider.value = currentValue;
         }
 
-        UpdateGauge();
-    }
+        public void AddGauge()
+        {
+            currentValue += gainAmount;
+            currentValue = Mathf.Clamp(currentValue, 0, gaugeSlider.maxValue);
+            UpdateGauge();
+        }
 
-    private void UpdateGauge()
-    {
-        gaugeSlider.value = currentValue;
+        public void SubGauge()
+        {
+            currentValue -= lossAmount;
+            currentValue = Mathf.Clamp(currentValue, 0, gaugeSlider.maxValue);
+
+            if (currentValue <= 0)
+            {
+                OnGameOver?.Invoke();
+            }
+
+            UpdateGauge();
+        }
+
+        private void UpdateGauge()
+        {
+            gaugeSlider.value = currentValue;
+        }
     }
 }

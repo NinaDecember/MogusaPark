@@ -1,48 +1,53 @@
-using System.Collections;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-
-public class IdolController : MonoBehaviour
+namespace Sho_Project
 {
-    [SerializeField] private ItemManager itemManager;
-    [SerializeField] private Vector3[] movePoints = new Vector3[3];
-    private int orderA;
-    private int orderB;
-    [SerializeField] private Animator idolAnim;
-    /// <summary>
-    /// 注文を受け取って即1つを選ぶ
-    /// </summary>
-    public void SetOrder(int a, int b)
+
+    using System.Collections;
+    using UnityEngine;
+    using static UnityEngine.GraphicsBuffer;
+
+    public class IdolController : MonoBehaviour
     {
-        orderA = a;
-        orderB = b;
-
-        // 2つの中からランダムで1つ選ぶ
-        int choice = (Random.Range(0, 2) == 0) ? orderA : orderB;
-        itemManager.IdolPick(choice);
-        Debug.Log("アイドルが選んだ番号は："+choice);
-        //Debug.Log($"【Idol】注文 {orderA} / {orderB} から {choice} を選びました");
-
-        StartCoroutine(IdolMove(movePoints[choice]));
-    }
-
-    private IEnumerator IdolMove(Vector3 target)
-    {
-
-        Vector3 start = transform.position;
-        float elapsed = 0f;
-        float moveTime = 0.15f;
-
-        while (elapsed < moveTime)
+        [SerializeField] private ItemManager itemManager;
+        [SerializeField] private Vector3[] movePoints = new Vector3[3];
+        private int orderA;
+        private int orderB;
+        [SerializeField] private Animator idolAnim;
+        /// <summary>
+        /// 注文を受け取って即1つを選ぶ
+        /// </summary>
+        public void SetOrder(int a, int b)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / moveTime;
-            t = t * t * (3 - 2 * t); // スムーズステップ
-            transform.position = Vector3.Lerp(start, target, t);
-            yield return null;
+            orderA = a;
+            orderB = b;
+
+            // 2つの中からランダムで1つ選ぶ
+            int choice = (Random.Range(0, 2) == 0) ? orderA : orderB;
+            itemManager.IdolPick(choice);
+            Debug.Log("アイドルが選んだ番号は：" + choice);
+            //Debug.Log($"【Idol】注文 {orderA} / {orderB} から {choice} を選びました");
+
+            StartCoroutine(IdolMove(movePoints[choice]));
         }
 
-        transform.position = target;
-        idolAnim.SetBool("IsLiftUp", true);
+        private IEnumerator IdolMove(Vector3 target)
+        {
+
+            Vector3 start = transform.position;
+            float elapsed = 0f;
+            float moveTime = 0.15f;
+
+            while (elapsed < moveTime)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / moveTime;
+                t = t * t * (3 - 2 * t); // スムーズステップ
+                transform.position = Vector3.Lerp(start, target, t);
+                yield return null;
+            }
+
+            transform.position = target;
+            idolAnim.SetBool("IsLiftUp", true);
+        }
     }
+
 }

@@ -1,45 +1,48 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-public class Customer : MonoBehaviour
+namespace Sho_Project
 {
-    private ItemManager itemManager;
-    [SerializeField] private Canvas canvas;
-    [SerializeField] private Image[] images;
-    [Header("Item Pool")]
-    public int[] itemPool = new int[] { 0, 1, 2 };
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    public void Init(ItemManager itemManager)
+    public class Customer : MonoBehaviour
     {
-        this.itemManager = itemManager;
-    }
-    // CustomerSpawner から呼ばれた時に移動
-    public void MoveTo(Vector3 targetPos)
-    {
-        // とりあえず瞬間移動でもOK
-        transform.position = targetPos;
+        private ItemManager itemManager;
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private Image[] images;
+        [Header("Item Pool")]
+        public int[] itemPool = new int[] { 0, 1, 2 };
 
-    }
-    public void CreateOrder()
-    {
-        int itemA = itemPool[Random.Range(0, itemPool.Length)];
-        int itemB = itemPool[Random.Range(0, itemPool.Length)];
-
-        while (itemA == itemB)
+        public void Init(ItemManager itemManager)
         {
-            itemB = itemPool[Random.Range(0, itemPool.Length)];
+            this.itemManager = itemManager;
         }
-        Debug.Log($"itemA:{itemA} itemB:{itemB}");
+        // CustomerSpawner から呼ばれた時に移動
+        public void MoveTo(Vector3 targetPos)
+        {
+            // とりあえず瞬間移動でもOK
+            transform.position = targetPos;
 
-        // タプルで受け取る
-        var (spriteA, spriteB) = itemManager.SetOrder(itemA, itemB);
+        }
+        public void CreateOrder()
+        {
+            int itemA = itemPool[Random.Range(0, itemPool.Length)];
+            int itemB = itemPool[Random.Range(0, itemPool.Length)];
 
-        // UI 更新
-        images[0].sprite = spriteA;
-        images[1].sprite = spriteB;
+            while (itemA == itemB)
+            {
+                itemB = itemPool[Random.Range(0, itemPool.Length)];
+            }
+            Debug.Log($"itemA:{itemA} itemB:{itemB}");
 
-        canvas.gameObject.SetActive(true);
+            // タプルで受け取る
+            var (spriteA, spriteB) = itemManager.SetOrder(itemA, itemB);
 
-        Debug.Log($"Customer が注文生成: {itemA}, {itemB}");
+            // UI 更新
+            images[0].sprite = spriteA;
+            images[1].sprite = spriteB;
+
+            canvas.gameObject.SetActive(true);
+
+            Debug.Log($"Customer が注文生成: {itemA}, {itemB}");
+        }
     }
 }

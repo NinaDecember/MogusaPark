@@ -1,48 +1,51 @@
-using UnityEngine;
-
-public class CameraController : MonoBehaviour
+namespace HabScene
 {
-    [Header("Camera Rotation")]
-    [SerializeField] private float rotationSpeed = 0.2f;
+    using UnityEngine;
 
-    public bool IsLocked = false;   // © ’Ç‰Á
-
-    private float lastTouchX;
-
-    void Update()
+    public class CameraController : MonoBehaviour
     {
-        if (IsLocked) return;   // © Canvas’†‚ÍƒJƒƒ‰‘€ì‹Ö~
+        [Header("Camera Rotation")]
+        [SerializeField] private float rotationSpeed = 0.2f;
 
-        HandleTouchRotation();
-    }
+        public bool IsLocked = false;   // © ’Ç‰Á
 
-    void HandleTouchRotation()
-    {
-        if (Input.touchCount == 1)
+        private float lastTouchX;
+
+        void Update()
         {
-            Touch t = Input.GetTouch(0);
+            if (IsLocked) return;   // © Canvas’†‚ÍƒJƒƒ‰‘€ì‹Ö~
 
-            if (t.phase == TouchPhase.Began)
+            HandleTouchRotation();
+        }
+
+        void HandleTouchRotation()
+        {
+            if (Input.touchCount == 1)
             {
-                lastTouchX = t.position.x;
+                Touch t = Input.GetTouch(0);
+
+                if (t.phase == TouchPhase.Began)
+                {
+                    lastTouchX = t.position.x;
+                }
+                else if (t.phase == TouchPhase.Moved)
+                {
+                    float deltaX = t.position.x - lastTouchX;
+                    transform.Rotate(Vector3.up, deltaX * rotationSpeed);
+                    lastTouchX = t.position.x;
+                }
             }
-            else if (t.phase == TouchPhase.Moved)
+            else if (Input.GetMouseButton(0))
             {
-                float deltaX = t.position.x - lastTouchX;
+                float deltaX = Input.GetAxis("Mouse X");
                 transform.Rotate(Vector3.up, deltaX * rotationSpeed);
-                lastTouchX = t.position.x;
             }
         }
-        else if (Input.GetMouseButton(0))
-        {
-            float deltaX = Input.GetAxis("Mouse X");
-            transform.Rotate(Vector3.up, deltaX * rotationSpeed);
-        }
-    }
 
-    public void ChangePosition(Vector3 vec)
-    {
-        if (IsLocked) return;   // ƒƒbƒN’†‚ÍˆÚ“®‹Ö~
-        transform.position = vec;
+        public void ChangePosition(Vector3 vec)
+        {
+            if (IsLocked) return;   // ƒƒbƒN’†‚ÍˆÚ“®‹Ö~
+            transform.position = vec;
+        }
     }
 }

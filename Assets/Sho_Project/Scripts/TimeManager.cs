@@ -1,53 +1,56 @@
-using TMPro;
-using UnityEngine;
-
-public class TimeManager : MonoBehaviour
+namespace Sho_Project
 {
-    [SerializeField] private float gameTime = 60f;
-    [SerializeField] private TextMeshProUGUI timerText;
+    using TMPro;
+    using UnityEngine;
 
-    public float CurrentTime { get; private set; }
-    public bool IsRunning { get; private set; } = false;
-
-    public System.Action OnTimeUp;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class TimeManager : MonoBehaviour
     {
-        CurrentTime = gameTime;
-    }
+        [SerializeField] private float gameTime = 60f;
+        [SerializeField] private TextMeshProUGUI timerText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!IsRunning) return;
+        public float CurrentTime { get; private set; }
+        public bool IsRunning { get; private set; } = false;
 
-        CurrentTime -= Time.deltaTime;
-        if (CurrentTime < 0)
+        public System.Action OnTimeUp;
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            CurrentTime = 0;
-            IsRunning = false;
-
-            OnTimeUp?.Invoke();
+            CurrentTime = gameTime;
         }
 
-        // UI更新
-        timerText.text = "Time:" + Mathf.Ceil(CurrentTime).ToString();
-    }
+        // Update is called once per frame
+        void Update()
+        {
+            if (!IsRunning) return;
 
-    public void StartTimer()
-    {
-        IsRunning = true;
-    }
+            CurrentTime -= Time.deltaTime;
+            if (CurrentTime < 0)
+            {
+                CurrentTime = 0;
+                IsRunning = false;
 
-    public void StopTimer()
-    {
-        IsRunning = false;
-    }
+                OnTimeUp?.Invoke();
+            }
 
-    public void ResetTimer()
-    {
-        CurrentTime = gameTime;
-        timerText.text = Mathf.Ceil(CurrentTime).ToString();
+            // UI更新
+            timerText.text = "Time:" + Mathf.Ceil(CurrentTime).ToString();
+        }
+
+        public void StartTimer()
+        {
+            IsRunning = true;
+        }
+
+        public void StopTimer()
+        {
+            IsRunning = false;
+        }
+
+        public void ResetTimer()
+        {
+            CurrentTime = gameTime;
+            timerText.text = Mathf.Ceil(CurrentTime).ToString();
+        }
     }
 }

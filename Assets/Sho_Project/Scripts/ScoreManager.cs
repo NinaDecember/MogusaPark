@@ -1,42 +1,45 @@
-using TMPro;
-using UnityEngine;
-
-public class ScoreManager : MonoBehaviour
+namespace Sho_Project
 {
-    public int Score { get; private set; }
-    private int highScore;
+    using TMPro;
+    using UnityEngine;
 
-    void Awake()
+    public class ScoreManager : MonoBehaviour
     {
-        LoadHighScore();
-    }
+        public int Score { get; private set; }
+        private int highScore;
 
-    public void ResetScore()
-    {
-        Score = 0;
-    }
-
-    public void AddScore(int value)
-    {
-        Score += value;
-    }
-
-    public void SaveHighScore()
-    {
-        if (Score > highScore)
+        void Awake()
         {
-            highScore = Score;
-            PlayerPrefs.SetInt("HighScore", highScore);
+            LoadHighScore();
         }
-    }
 
-    void LoadHighScore()
-    {
-        highScore = PlayerPrefs.GetInt("HighScore", 0);
-    }
+        public void ResetScore()
+        {
+            Score = 0;
+        }
 
-    public int GetHighScore()
-    {
-        return highScore;
+        public void AddScore(int value)
+        {
+            Score += value;
+        }
+
+        public void SaveHighScore()
+        {
+            if (Score > highScore)
+            {
+                highScore = Score;
+                PlayerPrefs.SetInt("HighScore", highScore);
+            }
+        }
+
+        void LoadHighScore()
+        {
+            highScore = PlayerPrefs.GetInt("HighScore", 0);
+        }
+
+        public int GetHighScore()
+        {
+            return highScore;
+        }
     }
 }

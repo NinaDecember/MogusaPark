@@ -1,33 +1,36 @@
-using UnityEngine;
-
-public class TapDetector : MonoBehaviour
+namespace HabScene
 {
-    // Update is called once per frame
-    void Update()
-    {
-        // タップ（スマホ）
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            CheckTap(Input.GetTouch(0).position);
-        }
+    using UnityEngine;
 
-        // クリック（PC）
-        if (Input.GetMouseButtonDown(0))
-        {
-            CheckTap(Input.mousePosition);
-        }
-    }
-
-    void CheckTap(Vector2 screenPos)
+    public class TapDetector : MonoBehaviour
     {
-        Ray ray = Camera.main.ScreenPointToRay(screenPos);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        // Update is called once per frame
+        void Update()
         {
-            // タップされたオブジェクトに TapPoint がついていたら呼ぶ
-            var tapPoint = hit.collider.GetComponent<TapPoint>();
-            if (tapPoint != null)
+            // タップ（スマホ）
+            if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                tapPoint.OnTapped();
+                CheckTap(Input.GetTouch(0).position);
+            }
+
+            // クリック（PC）
+            if (Input.GetMouseButtonDown(0))
+            {
+                CheckTap(Input.mousePosition);
+            }
+        }
+
+        void CheckTap(Vector2 screenPos)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(screenPos);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                // タップされたオブジェクトに TapPoint がついていたら呼ぶ
+                var tapPoint = hit.collider.GetComponent<TapPoint>();
+                if (tapPoint != null)
+                {
+                    tapPoint.OnTapped();
+                }
             }
         }
     }

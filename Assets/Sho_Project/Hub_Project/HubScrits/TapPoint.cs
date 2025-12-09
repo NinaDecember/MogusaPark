@@ -1,29 +1,32 @@
-using UnityEngine;
-
-public class TapPoint : MonoBehaviour
+namespace HabScene
 {
-    public bool isSelect = false;
-    [SerializeField] private GameObject canvasObject;
+    using UnityEngine;
 
-    [SerializeField] private CameraController cameraController;
-
-    public void OnTapped()
+    public class TapPoint : MonoBehaviour
     {
-        if (isSelect) return;
-        isSelect = true;
+        public bool isSelect = false;
+        [SerializeField] private GameObject canvasObject;
 
-        cameraController.IsLocked = true;
+        [SerializeField] private CameraController cameraController;
 
-        canvasObject.SetActive(true);
+        public void OnTapped()
+        {
+            if (isSelect) return;
+            isSelect = true;
+
+            cameraController.IsLocked = true;
+
+            canvasObject.SetActive(true);
+        }
+
+        public void ClosePanel()
+        {
+            isSelect = false;
+
+            cameraController.IsLocked = false; // ← カメラ再開
+
+            canvasObject.SetActive(false);
+        }
+
     }
-
-    public void ClosePanel()
-    {
-        isSelect = false;
-
-        cameraController.IsLocked = false; // ← カメラ再開
-
-        canvasObject.SetActive(false);
-    }
-
 }
