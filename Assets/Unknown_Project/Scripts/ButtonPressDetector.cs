@@ -3,45 +3,52 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonPressDetector : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+
+namespace Unknown_Project
 {
-    private ButtonController ctrlB;
-    public bool isPushed;
 
-    private Vector2 initPos;
 
-    private void Start()
+
+    public class ButtonPressDetector : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        ctrlB = FindFirstObjectByType<ButtonController>();
-        isPushed = false;
-        initPos = GetComponent<RectTransform>().anchoredPosition;
-    } 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        // Debug.Log("押された！");
-        isPushed = true;
-        ctrlB.Pushed(this.gameObject);
-    }
+        private ButtonController ctrlB;
+        public bool isPushed;
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        // Debug.Log("離された！");
-        isPushed = false;
-    }
+        private Vector2 initPos;
+
+        private void Start()
+        {
+            ctrlB = FindFirstObjectByType<ButtonController>();
+            isPushed = false;
+            initPos = GetComponent<RectTransform>().anchoredPosition;
+        } 
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            // Debug.Log("押された！");
+            isPushed = true;
+            ctrlB.Pushed(this.gameObject);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            // Debug.Log("離された！");
+            isPushed = false;
+        }
 
 
-    public void SetInitPos()
-    {
-        initPos = GetComponent<RectTransform>().anchoredPosition;
-    }
+        public void SetInitPos()
+        {
+            initPos = GetComponent<RectTransform>().anchoredPosition;
+        }
 
-    public Vector2 GetInitPos()
-    {
-        return initPos;
-    }
+        public Vector2 GetInitPos()
+        {
+            return initPos;
+        }
 
-    public Vector2 GetReturnInitPos()
-    {
-        return initPos;
+        public Vector2 GetReturnInitPos()
+        {
+            return initPos;
+        }
     }
 }

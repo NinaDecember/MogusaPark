@@ -1,16 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResultManager : MonoBehaviour
-{
-    [SerializeField] private Image day;
-    [SerializeField] private Image evening;
-    [SerializeField] private Image night;
-    private double time;
 
-    private void Start()
+namespace Unknown_Project
+{
+
+
+
+    public class ResultManager : MonoBehaviour
     {
-        time = ResultData.endTime;
-        ResultData.Reset();
+        [SerializeField] private Image day;
+        [SerializeField] private Image evening;
+        [SerializeField] private Image night;
+        private double time;
+
+        private void Start()
+        {
+            time = ResultData.endTime;
+            ResultData.Reset();
+        }
     }
 }
