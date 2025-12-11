@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+namespace Nave_Project.CSharpScript
+{
 public class ShotManagerV2 : MonoBehaviour
 {
     public static ShotManagerV2 Instance;
@@ -101,4 +103,5 @@ public class ShotManagerV2 : MonoBehaviour
 
         }
     }
+}
 }

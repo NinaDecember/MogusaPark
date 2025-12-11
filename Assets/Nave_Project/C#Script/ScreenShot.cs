@@ -19,7 +19,7 @@ public class ScreenShot : MonoBehaviour
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         canvas = GameObject.Find("Canvas");
-        targetImage = GameObject.Find("RawImage");
+        targetImage = GameObject.Find("PhotoImage");
     }
 
     private string GetScreenShotPath()

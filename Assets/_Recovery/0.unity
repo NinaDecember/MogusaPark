@@ -210,13 +210,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3868c0e89ebac6946b13f223e0125161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShotManagerV2
-  screenShot: {fileID: 477210502}
-  fitCamera: {fileID: 477210500}
+  screenShot: {fileID: 0}
+  fitCamera: {fileID: 0}
   shot: {fileID: 926519191}
   save: {fileID: 1505535058}
   cancel: {fileID: 1203119063}
-  Retry: {fileID: 859793330}
-  GoToTitle: {fileID: 1879780787}
+  Retry: {fileID: 0}
+  GoToTitle: {fileID: 0}
 --- !u!114 &477210502
 MonoBehaviour:
   m_ObjectHideFlags: 0
