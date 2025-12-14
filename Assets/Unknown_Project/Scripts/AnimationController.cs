@@ -10,7 +10,7 @@ namespace Unknown_Project
 
         private List<AnimationManager> animes;
         private List<int>delAnimationsIndex;
-        private List<(List<AnimationManager>,int)> popEffectAnimations;
+        private List<(List<AnimationManager>,int)> continuousEffectAnimations;
         private List<int>delPopAnimeIndex;
 
 
@@ -21,7 +21,7 @@ namespace Unknown_Project
         
             animes = new List<AnimationManager>();
             delAnimationsIndex = new List<int>();
-            popEffectAnimations = new List<(List<AnimationManager>,int)>();
+            continuousEffectAnimations = new List<(List<AnimationManager>,int)>();
             delPopAnimeIndex = new List<int>();
         }
 
@@ -55,19 +55,19 @@ namespace Unknown_Project
 
             //special
 
-            for (cnt = 0; cnt < popEffectAnimations.Count; cnt++)
+            for (cnt = 0; cnt < continuousEffectAnimations.Count; cnt++)
             {
-                if(popEffectAnimations[cnt].Item1 == null)
+                if(continuousEffectAnimations[cnt].Item1 == null)
                 {
                     delPopAnimeIndex.Add(cnt);
                     continue;
                 }
-                var popAnime = popEffectAnimations[cnt];
+                var popAnime = continuousEffectAnimations[cnt];
                 bool isEndAnimation = popAnime.Item1[popAnime.Item2].AnimationUpdate(deltaTime);
 
                 if (isEndAnimation && popAnime.Item2 < popAnime.Item1.Count - 1)
                 {
-                    popEffectAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
+                    continuousEffectAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
                 }
                 else if (isEndAnimation)
                 {
@@ -77,7 +77,7 @@ namespace Unknown_Project
 
             foreach(var delPopAnimeIndex in delPopAnimeIndex)
             {
-                popEffectAnimations.RemoveAt(delPopAnimeIndex);
+                continuousEffectAnimations.RemoveAt(delPopAnimeIndex);
             }
             delPopAnimeIndex = new List<int>();
 
@@ -113,6 +113,16 @@ namespace Unknown_Project
             animes.Add(scalingAnime);
         }
 
+
+
+
+
+
+
+
+        //////////////////////////////////////
+        ///special Add method
+        //////////////////////////////////////
         public void AddPopEffectAnimation(double scaleRate, GameObject obj, double elapsedTime)
         {
             List<AnimationManager> popEffectAnimation = new List<AnimationManager>();
@@ -133,7 +143,7 @@ namespace Unknown_Project
             popEffectAnimation.Add(big);
 
 
-            popEffectAnimations.Add((popEffectAnimation,0));
+            continuousEffectAnimations.Add((popEffectAnimation,0));
         }
     }
 }
