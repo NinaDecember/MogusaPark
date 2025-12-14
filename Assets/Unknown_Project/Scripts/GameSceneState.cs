@@ -1,8 +1,15 @@
-public enum GameSceneState
+
+
+namespace Unknown_Project
 {
-    Load,
-    CountDown,
-    Playing,
-    Pause,
-    Result
+
+
+    public enum GameSceneState
+    {
+        Load,
+        CountDown,
+        Playing,
+        Pause,
+        Result
+    }
 }
