@@ -5,7 +5,8 @@ using UnityEngine;
 using System.IO;
 using System;
 using UnityEngine.UI;
-
+namespace Nave_Project
+{
 public class ScreenShot : MonoBehaviour
 {
     Camera cam;
@@ -20,7 +21,8 @@ public class ScreenShot : MonoBehaviour
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         canvas = GameObject.Find("Canvas");
         targetImage = GameObject.Find("PhotoImage");
-    }
+        
+        }
 
     private string GetScreenShotPath()
     {
@@ -39,12 +41,11 @@ public class ScreenShot : MonoBehaviour
 
     private IEnumerator CreateScreenShot()
     {
-        UIStateChange();
+        //UIStateChange();
         DateTime date = DateTime.Now;
         timeStamp = date.ToString("yyyy-MM-dd-HH-mm-ss-fff");
         // レンダリング完了まで待機
         yield return new WaitForEndOfFrame();
-
         RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
         cam.targetTexture = renderTexture;
 
@@ -66,9 +67,11 @@ public class ScreenShot : MonoBehaviour
 
         Debug.Log("Done!");
         UIStateChange();
-    }
+        //yield return new WaitForEndOfFrame();
+        
+        }
 
-    Texture2D ResizeTexture(Texture2D src, int dst_w, int dst_h)
+        Texture2D ResizeTexture(Texture2D src, int dst_w, int dst_h)
     {
         Texture2D dst = new Texture2D(dst_w, dst_h, src.format, false);
 
@@ -134,4 +137,4 @@ public class ScreenShot : MonoBehaviour
         }
     }
 
-}
+}}

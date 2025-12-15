@@ -1,5 +1,6 @@
 using UnityEngine;
-
+namespace Nave_Project
+{
 public class ButtonClick : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -15,4 +16,5 @@ public class ButtonClick : MonoBehaviour
         }
         return 0;
     }
+}
 }

@@ -4,7 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using random = UnityEngine.Random;
-
+namespace Nave_Project
+{
 public class CharaMove : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,4 +47,4 @@ public class CharaMove : MonoBehaviour
         }
     }
 
-}
+}}

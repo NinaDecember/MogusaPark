@@ -1,7 +1,8 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
-
+namespace Nave_Project
+{
 public class shot_check : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,4 +40,5 @@ public class shot_check : MonoBehaviour
             return;
         }
     }
+}
 }
