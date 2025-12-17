@@ -7,8 +7,14 @@ namespace Unknown_Project
     public class AnimationController : MonoBehaviour
     {
         private AnimationManager animeManager;
+        private class AnimationSet
+        {
+            public string animeName;
+            public List<AnimationManager> animes;
+            public int playAnimeNum = 0;
+        }
 
-        private List<(List<AnimationManager>,int)> playingAnimations;//tuple(first:連続して再生するアニメーション, second:何index目のアニメーションを再生しているか)
+        private List<AnimationSet> playingAnimations;
         private List<int>delPlayingAnimeIndex;
 
 
@@ -17,7 +23,7 @@ namespace Unknown_Project
             animeManager = GetComponent<AnimationManager>();
     
         
-            playingAnimations = new List<(List<AnimationManager>,int)>();
+            playingAnimations = new List<AnimationSet>();
             delPlayingAnimeIndex = new List<int>();
         }
 
@@ -29,21 +35,21 @@ namespace Unknown_Project
         {
             for (int i = 0; i < playingAnimations.Count; i++)
             {
-                if(playingAnimations[i].Item1 == null)
+                if(playingAnimations[i] == null)
                 {
                     delPlayingAnimeIndex.Add(i);
                     continue;
                 }
 
                 var currentAnimeData = playingAnimations[i];
-                int playingAnimeNum = currentAnimeData.Item2;
-                AnimationManager playingAnime = currentAnimeData.Item1[playingAnimeNum];
+                int playingAnimeNum = currentAnimeData.playAnimeNum;
+                AnimationManager playingAnime = currentAnimeData.animes[playingAnimeNum];
 
                 bool isEndAnimation = playingAnime.AnimationUpdate(deltaTime);
 
-                if (isEndAnimation && playingAnimeNum < currentAnimeData.Item1.Count - 1)
+                if (isEndAnimation && playingAnimeNum < currentAnimeData.animes.Count - 1)
                 {
-                    playingAnimations[i] = (currentAnimeData.Item1, playingAnimeNum + 1);
+                    currentAnimeData.playAnimeNum += 1;
                 }
                 else if (isEndAnimation)
                 {
@@ -80,9 +86,12 @@ namespace Unknown_Project
         }
 
 
-        private void AddPlayingAnimes(List<AnimationManager> anime)
+        private void AddPlayingAnimes(List<AnimationManager> anime, string name)
         {
-            playingAnimations.Add((anime,0));
+            AnimationSet set = new AnimationSet();
+            set.animeName = name;
+            set.animes = anime;
+            playingAnimations.Add(set);
         }
 
 
@@ -106,7 +115,7 @@ namespace Unknown_Project
             LinearMoveEffect linearMoveEffect = MakeLinearMoveAnimation(start, goal, obj, elapsedTime);
             linearAnimations.Add(linearMoveEffect);
 
-            AddPlayingAnimes(linearAnimations);
+            AddPlayingAnimes(linearAnimations, "LinearMove");
         }
 
 
@@ -123,7 +132,7 @@ namespace Unknown_Project
             ScalingEffect scalingAnime = MakeScalingAnimation(startScale, goalScale, obj, elapsedTime);
             scalingAnimations.Add(scalingAnime);
 
-            AddPlayingAnimes(scalingAnimations);
+            AddPlayingAnimes(scalingAnimations,"Scaling");
         }
 
 
@@ -143,7 +152,7 @@ namespace Unknown_Project
             ScalingEffect big = MakeScalingAnimation(bigScale, normalScale, obj, elapsedTime);
             popAnimations.Add(big);
 
-            AddPlayingAnimes(popAnimations);
+            AddPlayingAnimes(popAnimations, "Pop");
         }
     }
 }
