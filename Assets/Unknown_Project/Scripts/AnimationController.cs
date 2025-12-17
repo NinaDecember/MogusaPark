@@ -8,7 +8,7 @@ namespace Unknown_Project
     {
         private AnimationManager animeManager;
 
-        private List<(List<AnimationManager>,int)> playingAnimations;
+        private List<(List<AnimationManager>,int)> playingAnimations;//tuple(first:連続して再生するアニメーション, second:何index目のアニメーションを再生しているか)
         private List<int>delPlayingAnimeIndex;
 
 
@@ -27,32 +27,36 @@ namespace Unknown_Project
 
         public void AnimetionUpdate(double deltaTime)
         {
-            for (int cnt = 0; cnt < playingAnimations.Count; cnt++)
+            for (int i = 0; i < playingAnimations.Count; i++)
             {
-                if(playingAnimations[cnt].Item1 == null)
+                if(playingAnimations[i].Item1 == null)
                 {
-                    delPlayingAnimeIndex.Add(cnt);
+                    delPlayingAnimeIndex.Add(i);
                     continue;
                 }
-                var popAnime = playingAnimations[cnt];
-                bool isEndAnimation = popAnime.Item1[popAnime.Item2].AnimationUpdate(deltaTime);
 
-                if (isEndAnimation && popAnime.Item2 < popAnime.Item1.Count - 1)
+                var currentAnimeData = playingAnimations[i];
+                int playingAnimeNum = currentAnimeData.Item2;
+                AnimationManager playingAnime = currentAnimeData.Item1[playingAnimeNum];
+
+                bool isEndAnimation = playingAnime.AnimationUpdate(deltaTime);
+
+                if (isEndAnimation && playingAnimeNum < currentAnimeData.Item1.Count - 1)
                 {
-                    playingAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
+                    playingAnimations[i] = (currentAnimeData.Item1, playingAnimeNum + 1);
                 }
                 else if (isEndAnimation)
                 {
-                    delPlayingAnimeIndex.Add(cnt);
+                    delPlayingAnimeIndex.Add(i);
                 }
+                //以降currentAnimeData関連の処理禁止
             }
 
-            foreach(var delPopAnimeIndex in delPlayingAnimeIndex)
+            foreach(var delAnimeIndex in delPlayingAnimeIndex)
             {
-                playingAnimations.RemoveAt(delPopAnimeIndex);
+                playingAnimations.RemoveAt(delAnimeIndex);
             }
             delPlayingAnimeIndex = new List<int>();
-
 
         }
 
