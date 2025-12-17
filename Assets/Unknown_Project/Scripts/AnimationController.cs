@@ -8,10 +8,8 @@ namespace Unknown_Project
     {
         private AnimationManager animeManager;
 
-        private List<AnimationManager> animes;
-        private List<int>delAnimationsIndex;
-        private List<(List<AnimationManager>,int)> continuousEffectAnimations;
-        private List<int>delPopAnimeIndex;
+        private List<(List<AnimationManager>,int)> playingAnimations;
+        private List<int>delPlayingAnimeIndex;
 
 
         private void Start()
@@ -19,10 +17,8 @@ namespace Unknown_Project
             animeManager = GetComponent<AnimationManager>();
     
         
-            animes = new List<AnimationManager>();
-            delAnimationsIndex = new List<int>();
-            continuousEffectAnimations = new List<(List<AnimationManager>,int)>();
-            delPopAnimeIndex = new List<int>();
+            playingAnimations = new List<(List<AnimationManager>,int)>();
+            delPlayingAnimeIndex = new List<int>();
         }
 
 
@@ -31,55 +27,31 @@ namespace Unknown_Project
 
         public void AnimetionUpdate(double deltaTime)
         {
-            int cnt = 0;
-            foreach(var anime in animes)
+            for (int cnt = 0; cnt < playingAnimations.Count; cnt++)
             {
-                if(anime == null)
+                if(playingAnimations[cnt].Item1 == null)
                 {
-                    delAnimationsIndex.Add(cnt);
+                    delPlayingAnimeIndex.Add(cnt);
                     continue;
                 }
-
-                bool isEndAnimation = anime.AnimationUpdate(deltaTime);
-                if(isEndAnimation)delAnimationsIndex.Add(cnt);
-                cnt++;
-            }
-
-
-            foreach(var delAnimeIndex in delAnimationsIndex)
-            {
-                animes.RemoveAt(delAnimeIndex);
-            }
-            delAnimationsIndex = new List<int>();
-
-
-            //special
-
-            for (cnt = 0; cnt < continuousEffectAnimations.Count; cnt++)
-            {
-                if(continuousEffectAnimations[cnt].Item1 == null)
-                {
-                    delPopAnimeIndex.Add(cnt);
-                    continue;
-                }
-                var popAnime = continuousEffectAnimations[cnt];
+                var popAnime = playingAnimations[cnt];
                 bool isEndAnimation = popAnime.Item1[popAnime.Item2].AnimationUpdate(deltaTime);
 
                 if (isEndAnimation && popAnime.Item2 < popAnime.Item1.Count - 1)
                 {
-                    continuousEffectAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
+                    playingAnimations[cnt] = (popAnime.Item1, popAnime.Item2 + 1);
                 }
                 else if (isEndAnimation)
                 {
-                    delPopAnimeIndex.Add(cnt);
+                    delPlayingAnimeIndex.Add(cnt);
                 }
             }
 
-            foreach(var delPopAnimeIndex in delPopAnimeIndex)
+            foreach(var delPopAnimeIndex in delPlayingAnimeIndex)
             {
-                continuousEffectAnimations.RemoveAt(delPopAnimeIndex);
+                playingAnimations.RemoveAt(delPopAnimeIndex);
             }
-            delPopAnimeIndex = new List<int>();
+            delPlayingAnimeIndex = new List<int>();
 
 
         }
@@ -87,30 +59,26 @@ namespace Unknown_Project
 
 
 
-        public void AddLinearMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
+        private LinearMoveEffect MakeLinearMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
         {
             LinearMoveEffect lineAnime = obj.AddComponent<LinearMoveEffect>();
             lineAnime.AddProps(start,goal,obj,elapsedTime);
 
-            animes.Add(lineAnime);
-        }
-        public void AddLinearMoveAnimation(Vector2 goal, GameObject obj, double elapsedTime)
-        {
-            LinearMoveEffect lineAnime = obj.AddComponent<LinearMoveEffect>();
-            Vector2 start = obj.GetComponent<RectTransform>().anchoredPosition;
-            lineAnime.AddProps(start,goal,obj,elapsedTime);
-
-            animes.Add(lineAnime);
+            return lineAnime;
         }
 
-
-
-        public void AddScalingAnimation(Vector3 startScale, Vector3 goalScale, GameObject obj, double elapsedTime)
+        private ScalingEffect MakeScalingAnimation(Vector3 startScale, Vector3 goalScale, GameObject obj, double elapsedTime)
         {
             ScalingEffect scalingAnime = obj.AddComponent<ScalingEffect>();
             scalingAnime.AddProps(startScale, goalScale, obj, elapsedTime);
 
-            animes.Add(scalingAnime);
+            return scalingAnime;
+        }
+
+
+        private void AddPlayingAnimes(List<AnimationManager> anime)
+        {
+            playingAnimations.Add((anime,0));
         }
 
 
@@ -118,32 +86,60 @@ namespace Unknown_Project
 
 
 
+        //////////////////////////////////////
+        ///Add method
+        //////////////////////////////////////
+
+        public void AddLinearMoveAnimation(Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            Vector2 start = obj.GetComponent<RectTransform>().anchoredPosition;
+            AddLinearMoveAnimation(start, goal, obj, elapsedTime);
+        }
+        public void AddLinearMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            List<AnimationManager> linearAnimations = new List<AnimationManager>();
+
+            LinearMoveEffect linearMoveEffect = MakeLinearMoveAnimation(start, goal, obj, elapsedTime);
+            linearAnimations.Add(linearMoveEffect);
+
+            AddPlayingAnimes(linearAnimations);
+        }
 
 
-        //////////////////////////////////////
-        ///special Add method
-        //////////////////////////////////////
+
+        public void AddScalingAnimation(Vector3 goalScale, GameObject obj, double elapsedTime)
+        {
+            Vector3 startScale = obj.GetComponent<RectTransform>().localScale;
+            AddScalingAnimation(startScale, goalScale, obj, elapsedTime);
+        }
+        public void AddScalingAnimation(Vector3 startScale, Vector3 goalScale, GameObject obj, double elapsedTime)
+        {
+            List<AnimationManager> scalingAnimations = new List<AnimationManager>();
+
+            ScalingEffect scalingAnime = MakeScalingAnimation(startScale, goalScale, obj, elapsedTime);
+            scalingAnimations.Add(scalingAnime);
+
+            AddPlayingAnimes(scalingAnimations);
+        }
+
+
+
+
         public void AddPopEffectAnimation(double scaleRate, GameObject obj, double elapsedTime)
         {
-            List<AnimationManager> popEffectAnimation = new List<AnimationManager>();
+            List<AnimationManager> popAnimations = new List<AnimationManager>();
 
             Vector3 smallScale = Vector3.one * 0.9f * (float)scaleRate;
             Vector3 bigScale = Vector3.one * 1.05f * (float)scaleRate;
             Vector3 normalScale = Vector3.one * (float)scaleRate;
 
-            ScalingEffect small = obj.AddComponent<ScalingEffect>();
-            small.AddProps(smallScale, bigScale, obj, elapsedTime);
+            ScalingEffect small = MakeScalingAnimation(smallScale, bigScale, obj, elapsedTime);
+            popAnimations.Add(small);
 
-            popEffectAnimation.Add(small);
+            ScalingEffect big = MakeScalingAnimation(bigScale, normalScale, obj, elapsedTime);
+            popAnimations.Add(big);
 
-
-            ScalingEffect big = obj.AddComponent<ScalingEffect>();
-            big.AddProps(bigScale, normalScale, obj, elapsedTime);
-
-            popEffectAnimation.Add(big);
-
-
-            continuousEffectAnimations.Add((popEffectAnimation,0));
+            AddPlayingAnimes(popAnimations);
         }
     }
 }
