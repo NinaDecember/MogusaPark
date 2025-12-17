@@ -16,6 +16,7 @@ namespace Unknown_Project
         private GameManager manager;
         private ButtonController ctrlB;
         private ButtonSpawner spawner;
+        private AnimationController animeCtrl; 
         private Queue<List<GameObject>>sampleGenList;
         private List<GameObject> selectableButtons;
         private GameObject[] setButtons;
@@ -26,6 +27,7 @@ namespace Unknown_Project
             manager = FindFirstObjectByType<GameManager>();
             spawner = FindFirstObjectByType<ButtonSpawner>();
             ctrlB = FindFirstObjectByType<ButtonController>();
+            animeCtrl = FindFirstObjectByType<AnimationController>();
 
             sampleGenList = new Queue<List<GameObject>>();
             selectableButtons = new List<GameObject>();
@@ -277,6 +279,7 @@ namespace Unknown_Project
 
             CulcStepScore();
 
+            PlayStepClearAnimation(setButtons);
 
             UpdateSampleButtons();
 
@@ -285,6 +288,11 @@ namespace Unknown_Project
         }
 
 
+
+        private void PlayStepClearAnimation(GameObject[] setButtons)
+        {
+            animeCtrl.AddStepClearAnimation(setButtons);
+        }
 
 
 
@@ -305,10 +313,10 @@ namespace Unknown_Project
         }
         public void ResetSetButtonsList()
         {
-            foreach(var button in setButtons)
-            {
-                Destroy(button);
-            }
+            // foreach(var button in setButtons)
+            // {
+            //     Destroy(button);
+            // }
             setButtons = new GameObject[levelData.samplePerRow];
         }
 

@@ -21,7 +21,7 @@ namespace Unknown_Project
 
         [SerializeField] private GameObject centorSampleBack;
         [SerializeField] private GameObject sampleSpacePrefab;
-        [SerializeField] private Transform canvasTransform;
+        [SerializeField] private Canvas canvas;
         private RectTransform rt;
 
         private double baseWidth;
@@ -160,7 +160,7 @@ namespace Unknown_Project
             sampleBack = new List<GameObject>();
             for(int i=LevelData.SAMPLE_STEP_COUNT-1; i>0; i--)
             {
-                GameObject back = Instantiate(sampleSpacePrefab,canvasTransform);
+                GameObject back = Instantiate(sampleSpacePrefab,canvas.GetComponent<Transform>());
                 RectTransform rt = back.GetComponent<RectTransform>();
                 rt.anchoredPosition = sampleSpaceList[i].center;    
                 rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,i);
@@ -211,9 +211,12 @@ namespace Unknown_Project
 
                     managerB.AddSetButtonsList(targetIndex,activeButton[index]);
 
-                    animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
-
                     bool isStepClear = managerB.IsStepClear();
+
+                    if (!isStepClear)
+                    {
+                        animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
+                    }
                 }
                 else
                 {
@@ -228,8 +231,28 @@ namespace Unknown_Project
 
         private void TrackingPoint(GameObject obj)
         {
-            RectTransform rt = obj.GetComponent<RectTransform>();
-            rt.position = Input.mousePosition;
+            Vector2 screenPos;
+
+            if (Input.touchCount > 0)
+            {
+                screenPos = Input.GetTouch(0).position;
+            }
+            else
+            {
+                screenPos = Input.mousePosition;
+            }
+
+            Camera uiCam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                screenPos,
+                uiCam,
+                out localPos
+            );
+            
+            obj.GetComponent<RectTransform>().anchoredPosition = localPos;
         }
 
 

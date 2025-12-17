@@ -25,5 +25,10 @@ namespace Unknown_Project
             this.elapsedTime = elapsedTime;
             this.time = 0.0;
         }
+
+        public void DestroyObj()
+        {
+            Destroy(obj);
+        }
     }
 }

@@ -72,6 +72,8 @@ namespace Unknown_Project
             }
             else if(manager.GetGameState() == GameSceneState.Result)
             {
+                Debug.Log("a");
+                animeCtrl.AnimetionUpdate(deltaTime);
                 Time.timeScale = 1;
                 ResultData.endTime = time;
                 manager.isSaveComplete = true;

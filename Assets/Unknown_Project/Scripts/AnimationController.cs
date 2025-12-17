@@ -7,6 +7,9 @@ namespace Unknown_Project
     public class AnimationController : MonoBehaviour
     {
         private AnimationManager animeManager;
+        [SerializeField] private GameObject stepClearParticlePrefab;
+
+        private List<string> destroyAnimationNames = new List<string>{"StepClearAnimation"};
         private class AnimationSet
         {
             public string animeName;
@@ -50,20 +53,36 @@ namespace Unknown_Project
                 if (isEndAnimation && playingAnimeNum < currentAnimeData.animes.Count - 1)
                 {
                     currentAnimeData.playAnimeNum += 1;
+                    //以降currentAnimeData関連の処理注意
                 }
                 else if (isEndAnimation)
                 {
                     delPlayingAnimeIndex.Add(i);
                 }
-                //以降currentAnimeData関連の処理禁止
             }
 
+            delPlayingAnimeIndex.Sort((a, b) => b.CompareTo(a));
             foreach(var delAnimeIndex in delPlayingAnimeIndex)
             {
+                if (IsDestroy(playingAnimations[delAnimeIndex]))
+                {
+                    playingAnimations[delAnimeIndex].animes[0].DestroyObj();
+                }
                 playingAnimations.RemoveAt(delAnimeIndex);
             }
             delPlayingAnimeIndex = new List<int>();
 
+        }
+
+
+
+        private bool IsDestroy(AnimationSet set)
+        {
+            foreach(var animeName in destroyAnimationNames)
+            {
+                if(set.animeName == animeName)return true;
+            }
+            return false;
         }
 
 
@@ -75,6 +94,14 @@ namespace Unknown_Project
             lineAnime.AddProps(start,goal,obj,elapsedTime);
 
             return lineAnime;
+        }
+
+        private SmoothMoveEffect MakeSmoothMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            SmoothMoveEffect smoothMoveEffect = obj.AddComponent<SmoothMoveEffect>();
+            smoothMoveEffect.AddProps(start,goal,obj,elapsedTime);
+
+            return smoothMoveEffect;
         }
 
         private ScalingEffect MakeScalingAnimation(Vector3 startScale, Vector3 goalScale, GameObject obj, double elapsedTime)
@@ -120,6 +147,24 @@ namespace Unknown_Project
 
 
 
+
+        public void AddSmoothMoveAnimation(Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            Vector2 start = obj.GetComponent<RectTransform>().anchoredPosition;
+            AddSmoothMoveAnimation(start, goal, obj, elapsedTime);
+        }
+        public void AddSmoothMoveAnimation(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            List<AnimationManager> smoothAnimations = new List<AnimationManager>();
+
+            SmoothMoveEffect smoothMoveEffect = MakeSmoothMoveAnimation(start, goal, obj, elapsedTime);
+            smoothAnimations.Add(smoothMoveEffect);
+
+            AddPlayingAnimes(smoothAnimations, "SmoothMove");
+        }
+
+
+
         public void AddScalingAnimation(Vector3 goalScale, GameObject obj, double elapsedTime)
         {
             Vector3 startScale = obj.GetComponent<RectTransform>().localScale;
@@ -153,6 +198,48 @@ namespace Unknown_Project
             popAnimations.Add(big);
 
             AddPlayingAnimes(popAnimations, "Pop");
+        }
+
+
+
+        private const float LIFT_HEIGHT = 350;
+        public void AddStepClearAnimation(GameObject[] objs)
+        {
+            foreach(var obj in objs)
+            {
+                List<AnimationManager> smoothMoveAnimations = new List<AnimationManager>();
+                
+                RectTransform rt = obj.GetComponent<RectTransform>();
+                rt.localScale = rt.localScale/2;
+                Vector2 start = rt.anchoredPosition;
+                Vector2 temp = start;
+                temp.y = LIFT_HEIGHT;
+                temp.x += UnityEngine.Random.Range(-50f,50f);
+                Vector2 goal = temp;
+
+                SmoothMoveEffect smoothMoveEffect = MakeSmoothMoveAnimation(start,goal,obj,0.5f);
+                smoothMoveAnimations.Add(smoothMoveEffect);
+
+                ScalingEffect scalingEffect = MakeScalingAnimation(rt.localScale, Vector3.zero, obj, 0.05);
+                smoothMoveAnimations.Add(scalingEffect);
+
+                //時間経過用(particleと合わせる)
+                LinearMoveEffect linearMove = MakeLinearMoveAnimation(goal, goal, obj, 0.45);
+                smoothMoveAnimations.Add(linearMove);
+
+                AddPlayingAnimes(smoothMoveAnimations, "StepClearAnimation");
+
+                PlayParticle(obj);
+            }
+        }
+
+        private void PlayParticle(GameObject obj)
+        {
+            GameObject objFx = Instantiate(stepClearParticlePrefab, obj.transform);
+            objFx.transform.localPosition = Vector3.zero;
+            objFx.transform.localRotation = Quaternion.identity;
+            objFx.transform.localScale = Vector3.one;
+
         }
     }
 }
