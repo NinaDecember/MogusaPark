@@ -20,7 +20,9 @@ namespace Unknown_Project
         }
 
         private List<AnimationSet> playingAnimations;
+        private List<AnimationSet> sampleMoveStockList;//右後から順番になっている（反転している）ことに注意, linear1/scaling1/linear2/scaling2の順だと思う...
         private List<int>delPlayingAnimeIndex;
+        private bool SampleMoveAddFirst;
 
 
         private void Start()
@@ -29,7 +31,9 @@ namespace Unknown_Project
     
         
             playingAnimations = new List<AnimationSet>();
+            sampleMoveStockList = new List<AnimationSet>();
             delPlayingAnimeIndex = new List<int>();
+            SampleMoveAddFirst = true;
         }
 
 
@@ -94,6 +98,11 @@ namespace Unknown_Project
         private bool IsChangeColor(AnimationSet set)
         {
             Vector3 scale = set.animes[0].GetObj().GetComponent<RectTransform>().localScale;
+
+            if(set.animeName == "SampleMoveAnimation")
+            {
+                sampleMoveStockList.Add(set);
+            }
             if(set.animeName == "SampleMoveAnimation" && scale == Vector3.one)return true;
             return false;            
         }
@@ -268,16 +277,61 @@ namespace Unknown_Project
         private const double ELAPSED_TIME = 0.25;
         public void AddSampleMoveAnimation(double scaleRate, List<List<Vector2>>sampleButtonPos, Queue<List<GameObject>>sampleButtons)
         {
-            for (int index = playingAnimations.Count-1; index >= 0; index--)
+            if (SampleMoveAddFirst)
             {
-                if(playingAnimations[index].animeName == "SampleMoveAnimation")
-                {
-                    playingAnimations.RemoveAt(index);
-                }
+                GenerateSampleMoveAnime(scaleRate, sampleButtonPos, sampleButtons);
+
+                SampleMoveAddFirst = false;
             }
+            else
+            {
+                for (int index = playingAnimations.Count-1; index >= 0; index--)
+                {
+                    if(playingAnimations[index].animeName == "SampleMoveAnimation")
+                    {
+                        sampleMoveStockList.Add(playingAnimations[index]);
+                        playingAnimations.RemoveAt(index);
+                    }
+                }
 
+                sampleMoveStockList.Reverse();
 
+                int cnt=0;
+                int i=0;
+                foreach(var sampleRowButtons in sampleButtons)
+                {
+                    for(int j=0; j<levelData.samplePerRow; j++)
+                    {
+                        if(i != LevelData.SAMPLE_STEP_COUNT - 1)
+                        {
+                            sampleMoveStockList[cnt].animes[0].AddProps(sampleRowButtons[j],ELAPSED_TIME);
+                            playingAnimations.Add(sampleMoveStockList[cnt]);
 
+                            cnt++;
+
+                            sampleMoveStockList[cnt].animes[0].AddProps(sampleRowButtons[j],ELAPSED_TIME);
+                            playingAnimations.Add(sampleMoveStockList[cnt]);
+
+                            cnt++;
+                            
+                        }
+                        else
+                        {
+                            sampleMoveStockList[cnt].animes[0].AddProps(sampleRowButtons[j],ELAPSED_TIME);
+                            playingAnimations.Add(sampleMoveStockList[cnt]);
+
+                            cnt++;                            
+                        }
+                    }
+                    i++;
+                }
+                sampleMoveStockList = new List<AnimationSet>();
+
+            }
+        }
+
+        private void GenerateSampleMoveAnime(double scaleRate, List<List<Vector2>>sampleButtonPos, Queue<List<GameObject>>sampleButtons)
+        {
             int i=0;
             foreach(var sampleRowButtons in sampleButtons)
             {
