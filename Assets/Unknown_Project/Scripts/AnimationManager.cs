@@ -30,5 +30,10 @@ namespace Unknown_Project
         {
             Destroy(obj);
         }
+
+        public GameObject GetObj()
+        {
+            return obj;
+        }
     }
 }

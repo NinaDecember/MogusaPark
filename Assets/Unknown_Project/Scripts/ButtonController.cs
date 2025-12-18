@@ -67,7 +67,7 @@ namespace Unknown_Project
 
 
         private int SAMPLE_STEP_COUNT = LevelData.SAMPLE_STEP_COUNT;
-        const double BASE_SCALE = 0.68;
+        const double BASE_SCALE_RATE = 0.68;
         private List<SampleSpaceData> CulcSampleSpaceData()
         {
             List<SampleSpaceData> data = new List<SampleSpaceData>();
@@ -83,8 +83,8 @@ namespace Unknown_Project
                 SampleSpaceData ssd = new SampleSpaceData();
                 // ssd.width = data[i-1].width * Math.Pow(BASE_SCALE,i);
                 // ssd.height = data[i-1].height * Math.Pow(BASE_SCALE,i);
-                ssd.width = data[i-1].width * BASE_SCALE;
-                ssd.height = data[i-1].height * BASE_SCALE;
+                ssd.width = data[i-1].width * BASE_SCALE_RATE;
+                ssd.height = data[i-1].height * BASE_SCALE_RATE;
             
                 double centerX = baseCenter.x;
             
@@ -163,7 +163,7 @@ namespace Unknown_Project
                 GameObject back = Instantiate(sampleSpacePrefab,canvas.GetComponent<Transform>());
                 RectTransform rt = back.GetComponent<RectTransform>();
                 rt.anchoredPosition = sampleSpaceList[i].center;    
-                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,i);
+                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE_RATE,i);
                 sampleBack.Add(back);
             }
 
@@ -269,31 +269,7 @@ namespace Unknown_Project
 
         public void ReDrawSampleButtons(Queue<List<GameObject>> buttons)
         {
-            int rowCnt = 0;
-            foreach(var rowButtons in buttons)
-            {
-                int colCnt = 0;
-                foreach(var button in rowButtons)
-                {
-                    if(rowCnt == 0)
-                    {
-                        Image image = button.GetComponent<Image>();
-                        Color color = image.color;
-                        color.a = 0.5f;
-                        image.color = color;
-                    }
-                    RectTransform rt = button.GetComponent<RectTransform>();
-                
-                    Vector2 pos = rt.anchoredPosition;
-                    pos = sampleButtonPos[rowCnt][colCnt];
-                    rt.anchoredPosition = pos;
-
-                    rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,rowCnt);
-
-                    colCnt++;
-                }
-                rowCnt++;
-            }
+            animeCtrl.AddSampleMoveAnimation(BASE_SCALE_RATE, sampleButtonPos, buttons);
         }
 
 

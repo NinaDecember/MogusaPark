@@ -2273,6 +2273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ddc2951bd200d4abda30b99cff5bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationController
+  levelData: {fileID: 11400000, guid: fe64b558c34f88543b9f6de4ae28f442, type: 2}
   stepClearParticlePrefab: {fileID: 5634617069347314741, guid: d678a054b3d622540b84dfdeef2b9398, type: 3}
 --- !u!114 &1991855468
 MonoBehaviour:

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Unknown_Project
 {
     public class AnimationController : MonoBehaviour
     {
+        [SerializeField] private LevelData levelData;
         private AnimationManager animeManager;
         [SerializeField] private GameObject stepClearParticlePrefab;
 
@@ -68,6 +70,10 @@ namespace Unknown_Project
                 {
                     playingAnimations[delAnimeIndex].animes[0].DestroyObj();
                 }
+                if (IsChangeColor(playingAnimations[delAnimeIndex]))
+                {
+                    ChangeAlpha(playingAnimations[delAnimeIndex]);
+                }
                 playingAnimations.RemoveAt(delAnimeIndex);
             }
             delPlayingAnimeIndex = new List<int>();
@@ -83,6 +89,21 @@ namespace Unknown_Project
                 if(set.animeName == animeName)return true;
             }
             return false;
+        }
+
+        private bool IsChangeColor(AnimationSet set)
+        {
+            Vector3 scale = set.animes[0].GetObj().GetComponent<RectTransform>().localScale;
+            if(set.animeName == "SampleMoveAnimation" && scale == Vector3.one)return true;
+            return false;            
+        }
+
+        private void ChangeAlpha(AnimationSet animeSet)
+        {
+            Image image = animeSet.animes[0].GetObj().GetComponent<Image>();
+            Color color = image.color;
+            color.a = 0.5f;
+            image.color = color;
         }
 
 
@@ -240,6 +261,70 @@ namespace Unknown_Project
             objFx.transform.localRotation = Quaternion.identity;
             objFx.transform.localScale = Vector3.one;
 
+        }
+
+
+
+        private const double ELAPSED_TIME = 0.25;
+        public void AddSampleMoveAnimation(double scaleRate, List<List<Vector2>>sampleButtonPos, Queue<List<GameObject>>sampleButtons)
+        {
+            for (int index = playingAnimations.Count-1; index >= 0; index--)
+            {
+                if(playingAnimations[index].animeName == "SampleMoveAnimation")
+                {
+                    playingAnimations.RemoveAt(index);
+                }
+            }
+
+
+
+            int i=0;
+            foreach(var sampleRowButtons in sampleButtons)
+            {
+                for(int j=0; j<levelData.samplePerRow; j++)
+                {
+                    List<AnimationManager> linearAnimes = new List<AnimationManager>();
+                    List<AnimationManager> scalingAnimes = new List<AnimationManager>();
+                    if(i+1 < LevelData.SAMPLE_STEP_COUNT)
+                    {
+                        Vector2 goalPos = sampleButtonPos[i][j];
+                        Vector2 startPos = sampleButtonPos[i+1][j];
+                        GameObject sampleButton = sampleRowButtons[j];
+                        Vector3 scale = Vector3.one;
+                        Vector3 startScale = scale * (float)Math.Pow(scaleRate,i+1);
+                        Vector3 goalScale = scale * (float)Math.Pow(scaleRate,i);
+                        
+
+                        LinearMoveEffect linear = MakeLinearMoveAnimation(startPos,goalPos,sampleButton,ELAPSED_TIME);
+                        linearAnimes.Add(linear);
+                        AddPlayingAnimes(linearAnimes,"SampleMoveAnimation");
+
+                        
+                        ScalingEffect scaling = MakeScalingAnimation(startScale,goalScale,sampleButton,ELAPSED_TIME);
+                        scalingAnimes.Add(scaling);
+                        AddPlayingAnimes(scalingAnimes,"SampleMoveAnimation");
+                        
+                    }
+                    else
+                    {
+                        GameObject sampleButton = sampleRowButtons[j];
+                        RectTransform rt = sampleButton.GetComponent<RectTransform>();
+                        rt.anchoredPosition = sampleButtonPos[i][j];
+                        Vector3 startScale = Vector3.zero;
+                        rt.localScale = startScale;
+                        Vector3 scale = Vector3.one;
+                        Vector3 goalScale = scale * (float)Math.Pow(scaleRate,i);
+                        
+
+                        ScalingEffect scaling = MakeScalingAnimation(startScale,goalScale,sampleButton,ELAPSED_TIME);
+                        scalingAnimes.Add(scaling);
+                        AddPlayingAnimes(scalingAnimes,"SampleMoveAnimation");
+                        
+                        
+                    }
+                }
+                i++;
+            }
         }
     }
 }
