@@ -15,14 +15,18 @@ public class GameStarterExiter : MonoBehaviour
     void Start()
     {
         SceneManager.UnloadSceneAsync("BestShot_Game");
-        if (SceneManager.GetActiveScene().name != this.gameObject.scene.name)
+        if (SceneManager.GetActiveScene().name == this.gameObject.scene.name)
         {
             StartButton.gameObject.SetActive(true);
             ExitButton.gameObject.SetActive(true);
             StartButton.enabled = true;
             ExitButton.enabled = true;
         }
-    }
+            EventSystem.current.SetSelectedGameObject(null);
+            if(EventSystem.current.gameObject.scene.name != "DontDestroyOnLoad")
+                DontDestroyOnLoad(EventSystem.current.gameObject);
+        }
+    
     public void GameStart()
     {
         Debug.Log("GameStart");
@@ -34,13 +38,19 @@ public class GameStarterExiter : MonoBehaviour
    }
     public void GameExit()
     {
-    #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-    #elif UNITY_WEBPLAYER
-        Application.OpenURL("https://unityroom.com/");
-    #else
-        Application.Quit();
-    #endif
+        if(SceneManager.GetActiveScene().name == "BestShot_Title")
+        {
+            Debug.Log("GameExit");
+        {
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #elif UNITY_WEBPLAYER
+                Application.OpenURL("https://unityroom.com/");
+            #else
+                Application.Quit();
+            #endif
         }
+        }
+    }
     }
 }
