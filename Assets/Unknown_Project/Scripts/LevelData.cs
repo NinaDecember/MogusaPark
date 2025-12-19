@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 
@@ -7,7 +6,7 @@ namespace Unknown_Project
 {
 
 
-    using UnityEngine.UI;
+    
 
     [CreateAssetMenu(fileName = "LevelData", menuName = "MyGame/LevelData")]
     public class LevelData : ScriptableObject

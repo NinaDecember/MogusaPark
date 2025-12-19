@@ -320,6 +320,8 @@ namespace Unknown_Project
                             sampleMoveStockList[cnt].animes[0].AddProps(sampleRowButtons[j],ELAPSED_TIME);
                             playingAnimations.Add(sampleMoveStockList[cnt]);
 
+                            sampleRowButtons[j].GetComponent<RectTransform>().anchoredPosition = sampleButtonPos[i][j];
+
                             cnt++;                            
                         }
                     }
