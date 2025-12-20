@@ -16,6 +16,7 @@ namespace Unknown_Project
     {
         [SerializeField] private LevelData levelData;
         private ButtonManager managerB;
+        private GameController gameCtrl;
         private GameSceneState state;   //enum
         private int goalDistance;   //ゴールまでの段数
         public bool isSaveComplete = false;
@@ -26,6 +27,7 @@ namespace Unknown_Project
         private void Start()
         {
             managerB = FindFirstObjectByType<ButtonManager>();
+            gameCtrl = FindFirstObjectByType<GameController>();
 
 
             state = GameSceneState.Load;
@@ -54,7 +56,7 @@ namespace Unknown_Project
 
         public void EndGame()
         {
-            state = GameSceneState.Result;
+            state = GameSceneState.EndGame;
 
             StartCoroutine(SaveDataTime());
         }
@@ -67,6 +69,7 @@ namespace Unknown_Project
 
         public void Advance()
         {
+            gameCtrl.StairUpMotionReservation();
             goalDistance -= 1;
             if(goalDistance == 0)
             {

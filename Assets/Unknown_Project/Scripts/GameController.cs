@@ -12,9 +12,13 @@ namespace Unknown_Project
         private GameManager manager;
         private ButtonController ctrlB;
         private AnimationController animeCtrl;
+
     
         private double time;
         private double deltaTime;
+        [SerializeField] private Animator idolAnim;
+        private int StairUpMotionReserveNum;
+        private bool playingStairUpMotion;
 
 
 
@@ -28,6 +32,9 @@ namespace Unknown_Project
             time = 0.0;
             Time.timeScale = 0;
             deltaTime = 0.0;
+
+            StairUpMotionReserveNum = 0;
+            playingStairUpMotion = false;
         }
 
         private bool loadStart = false;
@@ -61,6 +68,15 @@ namespace Unknown_Project
                 deltaTime = Time.deltaTime;
                 time += deltaTime;
 
+
+                if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
+                {
+                    idolAnim.SetBool("IsStairUpping",true);
+                    playingStairUpMotion = true;
+                    StairUpMotionReserveNum--;
+                }
+
+
                 ctrlB.BCUpdate();
                 animeCtrl.AnimetionUpdate(deltaTime);
 
@@ -70,13 +86,24 @@ namespace Unknown_Project
                 Time.timeScale = 0;
             
             }
-            else if(manager.GetGameState() == GameSceneState.Result)
+            else if(manager.GetGameState() == GameSceneState.EndGame)
             {
-                Debug.Log("a");
+                Time.timeScale = 1;
+                if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
+                {
+                    idolAnim.SetBool("IsStairUpping",true);
+                    playingStairUpMotion = true;
+                    StairUpMotionReserveNum--;
+                }
                 animeCtrl.AnimetionUpdate(deltaTime);
                 Time.timeScale = 1;
                 ResultData.endTime = time;
                 manager.isSaveComplete = true;
+            }
+            else if(manager.GetGameState() == GameSceneState.Result)
+            {
+                Time.timeScale = 1;
+                
             }
             else
             {
@@ -84,5 +111,18 @@ namespace Unknown_Project
             }
 
         }
+
+
+        /////////////////////////////////////////
+        /// 外部呼出し関数
+        /////////////////////////////////////////
+        public void StairUpMotionReservation()
+        {
+            StairUpMotionReserveNum++;
+        }
+        public void FinishStairUpMotion()
+        {
+            playingStairUpMotion = false;
+        } 
     }
 }
