@@ -25,6 +25,7 @@ namespace Unknown_Project
         public List<bool> loadClear;
 
         [SerializeField] private GameObject gameCanvas;
+        [SerializeField] private GameObject resultCanvas;
         [SerializeField] private GameObject idol;
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject mainCamera;
@@ -103,6 +104,7 @@ namespace Unknown_Project
             idol.GetComponent<Animator>().SetTrigger("IsResult");
             player.GetComponent<Animator>().SetTrigger("IsResult");
             gameCanvas.SetActive(false);
+            resultCanvas.SetActive(true);
             
             Transform idolTrans = idol.GetComponent<Transform>();
             Transform playerTrans = player.GetComponent<Transform>();
@@ -124,4 +126,3 @@ namespace Unknown_Project
 
     }
 }
-//y-5
