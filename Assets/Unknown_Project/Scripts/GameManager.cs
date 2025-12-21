@@ -31,6 +31,8 @@ namespace Unknown_Project
 
         private void Start()
         {
+            Application.targetFrameRate = 30;
+            
             managerB = FindFirstObjectByType<ButtonManager>();
             gameCtrl = FindFirstObjectByType<GameController>();
 
