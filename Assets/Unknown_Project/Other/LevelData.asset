@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   CourseDistance: 20
-  samplePerRow: 1
-  sunSpeed: 0.005
+  samplePerRow: 3
+  sunSpeed: 0.1
   hitRate: 0.75
   lineAnimeElapsedTime: 0.05
   snapAnimeElapsedTime: 0.1

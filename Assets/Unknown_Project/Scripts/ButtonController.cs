@@ -16,6 +16,8 @@ namespace Unknown_Project
     {
         private ButtonManager managerB;
         private AnimationController animeCtrl;
+        private AudioManager audioManager;
+
 
         [SerializeField] private LevelData levelData;
 
@@ -47,6 +49,7 @@ namespace Unknown_Project
         {
             managerB = FindFirstObjectByType<ButtonManager>();
             animeCtrl = FindFirstObjectByType<AnimationController>();
+            audioManager = FindFirstObjectByType<AudioManager>();
 
 
             rt = centorSampleBack.GetComponent<RectTransform>();
@@ -216,6 +219,7 @@ namespace Unknown_Project
                     if (!isStepClear)
                     {
                         animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
+                        audioManager.PlaySE("Selected");
                     }
                 }
                 else
@@ -295,6 +299,7 @@ namespace Unknown_Project
             if(button.GetComponent<Button>().interactable){
                 activeButton.Add(button);
                 button.transform.SetAsLastSibling();
+                audioManager.PlaySE("Click");
             }
         }
 
