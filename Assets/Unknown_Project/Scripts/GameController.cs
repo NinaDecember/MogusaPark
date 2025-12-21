@@ -17,6 +17,7 @@ namespace Unknown_Project
         private double time;
         private double deltaTime;
         [SerializeField] private Animator idolAnim;
+        [SerializeField] private Transform directLight;
         private int StairUpMotionReserveNum;
         private bool playingStairUpMotion;
 
@@ -68,6 +69,7 @@ namespace Unknown_Project
                 deltaTime = Time.deltaTime;
                 time += deltaTime;
 
+                directLight.Rotate(levelData.sunSpeed,0,0);
 
                 if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
                 {
@@ -89,20 +91,33 @@ namespace Unknown_Project
             else if(manager.GetGameState() == GameSceneState.EndGame)
             {
                 Time.timeScale = 1;
+                if(ResultData.endTime == 0)ResultData.endTime = time;
+                
+                animeCtrl.AnimetionUpdate(deltaTime);
+
                 if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
                 {
                     idolAnim.SetBool("IsStairUpping",true);
                     playingStairUpMotion = true;
                     StairUpMotionReserveNum--;
                 }
-                animeCtrl.AnimetionUpdate(deltaTime);
-                Time.timeScale = 1;
-                ResultData.endTime = time;
-                manager.isSaveComplete = true;
+                if(StairUpMotionReserveNum <= 0 && !playingStairUpMotion)
+                {
+                    manager.finishAnimation = true;
+                    Debug.Log("FinishAnimationTime = true");
+                }
+
+
+                if (manager.finishAnimation)
+                {
+                    Debug.Log("FinishAnimationTime");
+                    manager.SetGameState(GameSceneState.Result);
+                }
             }
             else if(manager.GetGameState() == GameSceneState.Result)
             {
                 Time.timeScale = 1;
+
                 
             }
             else

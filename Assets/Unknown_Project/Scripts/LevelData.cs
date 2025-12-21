@@ -20,6 +20,7 @@ namespace Unknown_Project
 
 
 
+        public float sunSpeed = 0.01f;
         public float hitRate = 0.8f;
         public double lineAnimeElapsedTime = 0.05;
         public double snapAnimeElapsedTime = 0.1;
