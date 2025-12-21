@@ -104,13 +104,11 @@ namespace Unknown_Project
                 if(StairUpMotionReserveNum <= 0 && !playingStairUpMotion)
                 {
                     manager.finishAnimation = true;
-                    Debug.Log("FinishAnimationTime = true");
                 }
 
 
                 if (manager.finishAnimation)
                 {
-                    Debug.Log("FinishAnimationTime");
                     manager.SetGameState(GameSceneState.Result);
                 }
             }

@@ -88,13 +88,11 @@ namespace Unknown_Project
 
         private IEnumerator FinishedAnimationTime()
         {
-            Debug.Log("FinishAnimationTime");
             while (true)
             {
                 yield return new WaitForSeconds(1f);
                 if(finishAnimation)break;
             }
-            Debug.Log("woop exit"+finishAnimation);
 
             ResultSetting();
         }
@@ -102,7 +100,6 @@ namespace Unknown_Project
 
         private void ResultSetting()
         {
-            Debug.Log("ResultSetting");
             idol.GetComponent<Animator>().SetTrigger("IsResult");
             player.GetComponent<Animator>().SetTrigger("IsResult");
             gameCanvas.SetActive(false);
