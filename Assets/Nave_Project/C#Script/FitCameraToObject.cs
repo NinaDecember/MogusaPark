@@ -12,7 +12,7 @@ public class FitCameraToObject : MonoBehaviour
         // カメラ表示範囲
         float height = Camera.main.orthographicSize * 2f;
         float width = height * cam.aspect;
-        target.uvRect = new Rect(0, 0, width, height);
+        //target.rect = new Rect(0, 0, width, height);
         }
     public void ShowUI()
     {

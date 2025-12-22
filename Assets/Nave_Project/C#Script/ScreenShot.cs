@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 namespace Nave_Project
 {
 public class ScreenShot : MonoBehaviour
@@ -14,8 +15,9 @@ public class ScreenShot : MonoBehaviour
     GameObject targetImage;
     string screenShotPath;
     string timeStamp;
-
+    bool Created = false;
     private string path;
+    byte[] SSImage;
     void Awake()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -40,7 +42,7 @@ public class ScreenShot : MonoBehaviour
     }
 
     private IEnumerator CreateScreenShot()
-    {
+    {if(!Created){
         //UIStateChange();
         DateTime date = DateTime.Now;
         timeStamp = date.ToString("yyyy-MM-dd-HH-mm-ss-fff");
@@ -57,21 +59,22 @@ public class ScreenShot : MonoBehaviour
         // 保存する画像のサイズを変えるならResizeTexture()を実行
         //		texture = ResizeTexture(texture,320,240);
 
-        byte[] pngData = texture.EncodeToPNG();
+        SSImage = texture.EncodeToPNG();
         screenShotPath = GetScreenShotPath();
 
         // ファイルとして保存するならFile.WriteAllBytes()を実行
-        File.WriteAllBytes(screenShotPath, pngData);
+        //File.WriteAllBytes(screenShotPath, pngData);
 
         cam.targetTexture = null;
 
         Debug.Log("Done!");
         UIStateChange();
+        Created = true;
         //yield return new WaitForEndOfFrame();
-        
-        }
+    }    
+    }
 
-        Texture2D ResizeTexture(Texture2D src, int dst_w, int dst_h)
+    Texture2D ResizeTexture(Texture2D src, int dst_w, int dst_h)
     {
         Texture2D dst = new Texture2D(dst_w, dst_h, src.format, false);
 
@@ -91,36 +94,18 @@ public class ScreenShot : MonoBehaviour
     public void ClickShootButton()
     {
         StartCoroutine(CreateScreenShot());
+        
     }
 
     public void ShowSSImage()
     {
         if (!String.IsNullOrEmpty(screenShotPath))
         {
-            byte[] image = File.ReadAllBytes(screenShotPath);
 
             Texture2D tex = new Texture2D(0, 0);
-            tex.LoadImage(image);
-
-            // NGUI の UITexture に表示
+            tex.LoadImage(SSImage);
             RawImage target = targetImage.GetComponent<RawImage>();
             target.texture = tex;
-        }
-    }
-    public void DeleteSSImage()
-    {
-        if (File.Exists(screenShotPath))
-        {
-            File.Delete(screenShotPath);
-            Debug.Log("Deleted Screenshot: " + screenShotPath);
-            screenShotPath = null;
-            // Clear the RawImage texture
-            RawImage target = targetImage.GetComponent<RawImage>();
-            target.texture = null;
-        }
-        else
-        {
-            Debug.Log("No Screenshot to Delete at: " + screenShotPath);
         }
     }
     public void SaveSSImage()
@@ -128,7 +113,7 @@ public class ScreenShot : MonoBehaviour
         if (!String.IsNullOrEmpty(screenShotPath))
         {
             string savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Path.GetFileName(screenShotPath));
-            File.Copy(screenShotPath, savePath, true);
+            File.WriteAllBytes(savePath, SSImage);
             Debug.Log("Saved Screenshot to: " + savePath);
         }
         else
@@ -136,5 +121,8 @@ public class ScreenShot : MonoBehaviour
             Debug.Log("No Screenshot to Save.");
         }
     }
-
+    public void ResetCreatedFlag()
+    {
+        Created = false;
+    }
 }}

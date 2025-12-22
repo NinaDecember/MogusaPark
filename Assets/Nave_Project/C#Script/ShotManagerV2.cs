@@ -32,14 +32,12 @@ public class ShotManagerV2 : MonoBehaviour
                 screenShot.SaveSSImage();
                 save.enabled = false;
                 cancel.enabled = false;
-                screenShot.DeleteSSImage();
                 break;
             }
             else if (EventSystem.current.currentSelectedGameObject == cancel.gameObject)
             {
                 save.enabled = false;
                 cancel.enabled = false;
-                screenShot.DeleteSSImage();
                 break;
             }
                 else
@@ -87,9 +85,11 @@ public class ShotManagerV2 : MonoBehaviour
         }
         Retry.gameObject.SetActive(false);
         GoToTitle.gameObject.SetActive(false);
-        //Retry.enabled = false;
-        //GoToTitle.enabled = false;
-    }
+            //Retry.enabled = false;
+            //GoToTitle.enabled = false;
+            fitCamera.HideUI();
+
+        }
         private void Awake()
     {
         
@@ -110,7 +110,14 @@ public class ShotManagerV2 : MonoBehaviour
     }
     void Start()
     {
-        screenShot = GetComponent<ScreenShot>();
+        if (SceneManager.GetActiveScene().name != "BestShot_Game")
+        {
+            shot.enabled = false;
+            shot.gameObject.SetActive(false);
+            Destroy(fitCamera.target);
+        }
+            fitCamera.HideUI();
+            screenShot = GetComponent<ScreenShot>();
         fitCamera = GetComponent<FitCameraToObject>();
         shot.enabled = true;
         save.enabled = false;
@@ -124,21 +131,24 @@ public class ShotManagerV2 : MonoBehaviour
         GoToTitle.gameObject.SetActive(false);
         shot.gameObject.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
-    }
-    private void Update() {
-        shot.onClick.AddListener(Shot);   
-    }
-    public void Shot()
-    {
-        screenShot.ClickShootButton();
-        fitCamera.ShowUI();
-        shot.gameObject.SetActive(false);
-        screenShot.ShowSSImage();
-        fitCamera.Fit();
-            EventSystem.current.SetSelectedGameObject(null);
-            StartCoroutine(IfTitle());
-        
+        screenShot.ResetCreatedFlag();
     }
     
-}
-}
+    async public void Shot()
+    {
+        screenShot.ClickShootButton();
+        shot.gameObject.SetActive(false);
+        await System.Threading.Tasks.Task.Delay(600); //少し待つ
+        EventSystem.current.SetSelectedGameObject(null);
+        StartCoroutine(IfTitle());
+        prevwiew();
+        
+    }
+    async void prevwiew()
+    {
+        fitCamera.ShowUI();
+        //fitCamera.Fit();
+        screenShot.ShowSSImage();
+
+    }
+    }}

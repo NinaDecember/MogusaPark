@@ -24,10 +24,15 @@ public class GameStarterExiter : MonoBehaviour
         }
             EventSystem.current.SetSelectedGameObject(null);
             if(EventSystem.current.gameObject.scene.name != "DontDestroyOnLoad")
+                {DontDestroyOnLoad(EventSystem.current.gameObject);}
+            else{
+                Destroy(EventSystem.current.gameObject);
                 DontDestroyOnLoad(EventSystem.current.gameObject);
+            }
+
         }
-    
-    public void GameStart()
+
+        public void GameStart()
     {
         Debug.Log("GameStart");
         SceneManager.LoadScene("BestShot_Game", LoadSceneMode.Single);
