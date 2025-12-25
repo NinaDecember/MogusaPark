@@ -10,6 +10,7 @@ namespace Unknown_Project
         CountDown,
         Playing,
         Pause,
+        EndGame,
         Result
     }
 }

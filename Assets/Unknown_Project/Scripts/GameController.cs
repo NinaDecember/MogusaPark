@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 
@@ -12,9 +13,20 @@ namespace Unknown_Project
         private GameManager manager;
         private ButtonController ctrlB;
         private AnimationController animeCtrl;
+        private AudioManager audioManager;
+
     
         private double time;
         private double deltaTime;
+        [SerializeField] private Animator idolAnim;
+        [SerializeField] private Transform directLight;
+        private int StairUpMotionReserveNum;
+        private bool playingStairUpMotion;
+        private bool isStartVoicePlayFirst;
+        private bool isResultAudioPlayFirst;
+        private bool overDay;
+        private float lastRotX;
+
 
 
 
@@ -23,11 +35,20 @@ namespace Unknown_Project
             manager = FindFirstObjectByType<GameManager>();
             ctrlB = FindFirstObjectByType<ButtonController>();
             animeCtrl = FindFirstObjectByType<AnimationController>();
+            audioManager = FindFirstObjectByType<AudioManager>();
 
 
+            audioManager.PlayBGM("Main");
             time = 0.0;
             Time.timeScale = 0;
             deltaTime = 0.0;
+
+            StairUpMotionReserveNum = 0;
+            playingStairUpMotion = false;
+            isStartVoicePlayFirst = true;
+            isResultAudioPlayFirst = true;
+            overDay = false;
+            lastRotX = 0f;
         }
 
         private bool loadStart = false;
@@ -50,8 +71,14 @@ namespace Unknown_Project
             }
             else if(manager.GetGameState() == GameSceneState.CountDown)
             {
-                Time.timeScale = 0;
-                manager.SetGameState(GameSceneState.Playing);
+                Time.timeScale = 1;
+
+                if (isStartVoicePlayFirst)
+                {
+                    isStartVoicePlayFirst = false;
+                    StartCoroutine(StartCount());
+                }
+                
             }
             else if(manager.GetGameState() == GameSceneState.Playing)
             {
@@ -60,6 +87,33 @@ namespace Unknown_Project
 
                 deltaTime = Time.deltaTime;
                 time += deltaTime;
+
+                directLight.Rotate(levelData.sunSpeed,0,0);
+                // Debug.Log(directLight.localEulerAngles);
+                if(directLight.localEulerAngles.x > 345)
+                {
+                    if(lastRotX != 0 && lastRotX < directLight.localEulerAngles.x)
+                    {
+                        overDay = true;
+                    }
+                    else if(lastRotX == 0)
+                    {
+                        lastRotX = directLight.localEulerAngles.x;
+                    }
+                }
+                else
+                {
+                    lastRotX = 0f;
+                }
+
+
+                if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
+                {
+                    idolAnim.SetBool("IsStairUpping",true);
+                    playingStairUpMotion = true;
+                    StairUpMotionReserveNum--;
+                }
+
 
                 ctrlB.BCUpdate();
                 animeCtrl.AnimetionUpdate(deltaTime);
@@ -70,11 +124,36 @@ namespace Unknown_Project
                 Time.timeScale = 0;
             
             }
+            else if(manager.GetGameState() == GameSceneState.EndGame)
+            {
+                Time.timeScale = 1;
+                if(ResultData.endTime == 0)ResultData.endTime = time;
+                
+                animeCtrl.AnimetionUpdate(deltaTime);
+
+                if(StairUpMotionReserveNum > 0 && !playingStairUpMotion)
+                {
+                    idolAnim.SetBool("IsStairUpping",true);
+                    playingStairUpMotion = true;
+                    StairUpMotionReserveNum--;
+                }
+                if(StairUpMotionReserveNum <= 0 && !playingStairUpMotion)
+                {
+                    manager.finishAnimation = true;
+                }
+
+
+                if (manager.finishAnimation)
+                {
+                    manager.SetGameState(GameSceneState.Result);
+                }
+            }
             else if(manager.GetGameState() == GameSceneState.Result)
             {
                 Time.timeScale = 1;
-                ResultData.endTime = time;
-                manager.isSaveComplete = true;
+
+                PlayAudio();
+
             }
             else
             {
@@ -82,5 +161,62 @@ namespace Unknown_Project
             }
 
         }
+
+
+        private IEnumerator StartCount()
+        {
+            audioManager.PlayVoice("Start");
+
+            yield return StartCoroutine(WaitForScaledSeconds(3f));
+            
+            manager.SetGameState(GameSceneState.Playing);
+        }
+
+
+        private void PlayAudio()
+        {
+            if (isResultAudioPlayFirst)
+            {
+                isResultAudioPlayFirst = false;
+                audioManager.PlayBGM("Result");
+                audioManager.PlaySE("NatureWind");
+                // audioManager.PlaySE("WindSound");
+
+                float x = directLight.localEulerAngles.x;
+                
+                if(overDay)audioManager.PlayVoice("LaterDate");
+                else if(x > 10 && x < 90)audioManager.PlayVoice("Day");
+                else if(x <= 10 || x > 355)audioManager.PlayVoice("Evening");
+                else if(x < 355 && x > 270)audioManager.PlayVoice("Night");
+                
+
+            }
+        }
+
+
+        private IEnumerator WaitForScaledSeconds(float seconds)
+        {
+            float t = 0f;
+            while (t < seconds)
+            {
+                if (Time.timeScale > 0f)
+                    t += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+
+
+        /////////////////////////////////////////
+        /// 外部呼出し関数
+        /////////////////////////////////////////
+        public void StairUpMotionReservation()
+        {
+            StairUpMotionReserveNum++;
+        }
+        public void FinishStairUpMotion()
+        {
+            playingStairUpMotion = false;
+        } 
     }
 }

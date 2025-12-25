@@ -16,6 +16,8 @@ namespace Unknown_Project
         private GameManager manager;
         private ButtonController ctrlB;
         private ButtonSpawner spawner;
+        private AnimationController animeCtrl; 
+        private AudioManager audioManager; 
         private Queue<List<GameObject>>sampleGenList;
         private List<GameObject> selectableButtons;
         private GameObject[] setButtons;
@@ -26,6 +28,8 @@ namespace Unknown_Project
             manager = FindFirstObjectByType<GameManager>();
             spawner = FindFirstObjectByType<ButtonSpawner>();
             ctrlB = FindFirstObjectByType<ButtonController>();
+            animeCtrl = FindFirstObjectByType<AnimationController>();
+            audioManager = FindFirstObjectByType<AudioManager>();
 
             sampleGenList = new Queue<List<GameObject>>();
             selectableButtons = new List<GameObject>();
@@ -277,6 +281,7 @@ namespace Unknown_Project
 
             CulcStepScore();
 
+            PlayStepClearAnimation(setButtons);
 
             UpdateSampleButtons();
 
@@ -285,6 +290,23 @@ namespace Unknown_Project
         }
 
 
+
+        private void PlayStepClearAnimation(GameObject[] setButtons)
+        {
+            animeCtrl.AddStepClearAnimation(setButtons);
+            audioManager.PlaySE("StepClear");
+
+            if(manager.GetGoalDistance() == levelData.CourseDistance/2)audioManager.PlayVoice("Half");
+            else if(manager.GetGoalDistance() == 4)audioManager.PlayVoice("3Step");
+            else if(manager.GetGoalDistance() == 3)audioManager.PlayVoice("2Step");
+            else if(manager.GetGoalDistance() == 2)audioManager.PlayVoice("LastStep");
+            else if(manager.GetGoalDistance() == 1)audioManager.PlayVoice("Goal");
+            else
+            {
+                string type = setButtons[UnityEngine.Random.Range(0,levelData.samplePerRow-1)].tag;
+                audioManager.PlayVoice(type);
+            }
+        }
 
 
 
@@ -305,10 +327,10 @@ namespace Unknown_Project
         }
         public void ResetSetButtonsList()
         {
-            foreach(var button in setButtons)
-            {
-                Destroy(button);
-            }
+            // foreach(var button in setButtons)
+            // {
+            //     Destroy(button);
+            // }
             setButtons = new GameObject[levelData.samplePerRow];
         }
 

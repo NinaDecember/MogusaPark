@@ -105,3 +105,6 @@ InitTestScene*.unity*
 # 追加Asset
 /[Aa]ssets/JMO Assets/
 /[Aa]ssets/JMO Assets*
+
+# UKS404 Import Assets folder
+/[Aa]ssets/Unknown_Project/ImportAssets
