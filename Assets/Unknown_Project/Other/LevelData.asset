@@ -27,3 +27,4 @@ MonoBehaviour:
   - {fileID: 5715816822959657182, guid: 4eb15df9b8b4f344f9ca3e7d40c4db28, type: 3}
   - {fileID: 2677703836171880631, guid: fdee392f123750d45995b34e3efa62f1, type: 3}
   - {fileID: 2335511472961484232, guid: 3413eb3c8098ed64d82e9a60316cf6e9, type: 3}
+  hubSceneName: HubScene

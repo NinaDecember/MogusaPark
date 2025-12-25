@@ -6,17 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Sho_Project/Hub_Project/HubScene.unity
+    guid: bc207edf4c09a1d4c8d34057bf569637
+  - enabled: 1
+    path: Assets/Sho_Project/Sho_ProjectScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
     path: Assets/Unknown_Project/Scenes/TopScene.unity
     guid: e52f414f64a8f6b4c9ed7b51463db62a
   - enabled: 1
     path: Assets/Unknown_Project/Scenes/PuzzleGameScene.unity
     guid: 90dc4cdca15c90a49a06bc0fe250d4a9
-  - enabled: 0
-    path: Assets/Sho_Project/Hub_Project/HubScene.unity
-    guid: bc207edf4c09a1d4c8d34057bf569637
-  - enabled: 0
-    path: Assets/Sho_Project/Sho_ProjectScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
