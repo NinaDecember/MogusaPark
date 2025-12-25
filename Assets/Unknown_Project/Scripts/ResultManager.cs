@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -9,9 +11,9 @@ namespace Unknown_Project
 
     public class ResultManager : MonoBehaviour
     {
-        [SerializeField] private Image day;
-        [SerializeField] private Image evening;
-        [SerializeField] private Image night;
+        [SerializeField] private LevelData levelData;
+        [SerializeField] private AudioManager audioManager;
+
         private double time;
 
         private void Start()
@@ -19,5 +21,18 @@ namespace Unknown_Project
             time = ResultData.endTime;
             ResultData.Reset();
         }
+
+        public void OnClickReturnHub()
+        {
+            audioManager.PlaySE("Click");
+            SceneManager.LoadScene(levelData.hubSceneName);
+        }
+
+        public void OnClickRetry()
+        {
+            audioManager.PlaySE("Click");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
     }
 }
