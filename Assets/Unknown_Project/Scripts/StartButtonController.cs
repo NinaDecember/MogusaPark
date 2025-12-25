@@ -10,6 +10,7 @@ namespace Unknown_Project
         public void OnClick()
         {
             audioManager.PlaySE("Click");
+            Time.timeScale = 1f;
             StartCoroutine(TimeLug());
         }
 

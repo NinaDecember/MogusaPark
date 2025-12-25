@@ -42,6 +42,15 @@ namespace Unknown_Project
             BGMSource.Play();
         }
 
+        public void StopVoice()
+        {
+            VoiceSource.Pause();
+        }
+        public void ResumeVoice()
+        {
+            VoiceSource.UnPause();
+        }
+
 
     }
 }

@@ -89,7 +89,7 @@ namespace Unknown_Project
                 time += deltaTime;
 
                 directLight.Rotate(levelData.sunSpeed,0,0);
-                Debug.Log(directLight.localEulerAngles);
+                // Debug.Log(directLight.localEulerAngles);
                 if(directLight.localEulerAngles.x > 345)
                 {
                     if(lastRotX != 0 && lastRotX < directLight.localEulerAngles.x)
@@ -163,13 +163,12 @@ namespace Unknown_Project
         }
 
 
-
         private IEnumerator StartCount()
         {
             audioManager.PlayVoice("Start");
 
-            yield return new WaitForSeconds(3f);
-
+            yield return StartCoroutine(WaitForScaledSeconds(3f));
+            
             manager.SetGameState(GameSceneState.Playing);
         }
 
@@ -193,6 +192,19 @@ namespace Unknown_Project
 
             }
         }
+
+
+        private IEnumerator WaitForScaledSeconds(float seconds)
+        {
+            float t = 0f;
+            while (t < seconds)
+            {
+                if (Time.timeScale > 0f)
+                    t += Time.deltaTime;
+                yield return null;
+            }
+        }
+
 
 
         /////////////////////////////////////////

@@ -6,6 +6,7 @@ namespace Unknown_Project
 
     public class ReturnHubButtonController : MonoBehaviour
     {
+        [SerializeField] private LevelData levelData;
         [SerializeField] private AudioManager audioManager;
         public void OnClick()
         {
@@ -16,7 +17,7 @@ namespace Unknown_Project
         private IEnumerator TimeLug()
         {
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene("TopScene");
+            SceneManager.LoadScene(levelData.hubSceneName);
         }
     }
 }
