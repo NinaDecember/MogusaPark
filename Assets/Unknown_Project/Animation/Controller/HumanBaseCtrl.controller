@@ -58,13 +58,8 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-<<<<<<< HEAD:Assets/Sho_Project/Vroid/IdolAnimContoroller.controller
-    m_State: {fileID: -3895940124662972697}
-    m_Position: {x: 70, y: 220, z: 0}
-=======
     m_State: {fileID: 6652545005321757293}
     m_Position: {x: 370, y: 10, z: 0}
->>>>>>> origin/StairGame_UKS404:Assets/Unknown_Project/Animation/Controller/HumanBaseCtrl.controller
   - serializedVersion: 1
     m_State: {fileID: -7089217771981906200}
     m_Position: {x: 370, y: 120, z: 0}
