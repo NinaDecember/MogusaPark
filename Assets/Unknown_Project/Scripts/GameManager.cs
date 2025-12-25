@@ -22,7 +22,8 @@ namespace Unknown_Project
         //0:ButtonMana:GenerateSampleButtonInit() 1:ButtonNaba:GenerateSelectionButtonInit()
         public List<bool> loadClear;
 
-        [SerializeField] private GameObject gameCanvas;
+        [SerializeField] private GameObject game2d;
+        [SerializeField] private GameObject gameUI;
         [SerializeField] private GameObject resultCanvas;
         [SerializeField] private GameObject idol;
         [SerializeField] private GameObject player;
@@ -103,7 +104,8 @@ namespace Unknown_Project
         {
             idol.GetComponent<Animator>().SetTrigger("IsResult");
             player.GetComponent<Animator>().SetTrigger("IsResult");
-            gameCanvas.SetActive(false);
+            game2d.SetActive(false);
+            gameUI.SetActive(false);
             resultCanvas.SetActive(true);
             
             Transform idolTrans = idol.GetComponent<Transform>();
