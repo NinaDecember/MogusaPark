@@ -16,14 +16,26 @@ namespace Unknown_Project
             
         }
 
-        public void SetBgmVolume(float value)
+        public void SetBgmVolume(float value, string name)
         {
-            mixer.SetFloat("BGMVolume", Mathf.Log10(value) * 20);
+            mixer.SetFloat(name, Mathf.Log10(value) * 20);
         }
 
         public void OnBgmSliderChanged(float value)
         {
-            SetBgmVolume(value);
+            SetBgmVolume(value,"BGMVolume");
+        }
+        public void OnSESliderChanged(float value)
+        {
+            SetBgmVolume(value,"SEVolume");
+        }
+        public void OnVoiceSliderChanged(float value)
+        {
+            SetBgmVolume(value,"VoiceVolume");
+        }
+        public void OnMasterSliderChanged(float value)
+        {
+            SetBgmVolume(value,"MasterVolume");
         }
 
         public void PlaySE(string name)

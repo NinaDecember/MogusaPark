@@ -9,6 +9,7 @@ namespace Unknown_Project
         [SerializeField] private LevelData levelData;
         [SerializeField] private AudioManager audioManager;
         [SerializeField] private GameObject pauseScreen;
+        [SerializeField] private GameObject settingScreen;
         [SerializeField] private Button titleButton;
         [SerializeField] private Button retryButton;
         [SerializeField] private Button continueButton;
@@ -57,7 +58,9 @@ namespace Unknown_Project
 
         public void OnClickSettingButton()
         {
-            
+            audioManager.PlaySE("Click");
+            settingScreen.SetActive(true);
         }
+
     }
 }
