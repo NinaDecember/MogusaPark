@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0548adfe846c944a431953a88626b1, type: 3}
+  m_Name: AudioData
+  m_EditorClassIdentifier: Assembly-CSharp::AudioData
+  BGMDatas:
+  - name: BGM01
+    clip: {fileID: 8300000, guid: 2dd89f61a448beb4fac21435e8fe9955, type: 3}
+  SEDatas:
+  - name: "\u6210\u529F\u97F3"
+    clip: {fileID: 8300000, guid: ec39e3da81f75604babaef788d5c3366, type: 3}
+  - name: "\u5931\u6557\u97F3"
+    clip: {fileID: 8300000, guid: b1a9e7ad94d08924a8deb85c1c2ee307, type: 3}
+  - name: "\u30AF\u30EA\u30C3\u30AF\u97F3"
+    clip: {fileID: 8300000, guid: bf151d7219d01cb439dded1dfc7a1026, type: 3}
+  VoiceDatas:
+  - name: "\u30B9\u30BF\u30FC\u30C8"
+    clip: {fileID: 8300000, guid: 3627731cd474077459b72ba4612f6f42, type: 3}
+  - name: "\u30B2\u30FC\u30E0\u30AF\u30EA\u30A2"
+    clip: {fileID: 8300000, guid: 2b48ccfb019bad544bb56f000deaa797, type: 3}
+  - name: "\u30B2\u30FC\u30E0\u30AA\u30FC\u30D0\u30FC"
+    clip: {fileID: 8300000, guid: 13c93a26ca55f62468a4d67db19c3790, type: 3}

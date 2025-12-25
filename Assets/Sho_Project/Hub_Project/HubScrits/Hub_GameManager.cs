@@ -2,7 +2,6 @@ namespace HabScene
 {
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using UnityEngine.SocialPlatforms.Impl;
 
     public class Hub_GameManager : MonoBehaviour
     {
@@ -34,7 +33,7 @@ namespace HabScene
         public void ChangeScene(string sceneName)
         {
             Debug.Log("ƒV[ƒ“ˆÚ“®F" + sceneName);
-            //SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName);
         }
 
     }
