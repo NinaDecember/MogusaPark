@@ -126,5 +126,26 @@ namespace Unknown_Project
             mainCamTrans.rotation = mainCamRot;
         }
 
+        public void SelectButtonInteractable()
+        {
+            List<GameObject> selectableButtons = managerB.GetSelectableButtons();
+            foreach(var button in selectableButtons)
+            {
+                Button buttonCompo = button.GetComponent<Button>();
+                buttonCompo.interactable = true;
+            }
+
+        }
+        public void SelectButtonInteractDisable()
+        {
+            List<GameObject> selectableButtons = managerB.GetSelectableButtons();
+            foreach(var button in selectableButtons)
+            {
+                Button buttonCompo = button.GetComponent<Button>();
+                buttonCompo.interactable = false;
+            }
+
+        }
+
     }
 }

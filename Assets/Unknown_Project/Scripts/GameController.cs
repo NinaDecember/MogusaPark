@@ -170,6 +170,7 @@ namespace Unknown_Project
             yield return StartCoroutine(WaitForScaledSeconds(3f));
             
             manager.SetGameState(GameSceneState.Playing);
+            manager.SelectButtonInteractable();
         }
 
 

@@ -277,20 +277,34 @@ namespace Unknown_Project
         }
 
 
-        public void ReDrawSelectionButtons(List<GameObject> selectButtons)
+        public void ReDrawSelectionButtons(List<GameObject> generateSelectButtons)
         {
             int cnt = 0;
-            foreach(var button in selectButtons)
+            foreach(var button in generateSelectButtons)
             {
                 RectTransform rt = button.GetComponent<RectTransform>();
                 rt.anchoredPosition = selectButtonPositions[cnt];
                 button.GetComponent<ButtonPressDetector>().SetInitPos();
 
-                Button buttonCompo = button.GetComponent<Button>();
-                buttonCompo.interactable = true;
+                Vector3 startScale = Vector3.zero;
+                rt.localScale = startScale;
+                Vector3 goalScale = Vector3.one;
+                animeCtrl.AddScalingAnimation(startScale, goalScale, button, 0.1);
 
                 cnt++;
             }
+        }
+        public void ReDrawSelectionButtons(int index, GameObject button)
+        {
+            RectTransform rt = button.GetComponent<RectTransform>();
+            rt.anchoredPosition = selectButtonPositions[index];
+            button.GetComponent<ButtonPressDetector>().SetInitPos();
+
+            Vector3 startScale = Vector3.zero;
+            rt.localScale = startScale;
+            Vector3 goalScale = Vector3.one;
+            animeCtrl.AddScalingAnimation(startScale, goalScale, button, 0.1);
+
         }
 
 

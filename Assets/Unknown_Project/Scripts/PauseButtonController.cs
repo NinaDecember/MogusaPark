@@ -29,6 +29,7 @@ namespace Unknown_Project
             audioManager.PlaySE("Click");
             audioManager.StopVoice();
             beforePauseGameState = gameManager.GetGameState();
+            gameManager.SelectButtonInteractDisable();
             gameManager.SetGameState(GameSceneState.Pause);
             pauseScreen.SetActive(true);
         }
@@ -49,6 +50,7 @@ namespace Unknown_Project
         {
             audioManager.PlaySE("Click");
             audioManager.ResumeVoice();
+            gameManager.SelectButtonInteractable();
             gameManager.SetGameState(beforePauseGameState);
             pauseScreen.SetActive(false);            
         }

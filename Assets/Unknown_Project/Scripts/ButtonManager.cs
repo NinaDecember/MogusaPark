@@ -130,7 +130,8 @@ namespace Unknown_Project
             Debug.Log("delIndex:"+delIndex);
     
             selectableButtons[delIndex] = spawner.SpawnSelectButton(genObj);
-            ctrlB.ReDrawSelectionButtons(selectableButtons);
+            selectableButtons[delIndex].GetComponent<Button>().interactable = true;
+            ctrlB.ReDrawSelectionButtons(delIndex, selectableButtons[delIndex]);
         }
 
 
@@ -333,6 +334,13 @@ namespace Unknown_Project
             // }
             setButtons = new GameObject[levelData.samplePerRow];
         }
+
+
+        public List<GameObject> GetSelectableButtons()
+        {
+            return selectableButtons;
+        }
+
 
 
     }
