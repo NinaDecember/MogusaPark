@@ -102,5 +102,9 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
+# 追加Asset
+/[Aa]ssets/JMO Assets/
+/[Aa]ssets/JMO Assets*
+
 # UKS404 Import Assets folder
 /[Aa]ssets/Unknown_Project/ImportAssets
