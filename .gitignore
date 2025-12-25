@@ -111,6 +111,13 @@ InitTestScene*.unity*
 
 # 各メンバーのIgnoreFolder
 /[Aa]ssets/Sho_Project/IgnoreFolder/*
+!/[Aa]ssets/Sho_Project/IgnoreFolder/.gitkeep
+
 /[Aa]ssets/Unknown_Project/IgnoreFolder/*
+!/[Aa]ssets/Unknown_Project/IgnoreFolder/.gitkeep
+
 /[Aa]ssets/Nave_Project/IgnoreFolder/*
+!/[Aa]ssets/Nave_Project/IgnoreFolder/.gitkeep
+
 /[Aa]ssets/Kojima_Project/IgnoreFolder/*
+!/[Aa]ssets/Kojima_Project/IgnoreFolder/.gitkeep
