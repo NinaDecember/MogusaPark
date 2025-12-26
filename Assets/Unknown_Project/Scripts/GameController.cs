@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 namespace Unknown_Project
@@ -25,6 +26,8 @@ namespace Unknown_Project
         [SerializeField] private Button pauseButton;
         [SerializeField] private GameObject resultTopButton;
         [SerializeField] private GameObject resultRetryButton;
+        [SerializeField] private VoiceText voiceTextData;
+        [SerializeField] private TextMeshProUGUI resultVoiceTextField;
         private int StairUpMotionReserveNum;
         private bool playingStairUpMotion;
         private bool isStartFadeFirst;
@@ -34,6 +37,9 @@ namespace Unknown_Project
         private bool isResultTransFirst;
         private bool overDay;
         private float lastRotX;
+        private bool isTextAnimating;
+        private bool nextTextFlg;
+
 
 
 
@@ -64,6 +70,8 @@ namespace Unknown_Project
             pauseButton.interactable = false;
             resultTopButton.SetActive(false);
             resultRetryButton.SetActive(false);
+            isTextAnimating = false;
+            nextTextFlg = false;
 
         }
 
@@ -198,6 +206,7 @@ namespace Unknown_Project
         private IEnumerator StartCount()
         {
             audioManager.PlayVoice("Start");
+            manager.DrawVoiceTextBM("Start");
 
             yield return StartCoroutine(WaitForScaledSeconds(3f));
             
@@ -244,11 +253,27 @@ namespace Unknown_Project
             resultRetryButton.SetActive(true);
 
             float x = directLight.localEulerAngles.x;
-            
-            if(overDay)audioManager.PlayVoice("LaterDate");
-            else if(x > 10 && x < 90)audioManager.PlayVoice("Day");
-            else if(x <= 10 || x > 355)audioManager.PlayVoice("Evening");
-            else if(x < 355 && x > 270)audioManager.PlayVoice("Night");
+
+            if (overDay)
+            {
+                audioManager.PlayVoice("LaterDate");
+                StartCoroutine(DrawResultVoiceText("LaterDate"));
+            }
+            else if(x > 10 && x < 90)
+            {
+                audioManager.PlayVoice("Day");
+                StartCoroutine(DrawResultVoiceText("Day"));
+            }
+            else if(x <= 10 || x > 355)
+            {
+                audioManager.PlayVoice("Evening");
+                StartCoroutine(DrawResultVoiceText("Evening"));
+            }
+            else if(x < 355 && x > 270)
+            {
+                audioManager.PlayVoice("Night");
+                StartCoroutine(DrawResultVoiceText("Night"));
+            }
 
         }
         private IEnumerator FadeOut()
@@ -260,6 +285,31 @@ namespace Unknown_Project
                 yield return null;
             }
         }
+        private IEnumerator DrawResultVoiceText(string type)
+        {
+            while (isTextAnimating)
+            {
+                nextTextFlg = true;
+                yield return null;
+            }
+            nextTextFlg = false;
+
+            isTextAnimating = true;
+            resultVoiceTextField.text = "";
+            string text = voiceTextData.GetVoiceText(type);
+            if(text != null)
+            {
+                foreach (char c in text)
+                {
+                    resultVoiceTextField.text += c;
+                    yield return new WaitForSeconds(0.05f);
+
+                    if(nextTextFlg)break;
+                }                
+            }
+            isTextAnimating = false;
+       }
+
 
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 namespace Unknown_Project
@@ -13,6 +14,8 @@ namespace Unknown_Project
     public class ButtonManager : MonoBehaviour
     {
         [SerializeField] private LevelData levelData;
+        [SerializeField] private VoiceText voiceTextData;
+        [SerializeField] private TextMeshProUGUI voicetextField;
         private GameManager manager;
         private ButtonController ctrlB;
         private ButtonSpawner spawner;
@@ -21,6 +24,8 @@ namespace Unknown_Project
         private Queue<List<GameObject>>sampleGenList;
         private List<GameObject> selectableButtons;
         private GameObject[] setButtons;
+        private bool isTextAnimating;
+        private bool nextTextFlg;
 
 
         private void Start()
@@ -35,6 +40,8 @@ namespace Unknown_Project
             selectableButtons = new List<GameObject>();
             setButtons = new GameObject[levelData.samplePerRow];
 
+            isTextAnimating = false;
+            nextTextFlg = false;
         }
 
 
@@ -297,19 +304,63 @@ namespace Unknown_Project
             animeCtrl.AddStepClearAnimation(setButtons);
             audioManager.PlaySE("StepClear");
 
-            if(manager.GetGoalDistance() == levelData.CourseDistance/2)audioManager.PlayVoice("Half");
-            else if(manager.GetGoalDistance() == 4)audioManager.PlayVoice("3Step");
-            else if(manager.GetGoalDistance() == 3)audioManager.PlayVoice("2Step");
-            else if(manager.GetGoalDistance() == 2)audioManager.PlayVoice("LastStep");
-            else if(manager.GetGoalDistance() == 1)audioManager.PlayVoice("Goal");
+            if(manager.GetGoalDistance() == levelData.CourseDistance/2){
+                audioManager.PlayVoice("Half");
+                StartCoroutine(DrawVoiceText("Half"));
+            }
+            else if(manager.GetGoalDistance() == 4)
+            {
+                audioManager.PlayVoice("3Step");
+                StartCoroutine(DrawVoiceText("3Step"));
+            }
+            else if(manager.GetGoalDistance() == 3)
+            {
+                audioManager.PlayVoice("2Step");
+                StartCoroutine(DrawVoiceText("2Step"));
+            }
+            else if(manager.GetGoalDistance() == 2)
+            {
+                audioManager.PlayVoice("LastStep");
+                StartCoroutine(DrawVoiceText("LastStep"));
+            }
+            else if(manager.GetGoalDistance() == 1)
+            {
+                audioManager.PlayVoice("Goal");
+                StartCoroutine(DrawVoiceText("Goal"));
+            }
             else
             {
                 string type = setButtons[UnityEngine.Random.Range(0,levelData.samplePerRow-1)].tag;
                 audioManager.PlayVoice(type);
+                StartCoroutine(DrawVoiceText(type));
             }
         }
 
+        //別プロジェクト(ゲーム名：きゅうきゅう)の山崎翔さんのコードを一部参照
+        public IEnumerator DrawVoiceText(string type)
+        {
+            while (isTextAnimating)
+            {
+                nextTextFlg = true;
+                yield return null;
+            }
+            nextTextFlg = false;
 
+            isTextAnimating = true;
+            voicetextField.text = "";
+            string text = voiceTextData.GetVoiceText(type);
+            if(text != null)
+            {
+                foreach (char c in text)
+                {
+                    voicetextField.text += c;
+                    yield return new WaitForSeconds(0.05f);
+
+                    if(nextTextFlg)break;
+                }                
+            }
+            isTextAnimating = false;
+       }
 
 
         public void AddSetButtonsList(int target, GameObject selectedButton)

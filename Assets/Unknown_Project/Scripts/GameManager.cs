@@ -154,6 +154,8 @@ namespace Unknown_Project
 
         }
 
+        //中継
+
         public bool GetIsFinishFade()
         {
             return gameCtrl.isFinishFade;
@@ -161,6 +163,12 @@ namespace Unknown_Project
         public void SetIsFinishFade(bool flg)
         {
             gameCtrl.isFinishFade = flg;
+        }
+
+        //ButtonManager中継
+        public void DrawVoiceTextBM(string type)
+        {
+            StartCoroutine(managerB.DrawVoiceText(type));
         }
 
     }
