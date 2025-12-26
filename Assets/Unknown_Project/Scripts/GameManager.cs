@@ -18,6 +18,7 @@ namespace Unknown_Project
         private GameSceneState state;   //enum
         private int goalDistance;   //ゴールまでの段数
         public bool finishAnimation = false;
+        public bool finishResultSetting = false;
 
         //0:ButtonMana:GenerateSampleButtonInit() 1:ButtonNaba:GenerateSelectionButtonInit()
         public List<bool> loadClear;
@@ -42,6 +43,8 @@ namespace Unknown_Project
             goalDistance = levelData.CourseDistance;
 
             loadClear  = new List<bool>{false,false};
+
+            finishResultSetting = false;
         
         }
 
@@ -66,7 +69,7 @@ namespace Unknown_Project
         {
             state = GameSceneState.EndGame;
 
-            StartCoroutine(FinishedAnimationTime());
+            StartCoroutine(FinishResultTransTime());
         }
 
 
@@ -88,12 +91,12 @@ namespace Unknown_Project
 
 
 
-        private IEnumerator FinishedAnimationTime()
+        private IEnumerator FinishResultTransTime()
         {
             while (true)
             {
                 yield return new WaitForSeconds(1f);
-                if(finishAnimation)break;
+                if(gameCtrl.isFinishFade)break;
             }
 
             ResultSetting();
@@ -126,6 +129,8 @@ namespace Unknown_Project
             playerTrans.localRotation = resultPlayerRot;
             mainCamTrans.position = mainCamPos;
             mainCamTrans.rotation = mainCamRot;
+
+            finishResultSetting = true;
         }
 
         public void SelectButtonInteractable()
@@ -147,6 +152,15 @@ namespace Unknown_Project
                 buttonCompo.interactable = false;
             }
 
+        }
+
+        public bool GetIsFinishFade()
+        {
+            return gameCtrl.isFinishFade;
+        }
+        public void SetIsFinishFade(bool flg)
+        {
+            gameCtrl.isFinishFade = flg;
         }
 
     }

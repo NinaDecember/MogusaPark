@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace Unknown_Project
@@ -10,6 +11,7 @@ namespace Unknown_Project
     public class GameController : MonoBehaviour
     {
         [SerializeField] private LevelData levelData;
+        [SerializeField] private ScreenTransition screenTransition;
         private GameManager manager;
         private ButtonController ctrlB;
         private AnimationController animeCtrl;
@@ -20,10 +22,16 @@ namespace Unknown_Project
         private double deltaTime;
         [SerializeField] private Animator idolAnim;
         [SerializeField] private Transform directLight;
+        [SerializeField] private Button pauseButton;
+        [SerializeField] private GameObject resultTopButton;
+        [SerializeField] private GameObject resultRetryButton;
         private int StairUpMotionReserveNum;
         private bool playingStairUpMotion;
+        private bool isStartFadeFirst;
+        public bool isFinishFade;
         private bool isStartVoicePlayFirst;
         private bool isResultAudioPlayFirst;
+        private bool isResultTransFirst;
         private bool overDay;
         private float lastRotX;
 
@@ -45,10 +53,18 @@ namespace Unknown_Project
 
             StairUpMotionReserveNum = 0;
             playingStairUpMotion = false;
+            isStartFadeFirst = true;
+            isFinishFade = false;
             isStartVoicePlayFirst = true;
             isResultAudioPlayFirst = true;
+            isResultTransFirst = true;
             overDay = false;
             lastRotX = 0f;
+
+            pauseButton.interactable = false;
+            resultTopButton.SetActive(false);
+            resultRetryButton.SetActive(false);
+
         }
 
         private bool loadStart = false;
@@ -73,9 +89,17 @@ namespace Unknown_Project
             {
                 Time.timeScale = 1;
 
-                if (isStartVoicePlayFirst)
+                if (isStartFadeFirst)
+                {
+                    isStartFadeFirst = false;
+                    isFinishFade = false;
+                    screenTransition.StartFadeOut();
+                }
+
+                if (isStartVoicePlayFirst && isFinishFade)
                 {
                     isStartVoicePlayFirst = false;
+                    pauseButton.interactable = true;
                     StartCoroutine(StartCount());
                 }
                 
@@ -142,9 +166,16 @@ namespace Unknown_Project
                     manager.finishAnimation = true;
                 }
 
-
-                if (manager.finishAnimation)
+                if (isStartFadeFirst && manager.finishAnimation)
                 {
+                    isStartFadeFirst = false;
+                    isFinishFade = false;
+                    pauseButton.interactable = false;
+                    screenTransition.StartFadeIn();
+                }
+                if (isResultTransFirst && isFinishFade)
+                {
+                    isResultTransFirst = false;
                     manager.SetGameState(GameSceneState.Result);
                 }
             }
@@ -152,7 +183,8 @@ namespace Unknown_Project
             {
                 Time.timeScale = 1;
 
-                PlayAudio();
+                if(manager.finishResultSetting)
+                    PlayAudioAndFade();
 
             }
             else
@@ -170,11 +202,13 @@ namespace Unknown_Project
             yield return StartCoroutine(WaitForScaledSeconds(3f));
             
             manager.SetGameState(GameSceneState.Playing);
+            isStartFadeFirst = true;
+            isFinishFade = false;
             manager.SelectButtonInteractable();
         }
 
 
-        private void PlayAudio()
+        private void PlayAudioAndFade()
         {
             if (isResultAudioPlayFirst)
             {
@@ -183,12 +217,8 @@ namespace Unknown_Project
                 audioManager.PlaySE("NatureWind");
                 // audioManager.PlaySE("WindSound");
 
-                float x = directLight.localEulerAngles.x;
-                
-                if(overDay)audioManager.PlayVoice("LaterDate");
-                else if(x > 10 && x < 90)audioManager.PlayVoice("Day");
-                else if(x <= 10 || x > 355)audioManager.PlayVoice("Evening");
-                else if(x < 355 && x > 270)audioManager.PlayVoice("Night");
+                StartCoroutine(PlayVoice());
+
                 
 
             }
@@ -206,6 +236,31 @@ namespace Unknown_Project
             }
         }
 
+        private IEnumerator PlayVoice()
+        {
+            yield return StartCoroutine(FadeOut());
+
+            resultTopButton.SetActive(true);
+            resultRetryButton.SetActive(true);
+
+            float x = directLight.localEulerAngles.x;
+            
+            if(overDay)audioManager.PlayVoice("LaterDate");
+            else if(x > 10 && x < 90)audioManager.PlayVoice("Day");
+            else if(x <= 10 || x > 355)audioManager.PlayVoice("Evening");
+            else if(x < 355 && x > 270)audioManager.PlayVoice("Night");
+
+        }
+        private IEnumerator FadeOut()
+        {
+            isFinishFade = false;
+            screenTransition.StartFadeOut();
+            while (!isFinishFade)
+            {
+                yield return null;
+            }
+        }
+
 
 
         /////////////////////////////////////////
@@ -219,5 +274,10 @@ namespace Unknown_Project
         {
             playingStairUpMotion = false;
         } 
+
+        public void FinishFade()
+        {
+            isFinishFade = true;
+        }
     }
 }

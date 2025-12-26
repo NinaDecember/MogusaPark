@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace Unknown_Project
         private GameManager gameManager;
         [SerializeField] private LevelData levelData;
         [SerializeField] private AudioManager audioManager;
+        [SerializeField] private ScreenTransition screenTransition;
         [SerializeField] private GameObject pauseScreen;
         [SerializeField] private GameObject settingScreen;
         [SerializeField] private Button titleButton;
@@ -42,12 +44,24 @@ namespace Unknown_Project
         public void OnClickTitleButton()
         {
             audioManager.PlaySE("Click");
+
+            StartCoroutine(OnClickTitleButtonFade());
+
+        }
+        private IEnumerator OnClickTitleButtonFade()
+        {
+            yield return StartCoroutine(WaitFadeFinish());
             SceneManager.LoadScene(levelData.hubSceneName);
         }
 
         public void OnClickRetryButton()
         {
             audioManager.PlaySE("Click");
+            StartCoroutine(OnClickRetryButtonFade());
+        }
+        private IEnumerator OnClickRetryButtonFade()
+        {
+            yield return StartCoroutine(WaitFadeFinish());
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
@@ -65,6 +79,17 @@ namespace Unknown_Project
         {
             audioManager.PlaySE("Click");
             settingScreen.SetActive(true);
+        }
+
+
+        private IEnumerator WaitFadeFinish()
+        {
+            gameManager.SetIsFinishFade(false);
+            screenTransition.StartFadeIn();
+            while (!gameManager.GetIsFinishFade())
+            {
+                yield return null;
+            }
         }
 
     }
