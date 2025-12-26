@@ -111,13 +111,15 @@ namespace Unknown_Project
             Transform idolTrans = idol.GetComponent<Transform>();
             Transform playerTrans = player.GetComponent<Transform>();
             Transform mainCamTrans = mainCamera.GetComponent<Transform>();
-            Vector3 resultIdolPos = new Vector3(6.2f,-0.6f,9.5f);
-            Quaternion resultIdolRot = Quaternion.Euler(0f,-38f,0f);
-            Vector3 resultPlayerPos = new Vector3(-0.005f,-0.00656f,0.00336f);
-            Quaternion resultPlayerRot = Quaternion.Euler(-3.17f,62f,-6f);
+            Vector3 resultIdolPos = new Vector3(6.2f,3.27f,15.7f);
+            Quaternion resultIdolRot = Quaternion.Euler(0f,-12f,0f);
+            Vector3 resultPlayerPos = new Vector3(5.8f,3.3f,15.75f);
+            Quaternion resultPlayerRot = Quaternion.Euler(0f,7.75f,0f);
             Vector3 mainCamPos = new Vector3(4.85f,4.4f,13.5f);
             Quaternion mainCamRot = Quaternion.Euler(-2.65f,21.8f,0.185f);
 
+            playerTrans.SetParent(null);
+            idolTrans.SetParent(null);
             idolTrans.localPosition = resultIdolPos;
             idolTrans.localRotation = resultIdolRot;
             playerTrans.localPosition = resultPlayerPos;
