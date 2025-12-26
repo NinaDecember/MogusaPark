@@ -44,6 +44,22 @@ namespace HabScene
             Debug.Log("ÉVÅ[Éìà⁄ìÆÅF" + sceneName);
             SceneManager.LoadScene(sceneName);
         }
+        public void OnPushLeftArrow()
+        {
+            cameraPositionIndex--;
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+            projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
+        }
+        public void OnPushRightArrow()
+        {
+            cameraPositionIndex++;
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+            projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
+        }
 
     }
 }
