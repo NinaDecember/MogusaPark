@@ -16,6 +16,7 @@ namespace Unknown_Project
         [SerializeField] private Button settingButton;
 
         private GameSceneState beforePauseGameState;
+        private bool isPaused;
 
 
         private void Start()
@@ -24,9 +25,12 @@ namespace Unknown_Project
             pauseScreen.SetActive(false);
 
             beforePauseGameState = GameSceneState.Playing;
+            isPaused = false;
         }
         public void OnClickPauseButton()
         {
+            if(isPaused)return;
+            isPaused = true;
             audioManager.PlaySE("Click");
             audioManager.StopVoice();
             beforePauseGameState = gameManager.GetGameState();
@@ -49,6 +53,7 @@ namespace Unknown_Project
 
         public void OnClickContinueButton()
         {
+            isPaused = false;
             audioManager.PlaySE("Click");
             audioManager.ResumeVoice();
             gameManager.SelectButtonInteractable();
