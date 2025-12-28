@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 3
   tags:
   - Water
+  - Bird
+  - Branch
+  - DeadLeaves
+  - FallenLeaves
+  - Maple
+  - Plum
+  - Rock
+  - Squirrel
   layers:
   - Default
   - TransparentFX

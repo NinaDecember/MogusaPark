@@ -1,0 +1,46 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+
+namespace Unknown_Project
+{
+
+
+
+    public class LinearMoveEffect : AnimationManager
+    {
+        private Vector2 startPos;
+        private Vector2 goalPos;
+        private Vector2 vector;
+
+
+
+        public override bool AnimationUpdate(double deltaTime)
+        {
+            if(obj == null)return true;
+
+            rtObj.anchoredPosition += vector * (float)deltaTime;
+            time += deltaTime;
+            if(time >= elapsedTime)
+            {
+                rtObj.anchoredPosition = goalPos;
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public void AddProps(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
+        {
+            base.AddProps(obj,elapsedTime);
+            startPos = start;
+            goalPos = goal;
+
+            Vector2 distance = goal-start;
+            vector = distance / (float)elapsedTime;
+        }
+
+
+    }
+}
