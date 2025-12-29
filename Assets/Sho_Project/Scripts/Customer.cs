@@ -1,5 +1,7 @@
 namespace Sho_Project
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -11,6 +13,7 @@ namespace Sho_Project
         [Header("Item Pool")]
         public int[] itemPool = new int[] { 0, 1, 2 };
 
+        [SerializeField] private float moveDuration = 0.5f;
         public void Init(ItemManager itemManager)
         {
             this.itemManager = itemManager;
@@ -18,9 +21,26 @@ namespace Sho_Project
         // CustomerSpawner から呼ばれた時に移動
         public void MoveTo(Vector3 targetPos)
         {
-            // とりあえず瞬間移動でもOK
-            transform.position = targetPos;
+            StartCoroutine(MoveCoroutine(targetPos));
 
+        }
+
+        private IEnumerator MoveCoroutine(Vector3 targetPos)
+        {
+            Vector3 startPos = transform.position;
+            float time = 0f;
+
+            while (time < moveDuration)
+            {
+                time += Time.deltaTime;
+                float t = time / moveDuration;
+
+                // 線形補間（必要なら SmoothStep に変更可）
+                transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+                yield return null;
+            }
+            transform.position = targetPos;
         }
         public void CreateOrder()
         {

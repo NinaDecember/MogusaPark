@@ -3,7 +3,6 @@ namespace Sho_Project
 
     using System.Collections;
     using UnityEngine;
-    using static UnityEngine.GraphicsBuffer;
 
     public class IdolController : MonoBehaviour
     {

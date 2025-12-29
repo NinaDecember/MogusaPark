@@ -6,7 +6,7 @@ namespace Unknown_Project
 {
 
 
-    using UnityEngine.UI;
+    
 
     [CreateAssetMenu(fileName = "LevelData", menuName = "MyGame/LevelData")]
     public class LevelData : ScriptableObject
@@ -20,6 +20,7 @@ namespace Unknown_Project
 
 
 
+        public float sunSpeed = 0.01f;
         public float hitRate = 0.8f;
         public double lineAnimeElapsedTime = 0.05;
         public double snapAnimeElapsedTime = 0.1;
@@ -52,6 +53,9 @@ namespace Unknown_Project
                 ButtonPrefabs.Add(prefab8);
             }
         }
+
+
+        public string hubSceneName = "TopScene";
     }
 
 

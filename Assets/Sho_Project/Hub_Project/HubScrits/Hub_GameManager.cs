@@ -1,14 +1,18 @@
 namespace HabScene
 {
+    using System.Collections.Generic;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using UnityEngine.SocialPlatforms.Impl;
 
     public class Hub_GameManager : MonoBehaviour
     {
-        [SerializeField] private Vector3[] cameraPositions = new Vector3[5];
+        [SerializeField] private List<GameObject> cameraPositions = new List<GameObject>();
         private int cameraPositionIndex = 0;
         [SerializeField] private CameraController cameraController;
+
+        [SerializeField] private TextMeshProUGUI projectNameText;
+        [SerializeField] private string[] projectNames;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -21,20 +25,40 @@ namespace HabScene
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 cameraPositionIndex--;
-                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Length);
-                cameraController.ChangePosition(cameraPositions[cameraPositionIndex]);
+                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+                cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+                projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 cameraPositionIndex++;
-                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Length);
-                cameraController.ChangePosition(cameraPositions[cameraPositionIndex]);
+                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+                cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+                projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
             }
         }
         public void ChangeScene(string sceneName)
         {
             Debug.Log("ÉVÅ[Éìà⁄ìÆÅF" + sceneName);
-            //SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName);
+        }
+        public void OnPushLeftArrow()
+        {
+            cameraPositionIndex--;
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+            projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
+        }
+        public void OnPushRightArrow()
+        {
+            cameraPositionIndex++;
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+
+            projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
         }
 
     }

@@ -16,12 +16,14 @@ namespace Unknown_Project
     {
         private ButtonManager managerB;
         private AnimationController animeCtrl;
+        private AudioManager audioManager;
+
 
         [SerializeField] private LevelData levelData;
 
         [SerializeField] private GameObject centorSampleBack;
         [SerializeField] private GameObject sampleSpacePrefab;
-        [SerializeField] private Transform canvasTransform;
+        [SerializeField] private Canvas canvas;
         private RectTransform rt;
 
         private double baseWidth;
@@ -47,6 +49,7 @@ namespace Unknown_Project
         {
             managerB = FindFirstObjectByType<ButtonManager>();
             animeCtrl = FindFirstObjectByType<AnimationController>();
+            audioManager = FindFirstObjectByType<AudioManager>();
 
 
             rt = centorSampleBack.GetComponent<RectTransform>();
@@ -67,7 +70,7 @@ namespace Unknown_Project
 
 
         private int SAMPLE_STEP_COUNT = LevelData.SAMPLE_STEP_COUNT;
-        const double BASE_SCALE = 0.68;
+        const double BASE_SCALE_RATE = 0.68;
         private List<SampleSpaceData> CulcSampleSpaceData()
         {
             List<SampleSpaceData> data = new List<SampleSpaceData>();
@@ -83,8 +86,8 @@ namespace Unknown_Project
                 SampleSpaceData ssd = new SampleSpaceData();
                 // ssd.width = data[i-1].width * Math.Pow(BASE_SCALE,i);
                 // ssd.height = data[i-1].height * Math.Pow(BASE_SCALE,i);
-                ssd.width = data[i-1].width * BASE_SCALE;
-                ssd.height = data[i-1].height * BASE_SCALE;
+                ssd.width = data[i-1].width * BASE_SCALE_RATE;
+                ssd.height = data[i-1].height * BASE_SCALE_RATE;
             
                 double centerX = baseCenter.x;
             
@@ -160,10 +163,10 @@ namespace Unknown_Project
             sampleBack = new List<GameObject>();
             for(int i=LevelData.SAMPLE_STEP_COUNT-1; i>0; i--)
             {
-                GameObject back = Instantiate(sampleSpacePrefab,canvasTransform);
+                GameObject back = Instantiate(sampleSpacePrefab,canvas.GetComponent<Transform>());
                 RectTransform rt = back.GetComponent<RectTransform>();
                 rt.anchoredPosition = sampleSpaceList[i].center;    
-                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,i);
+                rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE_RATE,i);
                 sampleBack.Add(back);
             }
 
@@ -211,9 +214,13 @@ namespace Unknown_Project
 
                     managerB.AddSetButtonsList(targetIndex,activeButton[index]);
 
-                    animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
-
                     bool isStepClear = managerB.IsStepClear();
+
+                    if (!isStepClear)
+                    {
+                        animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
+                        audioManager.PlaySE("Selected");
+                    }
                 }
                 else
                 {
@@ -228,8 +235,28 @@ namespace Unknown_Project
 
         private void TrackingPoint(GameObject obj)
         {
-            RectTransform rt = obj.GetComponent<RectTransform>();
-            rt.position = Input.mousePosition;
+            Vector2 screenPos;
+
+            if (Input.touchCount > 0)
+            {
+                screenPos = Input.GetTouch(0).position;
+            }
+            else
+            {
+                screenPos = Input.mousePosition;
+            }
+
+            Camera uiCam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                screenPos,
+                uiCam,
+                out localPos
+            );
+            
+            obj.GetComponent<RectTransform>().anchoredPosition = localPos;
         }
 
 
@@ -246,48 +273,38 @@ namespace Unknown_Project
 
         public void ReDrawSampleButtons(Queue<List<GameObject>> buttons)
         {
-            int rowCnt = 0;
-            foreach(var rowButtons in buttons)
-            {
-                int colCnt = 0;
-                foreach(var button in rowButtons)
-                {
-                    if(rowCnt == 0)
-                    {
-                        Image image = button.GetComponent<Image>();
-                        Color color = image.color;
-                        color.a = 0.5f;
-                        image.color = color;
-                    }
-                    RectTransform rt = button.GetComponent<RectTransform>();
-                
-                    Vector2 pos = rt.anchoredPosition;
-                    pos = sampleButtonPos[rowCnt][colCnt];
-                    rt.anchoredPosition = pos;
-
-                    rt.localScale = Vector3.one *(float) Math.Pow(BASE_SCALE,rowCnt);
-
-                    colCnt++;
-                }
-                rowCnt++;
-            }
+            animeCtrl.AddSampleMoveAnimation(BASE_SCALE_RATE, sampleButtonPos, buttons);
         }
 
 
-        public void ReDrawSelectionButtons(List<GameObject> selectButtons)
+        public void ReDrawSelectionButtons(List<GameObject> generateSelectButtons)
         {
             int cnt = 0;
-            foreach(var button in selectButtons)
+            foreach(var button in generateSelectButtons)
             {
                 RectTransform rt = button.GetComponent<RectTransform>();
                 rt.anchoredPosition = selectButtonPositions[cnt];
                 button.GetComponent<ButtonPressDetector>().SetInitPos();
 
-                Button buttonCompo = button.GetComponent<Button>();
-                buttonCompo.interactable = true;
+                Vector3 startScale = Vector3.zero;
+                rt.localScale = startScale;
+                Vector3 goalScale = Vector3.one;
+                animeCtrl.AddScalingAnimation(startScale, goalScale, button, 0.1);
 
                 cnt++;
             }
+        }
+        public void ReDrawSelectionButtons(int index, GameObject button)
+        {
+            RectTransform rt = button.GetComponent<RectTransform>();
+            rt.anchoredPosition = selectButtonPositions[index];
+            button.GetComponent<ButtonPressDetector>().SetInitPos();
+
+            Vector3 startScale = Vector3.zero;
+            rt.localScale = startScale;
+            Vector3 goalScale = Vector3.one;
+            animeCtrl.AddScalingAnimation(startScale, goalScale, button, 0.1);
+
         }
 
 
@@ -296,6 +313,7 @@ namespace Unknown_Project
             if(button.GetComponent<Button>().interactable){
                 activeButton.Add(button);
                 button.transform.SetAsLastSibling();
+                audioManager.PlaySE("Click");
             }
         }
 

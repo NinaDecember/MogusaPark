@@ -1,5 +1,6 @@
 namespace Sho_Project
 {
+    using System.Linq;
     using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -12,7 +13,7 @@ namespace Sho_Project
         public ScoreManager scoreManager;
         public ItemManager itemManager;
         public TimeManager timeManager;
-        public TrustGaugeManager trustGaugeManager;
+        //public TrustGaugeManager trustGaugeManager;
         public PlayerController playerController;
         public ResultUIManager resultUIManager;
 
@@ -26,6 +27,9 @@ namespace Sho_Project
         [SerializeField] private TextMeshProUGUI scoreText;
         private int score = 0;
 
+        [Header("サウンド")]
+        [SerializeField] private AudioManager audioManager;
+        [SerializeField] private AudioData audioData;
         void Awake()
         {
             scoreText.text = $"Score:{score.ToString("00000")}";
@@ -33,7 +37,9 @@ namespace Sho_Project
 
         void Start()
         {
-            StartGame();
+            playerController.DisableController();
+            audioManager.PlayVoice(audioData.VoiceDatas.FirstOrDefault(name => name.name == "スタート").clip);
+            Invoke("StartGame", 3f);
 
         }
 
@@ -48,8 +54,11 @@ namespace Sho_Project
             succsessCustomer = 0;
             scoreManager.ResetScore();
             timeManager.OnTimeUp = GameClear;
-            trustGaugeManager.OnGameOver = GameOver;
+            playerController.EnableController();
+            //trustGaugeManager.OnGameOver = GameOver;
             timeManager.StartTimer();
+            customerSpawner.InitCustomers();
+            audioManager.PlayBGM(audioData.BGMDatas.FirstOrDefault(name => name.name == "BGM01").clip);
         }
 
         // ---------------------------
@@ -61,7 +70,7 @@ namespace Sho_Project
             if (isGameOver || isGameClear) return;
             succsessCustomer++;
             scoreManager.AddScore(100);
-            trustGaugeManager.AddGauge();
+            //trustGaugeManager.AddGauge();
             ScoreChange();
             customerSpawner.OnCustomerFinished();
         }
@@ -72,8 +81,10 @@ namespace Sho_Project
         public void OnOrderFail()
         {
             if (isGameOver || isGameClear) return;
+            scoreManager.AddScore(-50);
+            ScoreChange();
             customerSpawner.OnCustomerFinished();
-            trustGaugeManager.SubGauge();
+            //trustGaugeManager.SubGauge();
             //itemManager.PrepareNextOrder();
         }
 
@@ -91,8 +102,9 @@ namespace Sho_Project
 
         public void GameClear()
         {
-            isGameClear = true;
+            isGameClear = succsessCustomer > 10 ? true : false ;
             timeManager.StopTimer();
+            audioManager.StopBGM();
             playerController.DisableController();
             resultUIManager.Init(isGameClear, score, succsessCustomer);
             Debug.Log("GAME CLEAR");
@@ -107,7 +119,7 @@ namespace Sho_Project
         public void ChangeScene(string sceneName)
         {
             Debug.Log("シーン移動：" + sceneName);
-            //SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName);
         }
 
 

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2756497442318704ca32a627412face6, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  CourseDistance: 5
-  samplePerRow: 4
+  CourseDistance: 20
+  samplePerRow: 3
+  sunSpeed: 0.045
   hitRate: 0.75
   lineAnimeElapsedTime: 0.05
   snapAnimeElapsedTime: 0.1
@@ -26,3 +27,4 @@ MonoBehaviour:
   - {fileID: 5715816822959657182, guid: 4eb15df9b8b4f344f9ca3e7d40c4db28, type: 3}
   - {fileID: 2677703836171880631, guid: fdee392f123750d45995b34e3efa62f1, type: 3}
   - {fileID: 2335511472961484232, guid: 3413eb3c8098ed64d82e9a60316cf6e9, type: 3}
+  hubSceneName: HubScene

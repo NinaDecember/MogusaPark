@@ -1,5 +1,6 @@
 namespace HabScene
 {
+    using TMPro;
     using UnityEngine;
 
     public class CameraController : MonoBehaviour
@@ -10,6 +11,8 @@ namespace HabScene
         public bool IsLocked = false;   // Å© í«â¡
 
         private float lastTouchX;
+
+       
 
         void Update()
         {

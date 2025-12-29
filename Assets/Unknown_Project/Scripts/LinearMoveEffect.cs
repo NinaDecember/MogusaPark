@@ -34,10 +34,10 @@ namespace Unknown_Project
         public void AddProps(Vector2 start, Vector2 goal, GameObject obj, double elapsedTime)
         {
             base.AddProps(obj,elapsedTime);
-            startPos = rtObj.anchoredPosition;
+            startPos = start;
             goalPos = goal;
 
-            Vector2 distance = goal-startPos;
+            Vector2 distance = goal-start;
             vector = distance / (float)elapsedTime;
         }
 

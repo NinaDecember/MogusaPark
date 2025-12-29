@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b459350d9761014db96a9c85902197b, type: 3}
+  m_Name: AudioClipData
+  m_EditorClassIdentifier: Assembly-CSharp::AudioClipData
+  seData:
+  - name: Click
+    clip: {fileID: 8300000, guid: c889bf343e73c41499913bc47c2e64fb, type: 3}
+  - name: NatureWind
+    clip: {fileID: 8300000, guid: b262ef478db3ce241a53496faec3f6ab, type: 3}
+  - name: Selected
+    clip: {fileID: 8300000, guid: b4a53aea17809a947a36ed75aa12aac8, type: 3}
+  - name: StepClear
+    clip: {fileID: 8300000, guid: dba01ede6ee810c4e9de6575a7793fe9, type: 3}
+  - name: WindSound
+    clip: {fileID: 8300000, guid: 9003fdf42e7ee25438323a56bd63e247, type: 3}
+  voiceData:
+  - name: 2Step
+    clip: {fileID: 8300000, guid: d23a76b0c83b0374487a7138c55d6518, type: 3}
+  - name: 3Step
+    clip: {fileID: 8300000, guid: 898298586242bcc40bf4517b05f50b77, type: 3}
+  - name: Bird
+    clip: {fileID: 8300000, guid: d5b2749381ca43648b9b7a97c1d8011c, type: 3}
+  - name: Branch
+    clip: {fileID: 8300000, guid: 9413bd5b2af46e540bf9be9774522727, type: 3}
+  - name: Day
+    clip: {fileID: 8300000, guid: 430db499d85d33c408b61480930daee1, type: 3}
+  - name: DeadLeaves
+    clip: {fileID: 8300000, guid: 79308dda2915647478f7b915077d22d2, type: 3}
+  - name: Evening
+    clip: {fileID: 8300000, guid: 3d665f9b9c0d6b44780975e2bef8cb39, type: 3}
+  - name: FallenLeaves
+    clip: {fileID: 8300000, guid: b893a99fc06de3e4b926983043a63dd7, type: 3}
+  - name: Goal
+    clip: {fileID: 8300000, guid: 42d45840781654646abecee4f81da4b4, type: 3}
+  - name: Half
+    clip: {fileID: 8300000, guid: 570e28ca3f0152e4e98758bbb0ff3044, type: 3}
+  - name: LastStep
+    clip: {fileID: 8300000, guid: 261cff603ad90284ca92c3071c877069, type: 3}
+  - name: LaterDate
+    clip: {fileID: 8300000, guid: db7daba9eee92254393d2cc8fd10fb51, type: 3}
+  - name: Maple
+    clip: {fileID: 8300000, guid: 864cdc4f7eb3c1749b8734e1ca478388, type: 3}
+  - name: Night
+    clip: {fileID: 8300000, guid: 8c866894f7c5ad948b1c2dca69a714bc, type: 3}
+  - name: Plum
+    clip: {fileID: 8300000, guid: 4d23a8e7083442048abed48438f388a6, type: 3}
+  - name: Rock
+    clip: {fileID: 8300000, guid: dee66f4b31b124d4796b1d5aa0785336, type: 3}
+  - name: Squirrel
+    clip: {fileID: 8300000, guid: 3654d207944c3c640b81c60aecfdec32, type: 3}
+  - name: Start
+    clip: {fileID: 8300000, guid: bc618b5be6a833348bbef3ef17219927, type: 3}
+  bgmData:
+  - name: Main
+    clip: {fileID: 8300000, guid: b253561e4c34752499b2eb993b14a096, type: 3}
+  - name: Result
+    clip: {fileID: 8300000, guid: 7aea07e81680512419c1b2f804fb7116, type: 3}

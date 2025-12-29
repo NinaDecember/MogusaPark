@@ -1,5 +1,6 @@
 namespace Sho_Project
 {
+    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -14,14 +15,13 @@ namespace Sho_Project
         private List<Customer> customers = new List<Customer>();
 
         [SerializeField] private ItemManager itemManager;
-
         void Start()
         {
-            InitCustomers();
+            
         }
 
         //ç≈èâÇ…5êlê∂ê¨
-        void InitCustomers()
+        public void InitCustomers()
         {
             for (int i = 0; i < spawnPositions.Length; i++)
             {
@@ -66,5 +66,8 @@ namespace Sho_Project
             // 4. ç≈èâÇÃãqÇÃè§ïiÇï\é¶Ç≥ÇπÇÈ
             customers[0].CreateOrder();
         }
+
+       
     }
+
 }

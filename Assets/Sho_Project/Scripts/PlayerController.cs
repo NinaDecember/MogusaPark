@@ -3,6 +3,7 @@ namespace Sho_Project
     using UnityEngine;
     using UnityEngine.InputSystem;
     using System.Collections;
+    using System.Linq;
 
     public class PlayerController : MonoBehaviour
     {
@@ -21,6 +22,14 @@ namespace Sho_Project
         [SerializeField] private InputAction moveLeftAction;
         [SerializeField] private InputAction moveRightAction;
         [SerializeField] private InputAction pickAction;
+
+        private bool canControll = true;
+
+
+        [Header("サウンド")]
+        [SerializeField] private AudioManager audioManager;
+        [SerializeField] private AudioData audioData;
+
 
         private void OnEnable()
         {
@@ -46,11 +55,21 @@ namespace Sho_Project
 
         public void DisableController()
         {
+            canControll = false;
             moveLeftAction.Disable();
             moveRightAction.Disable();
             pickAction.Disable();
 
             Debug.Log("Player Controls Disabled");
+        }
+
+        public void EnableController()
+        {
+            canControll = true;
+            moveLeftAction.Enable();
+            moveRightAction.Enable();
+            pickAction.Enable();
+            Debug.Log("Player Controls Enabled");
         }
 
         private void Start()
@@ -69,10 +88,11 @@ namespace Sho_Project
             MoveRequest(1);
         }
 
-        private void MoveRequest(int dir)
+        public void MoveRequest(int dir)
         {
             if (isMoving) return;
-
+            if (!canControll) return;
+            audioManager.PlaySE(audioData.SEDatas.FirstOrDefault(name => name.name == "クリック音").clip);
             int targetIndex = index + dir;
             if (targetIndex < 0 || targetIndex >= movePoints.Length) return;
 
@@ -107,6 +127,15 @@ namespace Sho_Project
             Debug.Log("PickUp:アイテムナンバー" + index);
             //アイテムマネージャーにアクセス
             itemManager.PlayerPick(index);
+            audioManager.PlaySE(audioData.SEDatas.FirstOrDefault(name => name.name == "クリック音").clip);
+            playerAnim.SetBool("IsLiftUp", true);
+        }
+
+        public void OnClickPick()
+        {
+            if (!canControll) return;
+            itemManager.PlayerPick(index);
+            audioManager.PlaySE(audioData.SEDatas.FirstOrDefault(name => name.name == "クリック音").clip);
             playerAnim.SetBool("IsLiftUp", true);
         }
         #endregion
