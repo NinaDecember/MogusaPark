@@ -54,6 +54,7 @@ public class GameStarterExiter : MonoBehaviour
             #else
                 Application.Quit();
             #endif*/
+            Destroy(EventSystem.current.gameObject);
             SceneManager.LoadScene("HubScene");
         }
         }
