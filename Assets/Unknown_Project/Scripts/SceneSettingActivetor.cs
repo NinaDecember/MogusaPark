@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Unknown_Project
@@ -5,10 +6,19 @@ namespace Unknown_Project
     public class SceneSettingActivetor : MonoBehaviour
     {
         [SerializeField] private SceneSetting sceneSetting;
-        void Start()
+        private void Start()
+        {
+
+        }
+
+        public IEnumerator ScreenSetting()
         {
             if(sceneSetting.screenAngle == ScreenAngle.Landscape)
             {
+                Screen.orientation = ScreenOrientation.LandscapeLeft;
+                
+                yield return null;
+                
                 Screen.orientation = ScreenOrientation.AutoRotation;
 
                 Screen.autorotateToLandscapeLeft  = true;
@@ -20,6 +30,10 @@ namespace Unknown_Project
             {
                 Screen.orientation = ScreenOrientation.Portrait;
 
+                yield return null;
+
+                Screen.orientation = ScreenOrientation.AutoRotation;
+
                 Screen.autorotateToPortrait = true;
                 Screen.autorotateToPortraitUpsideDown = false;
                 Screen.autorotateToLandscapeLeft = false;
@@ -27,7 +41,6 @@ namespace Unknown_Project
             }
 
             Application.targetFrameRate = sceneSetting.fps;
-    
 
         }
     }

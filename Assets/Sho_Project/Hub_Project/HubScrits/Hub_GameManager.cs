@@ -1,9 +1,11 @@
 namespace HabScene
 {
+    using System.Collections;
     using System.Collections.Generic;
     using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using Unknown_Project;
 
     public class Hub_GameManager : MonoBehaviour
     {
@@ -13,10 +15,12 @@ namespace HabScene
 
         [SerializeField] private TextMeshProUGUI projectNameText;
         [SerializeField] private string[] projectNames;
+        [SerializeField] private SceneSettingActivetor sceneSet;
+        [SerializeField] private RuntimeDisplaySetting displaySetting;
+        [SerializeField] private SceneSetting sceneSetting;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-
         }
 
         // Update is called once per frame
@@ -39,11 +43,6 @@ namespace HabScene
                 projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
             }
         }
-        public void ChangeScene(string sceneName)
-        {
-            Debug.Log("シーン移動：" + sceneName);
-            SceneManager.LoadScene(sceneName);
-        }
         public void OnPushLeftArrow()
         {
             cameraPositionIndex--;
@@ -61,5 +60,34 @@ namespace HabScene
             projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
         }
 
+        public void ChangeScene(string sceneName)
+        {
+            Debug.Log("シーン移動：" + sceneName);
+
+            StartCoroutine(ChangeSceneCoroutine(sceneName));
+        }
+        private IEnumerator ChangeSceneCoroutine(string sceneName)
+        {
+            // ???????????????
+            RuntimeDisplaySettingData screenSettings = displaySetting.GetScreenSettings(sceneName);
+
+            // ???????
+            sceneSetting.screenAngle = screenSettings.screenAngle;
+            sceneSetting.fps = screenSettings.fps;
+            yield return StartCoroutine(sceneSet.ScreenSetting());
+            
+            SceneManager.LoadScene(sceneName);
+        }
+
+        public void HubSceneScreenSetting()
+        {
+            RuntimeDisplaySettingData screenSettings = displaySetting.GetScreenSettings("hubScene");
+
+            // ???????
+            sceneSetting.screenAngle = screenSettings.screenAngle;
+            sceneSetting.fps = screenSettings.fps;
+            StartCoroutine(sceneSet.ScreenSetting());
+
+        }
     }
 }
