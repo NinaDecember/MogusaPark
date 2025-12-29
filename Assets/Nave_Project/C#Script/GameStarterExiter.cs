@@ -14,7 +14,7 @@ public class GameStarterExiter : MonoBehaviour
     
     void Start()
     {
-        SceneManager.UnloadSceneAsync("BestShot_Game");
+        // SceneManager.UnloadSceneAsync("BestShot_Game");
         if (SceneManager.GetActiveScene().name == this.gameObject.scene.name)
         {
             StartButton.gameObject.SetActive(true);
