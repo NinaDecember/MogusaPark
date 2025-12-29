@@ -47,13 +47,14 @@ public class GameStarterExiter : MonoBehaviour
         {
             Debug.Log("GameExit");
         {
-            #if UNITY_EDITOR
+            /*#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
             #elif UNITY_WEBPLAYER
                 Application.OpenURL("https://unityroom.com/");
             #else
                 Application.Quit();
-            #endif
+            #endif*/
+            SceneManager.LoadScene("HubScene");
         }
         }
     }
