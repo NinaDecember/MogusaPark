@@ -15,7 +15,9 @@ namespace Unknown_Project
         {
             if(sceneSetting.screenAngle == ScreenAngle.Landscape)
             {
-                Screen.orientation = ScreenOrientation.LandscapeLeft;
+                if(Screen.orientation == ScreenOrientation.LandscapeRight)
+                    Screen.orientation = ScreenOrientation.LandscapeRight;
+                else Screen.orientation = ScreenOrientation.LandscapeLeft;
                 
                 yield return null;
                 
@@ -38,6 +40,15 @@ namespace Unknown_Project
                 Screen.autorotateToPortraitUpsideDown = false;
                 Screen.autorotateToLandscapeLeft = false;
                 Screen.autorotateToLandscapeRight = false;
+            }
+            else if(sceneSetting.screenAngle == ScreenAngle.Both)
+            {
+                Screen.orientation = ScreenOrientation.AutoRotation;
+
+                Screen.autorotateToPortrait = true;
+                Screen.autorotateToPortraitUpsideDown = true;
+                Screen.autorotateToLandscapeLeft = true;
+                Screen.autorotateToLandscapeRight = true;
             }
 
             Application.targetFrameRate = sceneSetting.fps;
