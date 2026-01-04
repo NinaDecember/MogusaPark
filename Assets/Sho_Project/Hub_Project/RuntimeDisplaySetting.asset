@@ -17,7 +17,7 @@ MonoBehaviour:
     screenAngle: 0
     fps: 30
   - distinationSceneName: hubScene
-    screenAngle: 2
+    screenAngle: 0
     fps: 30
   - distinationSceneName: PuzzleGameScene
     screenAngle: 0
