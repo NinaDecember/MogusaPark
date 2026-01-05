@@ -146,9 +146,10 @@ public class ShotManagerV2 : MonoBehaviour
     }
     async void prevwiew()
     {
+        await System.Threading.Tasks.Task.Delay(100); //少し待つ
         fitCamera.ShowUI();
         //fitCamera.Fit();
-        screenShot.ShowSSImage();
+        screenShot.ShowSSImage();       
 
     }
     }}
