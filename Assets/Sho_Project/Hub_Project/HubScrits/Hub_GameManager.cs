@@ -10,6 +10,7 @@ namespace HabScene
     public class Hub_GameManager : MonoBehaviour
     {
         [SerializeField] private List<GameObject> cameraPositions = new List<GameObject>();
+        [SerializeField] private List<int> backIndext = new List<int>();
         private int cameraPositionIndex = 0;
         [SerializeField] private CameraController cameraController;
 
@@ -21,6 +22,7 @@ namespace HabScene
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
+            InitCameraPos();
             HubSceneScreenSetting();
         }
 
@@ -30,7 +32,8 @@ namespace HabScene
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 cameraPositionIndex--;
-                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+                Debug.Log("index" + cameraPositionIndex);
+                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count-1);
                 cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
 
                 projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
@@ -38,7 +41,8 @@ namespace HabScene
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 cameraPositionIndex++;
-                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+                Debug.Log("index" + cameraPositionIndex);
+                cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count-1);
                 cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
 
                 projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
@@ -47,7 +51,7 @@ namespace HabScene
         public void OnPushLeftArrow()
         {
             cameraPositionIndex--;
-            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count-1);
             cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
 
             projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
@@ -55,7 +59,7 @@ namespace HabScene
         public void OnPushRightArrow()
         {
             cameraPositionIndex++;
-            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count);
+            cameraPositionIndex = Mathf.Clamp(cameraPositionIndex, 0, cameraPositions.Count-1);
             cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
 
             projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
@@ -64,7 +68,7 @@ namespace HabScene
         public void ChangeScene(string sceneName)
         {
             Debug.Log("ÉVÅ[Éìà⁄ìÆÅF" + sceneName);
-
+            PlayerPrefs.SetInt("LastCameraIndex", backIndext[cameraPositionIndex]);
             StartCoroutine(ChangeSceneCoroutine(sceneName));
         }
         private IEnumerator ChangeSceneCoroutine(string sceneName)
@@ -89,6 +93,14 @@ namespace HabScene
             sceneSetting.fps = screenSettings.fps;
             StartCoroutine(sceneSet.ScreenSetting());
 
+        }
+
+        private void InitCameraPos()
+        {
+            int n = PlayerPrefs.GetInt("LastCameraIndex",0);
+            cameraPositionIndex = n;
+            cameraController.ChangePosition(cameraPositions[cameraPositionIndex].transform.position);
+            projectNameText.text = $"ProjectName:{projectNames[cameraPositionIndex]}";
         }
     }
 }

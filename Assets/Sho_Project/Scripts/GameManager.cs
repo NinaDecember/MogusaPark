@@ -119,9 +119,20 @@ namespace Sho_Project
         public void ChangeScene(string sceneName)
         {
             Debug.Log("ÉVÅ[Éìà⁄ìÆÅF" + sceneName);
+            Time.timeScale = 1;
             SceneManager.LoadScene(sceneName);
         }
 
+        public void StopTime()
+        {
+            Time.timeScale = 0;
+        }
 
+        public void StartTime()
+        {
+            Time.timeScale = 1;
+        }
+
+        
     }
 }
