@@ -6031,15 +6031,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9
+      value: -8.96
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.26999998
+      value: 0.67
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.02
+      value: -8.93
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6087,7 +6087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9002582448300130329, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Sho_ProjectScene02
+      value: 1215-finish2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7703,11 +7703,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.13
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.9
+      value: -9.4
       objectReference: {fileID: 0}
     - target: {fileID: 6530258291722087578, guid: 277b801d6d51cf446a927c12a428f285, type: 3}
       propertyPath: m_LocalRotation.w

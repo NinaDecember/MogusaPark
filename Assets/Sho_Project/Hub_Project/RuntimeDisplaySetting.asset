@@ -25,3 +25,6 @@ MonoBehaviour:
   - distinationSceneName: BestShot_Title
     screenAngle: 1
     fps: 30
+  - distinationSceneName: 1215-finish2
+    screenAngle: 0
+    fps: 30
