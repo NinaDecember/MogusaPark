@@ -125,8 +125,8 @@ namespace Unknown_Project
             idolTrans.localRotation = resultIdolRot;
             playerTrans.localPosition = resultPlayerPos;
             playerTrans.localRotation = resultPlayerRot;
-            mainCamTrans.position = mainCamPos;
-            mainCamTrans.rotation = mainCamRot;
+            // mainCamTrans.position = mainCamPos;
+            // mainCamTrans.rotation = mainCamRot;
 
             finishResultSetting = true;
         }

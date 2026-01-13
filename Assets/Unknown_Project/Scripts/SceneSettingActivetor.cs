@@ -8,7 +8,7 @@ namespace Unknown_Project
         [SerializeField] private SceneSetting sceneSetting;
         private void Start()
         {
-
+            StartCoroutine(ScreenSetting());
         }
 
         public IEnumerator ScreenSetting()

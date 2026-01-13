@@ -13,7 +13,7 @@ namespace Unknown_Project
 
         private void Start()
         {
-            
+            OnMasterSliderChanged(0.0001f);
         }
 
         public void SetBgmVolume(float value, string name)
