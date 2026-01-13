@@ -17,6 +17,8 @@ namespace Unknown_Project
         private ButtonController ctrlB;
         private AnimationController animeCtrl;
         private AudioManager audioManager;
+        private PythonClient pythonClient;
+
 
     
         private double time;
@@ -50,6 +52,8 @@ namespace Unknown_Project
             ctrlB = FindFirstObjectByType<ButtonController>();
             animeCtrl = FindFirstObjectByType<AnimationController>();
             audioManager = FindFirstObjectByType<AudioManager>();
+            pythonClient = FindFirstObjectByType<PythonClient>();
+
 
 
             audioManager.PlayBGM("Main");
@@ -86,6 +90,7 @@ namespace Unknown_Project
                 {
                     loadStart = true;
                     manager.LoadSampleButton();
+                    pythonClient.SendStart();
                 }
                 foreach(bool flg in manager.loadClear)
                 {

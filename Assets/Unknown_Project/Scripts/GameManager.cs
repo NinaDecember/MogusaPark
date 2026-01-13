@@ -16,7 +16,6 @@ namespace Unknown_Project
         private ButtonManager managerB;
         private GameController gameCtrl;
         private GameSceneState state;   //enum
-        private PythonClient pythonClient;
         private int goalDistance;   //ゴールまでの段数
         public bool finishAnimation = false;
         public bool finishResultSetting = false;
@@ -36,7 +35,6 @@ namespace Unknown_Project
         {
             managerB = FindFirstObjectByType<ButtonManager>();
             gameCtrl = FindFirstObjectByType<GameController>();
-            pythonClient = FindFirstObjectByType<PythonClient>();
 
 
             state = GameSceneState.Load;
@@ -46,7 +44,6 @@ namespace Unknown_Project
 
             finishResultSetting = false;
 
-            pythonClient.SendStart();
         
         }
 

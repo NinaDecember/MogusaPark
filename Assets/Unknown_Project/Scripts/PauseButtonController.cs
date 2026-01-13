@@ -7,6 +7,7 @@ namespace Unknown_Project
     public class PauseButtonController : MonoBehaviour
     {
         private GameManager gameManager;
+        private PythonClient pythonClient;
         [SerializeField] private LevelData levelData;
         [SerializeField] private AudioManager audioManager;
         [SerializeField] private ScreenTransition screenTransition;
@@ -24,6 +25,7 @@ namespace Unknown_Project
         private void Start()
         {
             gameManager = FindFirstObjectByType<GameManager>();
+            pythonClient = FindFirstObjectByType<PythonClient>();
             pauseScreen.SetActive(false);
 
             beforePauseGameState = GameSceneState.Playing;
@@ -44,7 +46,6 @@ namespace Unknown_Project
         public void OnClickTitleButton()
         {
             audioManager.PlaySE("Click");
-
             StartCoroutine(OnClickTitleButtonFade());
 
         }
@@ -86,6 +87,7 @@ namespace Unknown_Project
         private IEnumerator WaitFadeFinish()
         {
             gameManager.SetIsFinishFade(false);
+            pythonClient.OnDestroy();
             screenTransition.StartFadeIn();
             while (!gameManager.GetIsFinishFade())
             {

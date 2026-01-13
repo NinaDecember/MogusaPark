@@ -73,7 +73,7 @@ namespace Unknown_Project
             writer.WriteLine("START");
         }
 
-        void OnDestroy()
+        public void OnDestroy()
         {
             receiveThread?.Abort();
             client?.Close();
