@@ -46,7 +46,7 @@ namespace Unknown_Project
 
             finishResultSetting = false;
 
-            // pythonClient.SendStart();
+            pythonClient.SendStart();
         
         }
 
