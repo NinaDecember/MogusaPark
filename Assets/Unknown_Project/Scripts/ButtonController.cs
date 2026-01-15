@@ -186,16 +186,11 @@ namespace Unknown_Project
             List<int> delActiveObj = new List<int>();
             int cnt = 0;
             foreach(var obj in activeButton)
-            {
-                if (!obj.GetComponent<ButtonPressDetector>().isPushed)
-                {
-                    delActiveObj.Add(cnt);
-                }
-                else
-                {
-                    TrackingPoint(obj);
-                }
-            
+            {                                            
+                RectTransform rt = obj.GetComponent<RectTransform>();
+                rt.anchoredPosition = Vector2.zero;
+
+                delActiveObj.Add(cnt);
                 cnt++;
             }
 
@@ -225,7 +220,8 @@ namespace Unknown_Project
                 else
                 {
                     Vector2 returnPos = activeButton[index].GetComponent<ButtonPressDetector>().GetReturnInitPos();
-                    animeCtrl.AddLinearMoveAnimation(returnPos, activeButton[index],levelData.lineAnimeElapsedTime);
+                    activeButton[index].GetComponent<RectTransform>().anchoredPosition = returnPos;
+                    // animeCtrl.AddLinearMoveAnimation(returnPos, activeButton[index],levelData.lineAnimeElapsedTime);
                 }
                 activeButton.RemoveAt(index);
             }
@@ -283,7 +279,7 @@ namespace Unknown_Project
             foreach(var button in generateSelectButtons)
             {
                 RectTransform rt = button.GetComponent<RectTransform>();
-                rt.anchoredPosition = selectButtonPositions[cnt];
+                rt.anchoredPosition = selectButtonPositions[cnt]-new Vector2(0,1000);
                 button.GetComponent<ButtonPressDetector>().SetInitPos();
 
                 Vector3 startScale = Vector3.zero;
@@ -297,7 +293,7 @@ namespace Unknown_Project
         public void ReDrawSelectionButtons(int index, GameObject button)
         {
             RectTransform rt = button.GetComponent<RectTransform>();
-            rt.anchoredPosition = selectButtonPositions[index];
+            rt.anchoredPosition = selectButtonPositions[index]-new Vector2(0,1000);
             button.GetComponent<ButtonPressDetector>().SetInitPos();
 
             Vector3 startScale = Vector3.zero;
@@ -314,6 +310,32 @@ namespace Unknown_Project
                 activeButton.Add(button);
                 button.transform.SetAsLastSibling();
                 audioManager.PlaySE("Click");
+            }
+        }
+
+        public void AudioResponse(List<string> marks)
+        {
+            Debug.Log("marks:"+marks[0]+", "+marks[1]+", "+marks[2]);
+            List<GameObject>buttons = managerB.GetSelectableButtons();
+            Debug.Log("marks count:"+marks.Count);
+            Debug.Log("buttons count:"+buttons.Count);
+
+            foreach(var mark in marks)
+            {
+                foreach(var buttonObj in buttons)
+                {
+                    Debug.Log("mark:"+mark+", button:"+buttonObj.tag);
+                    if(buttonObj.tag == mark)
+                    {
+                        Debug.Log("Match");
+                        GameObject button = buttonObj;
+                        if(button.GetComponent<Button>().interactable){
+                            activeButton.Add(button);
+                            button.transform.SetAsLastSibling();
+                            // audioManager.PlaySE("Click");
+                        }
+                    }
+                }
             }
         }
 

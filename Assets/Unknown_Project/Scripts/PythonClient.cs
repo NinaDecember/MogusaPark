@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -13,9 +14,12 @@ namespace Unknown_Project
         StreamReader reader;
         StreamWriter writer;
         Thread receiveThread;
+        private ButtonController Bctrl;
 
         void Start()
         {
+            Bctrl = FindFirstObjectByType<ButtonController>();
+
             client = new TcpClient("127.0.0.1", 50007);
             NetworkStream stream = client.GetStream();
 
@@ -61,11 +65,21 @@ namespace Unknown_Project
 
         void HandleResult(string emojis)
         {
+            string mark = "";
+            List<string>selectedMark = new List<string>();
+
             foreach (char c in emojis)
             {
-                Debug.Log("Detected: " + c);
-                // switch(c) でゲーム処理
+                if(c == ',')
+                {
+                    selectedMark.Add(mark);
+                    mark = "";
+                    continue;
+                }
+                mark += c;
             }
+            selectedMark.Add(mark);
+            Bctrl.AudioResponse(selectedMark);
         }
 
         public void SendStart()
