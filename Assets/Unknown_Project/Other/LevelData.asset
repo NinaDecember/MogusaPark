@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2756497442318704ca32a627412face6, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  CourseDistance: 10
+  CourseDistance: 5
   samplePerRow: 1
   sunSpeed: 0.045
   hitRate: 0.75

@@ -198,6 +198,7 @@ namespace Unknown_Project
                 AudioResponse(marksCopy);
             }
 
+            
 
             List<int> delActiveObj = new List<int>();
             int cnt = 0;
@@ -214,10 +215,15 @@ namespace Unknown_Project
 
             foreach(var index in delActiveObj)
             {
+
+
                 bool isSetFinished = false;
                 GameObject targetObj = null;
                 int targetIndex = 0;
-                isSetFinished = managerB.TrySet(activeButton[index], out targetObj, out targetIndex);
+                if(managerB.GetGameState() != GameSceneState.EndGame)
+                {
+                    isSetFinished = managerB.TrySet(activeButton[index], out targetObj, out targetIndex);
+                }
 
                 if (isSetFinished)
                 {
@@ -234,9 +240,14 @@ namespace Unknown_Project
                         animeCtrl.AddPopEffectAnimation(1.0,activeButton[index],levelData.snapAnimeElapsedTime);
                         audioManager.PlaySE("Selected");
                     }
+                    else
+                    {
+                        pythonClient.ClearConn(true);
+                    }
                 }
                 else
                 {
+                    pythonClient.ClearConn(false);
                     Vector2 returnPos = activeButton[index].GetComponent<ButtonPressDetector>().GetReturnInitPos();
                     activeButton[index].GetComponent<RectTransform>().anchoredPosition = returnPos;
                     // animeCtrl.AddLinearMoveAnimation(returnPos, activeButton[index],levelData.lineAnimeElapsedTime);

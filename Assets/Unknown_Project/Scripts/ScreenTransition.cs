@@ -28,12 +28,12 @@ namespace Unknown_Project
 
         public void FinishFadeIn()
         {
-            Debug.Log("Finish");
+            // Debug.Log("Finish");
             gameController.FinishFade();
         }
         public void FinishFadeOut()
         {
-            Debug.Log("Finish");
+            // Debug.Log("Finish");
             gameController.FinishFade();
         }
 

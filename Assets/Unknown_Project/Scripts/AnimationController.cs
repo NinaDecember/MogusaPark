@@ -76,7 +76,7 @@ namespace Unknown_Project
                 }
                 if (IsChangeColor(playingAnimations[delAnimeIndex]))
                 {
-                    ChangeAlpha(playingAnimations[delAnimeIndex]);
+                    // ChangeAlpha(playingAnimations[delAnimeIndex]);
                 }
                 playingAnimations.RemoveAt(delAnimeIndex);
             }

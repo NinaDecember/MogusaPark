@@ -90,7 +90,6 @@ namespace Unknown_Project
                 {
                     loadStart = true;
                     manager.LoadSampleButton();
-                    pythonClient.SendStart();
                 }
                 foreach(bool flg in manager.loadClear)
                 {
@@ -152,6 +151,8 @@ namespace Unknown_Project
                 }
 
 
+
+                pythonClient.PCUpdate(deltaTime);
                 ctrlB.BCUpdate();
                 animeCtrl.AnimetionUpdate(deltaTime);
 
@@ -163,6 +164,8 @@ namespace Unknown_Project
             }
             else if(manager.GetGameState() == GameSceneState.EndGame)
             {
+                pythonClient.EndGame();
+
                 Time.timeScale = 1;
                 if(ResultData.endTime == 0)ResultData.endTime = time;
                 

@@ -134,7 +134,7 @@ namespace Unknown_Project
 
         public void UpdateSelectButtons(int delIndex, GameObject genObj)
         {
-            Debug.Log("delIndex:"+delIndex);
+            // Debug.Log("delIndex:"+delIndex);
     
             selectableButtons[delIndex] = spawner.SpawnSelectButton(genObj);
             selectableButtons[delIndex].GetComponent<Button>().interactable = true;
@@ -151,21 +151,21 @@ namespace Unknown_Project
         public bool TrySet(GameObject selectObj, out GameObject targetObj, out int targetIndex)
         {
             bool isPlaceable = IsPlaceableRange(selectObj, out targetObj, out targetIndex);
-            Debug.Log("Range:"+isPlaceable);
+            // Debug.Log("Range:"+isPlaceable);
             if (!isPlaceable)
             {
                 return false;
             }
 
             isPlaceable = IsPlaceableType(selectObj,targetObj);
-            Debug.Log("Type:"+isPlaceable);
+            // Debug.Log("Type:"+isPlaceable);
             if (!isPlaceable)
             {
                 return false;
             }
 
             isPlaceable = IsNotDuplicated(targetIndex);
-            Debug.Log("Duplicated:"+isPlaceable);
+            // Debug.Log("Duplicated:"+isPlaceable);
             if (!isPlaceable)
             {
                 return false;
@@ -392,7 +392,10 @@ namespace Unknown_Project
             return selectableButtons;
         }
 
-
+        public GameSceneState GetGameState()
+        {
+            return manager.GetGameState();
+        }
 
     }
 }
