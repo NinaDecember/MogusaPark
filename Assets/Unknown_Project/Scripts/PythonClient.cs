@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 namespace Unknown_Project
@@ -15,10 +16,15 @@ namespace Unknown_Project
         StreamWriter writer;
         Thread receiveThread;
         private ButtonController Bctrl;
+        public bool response = false;
+        public List<string>selectedMark;
+        public readonly object markLock = new object();
 
         void Start()
         {
             Bctrl = FindFirstObjectByType<ButtonController>();
+
+            response = false;
 
             client = new TcpClient("127.0.0.1", 50007);
             NetworkStream stream = client.GetStream();
@@ -65,23 +71,28 @@ namespace Unknown_Project
 
         void HandleResult(string emojis)
         {
+            var localList = new List<string>();
             string mark = "";
-            List<string>selectedMark = new List<string>();
 
             foreach (char c in emojis)
             {
-                if(c == ',')
+                if (c == ',')
                 {
-                    selectedMark.Add(mark);
+                    localList.Add(mark);
                     mark = "";
                     continue;
                 }
                 mark += c;
             }
-            selectedMark.Add(mark);
-            Bctrl.AudioResponse(selectedMark);
-        }
+            localList.Add(mark);
 
+            lock (markLock)
+            {
+                selectedMark = localList;
+                response = true;
+            }
+
+        }
         public void SendStart()
         {
             writer.WriteLine("START");

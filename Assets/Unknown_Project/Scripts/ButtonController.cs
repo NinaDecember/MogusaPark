@@ -17,6 +17,7 @@ namespace Unknown_Project
         private ButtonManager managerB;
         private AnimationController animeCtrl;
         private AudioManager audioManager;
+        private PythonClient pythonClient;
 
 
         [SerializeField] private LevelData levelData;
@@ -50,6 +51,7 @@ namespace Unknown_Project
             managerB = FindFirstObjectByType<ButtonManager>();
             animeCtrl = FindFirstObjectByType<AnimationController>();
             audioManager = FindFirstObjectByType<AudioManager>();
+            pythonClient = FindFirstObjectByType<PythonClient>();
 
 
             rt = centorSampleBack.GetComponent<RectTransform>();
@@ -183,6 +185,20 @@ namespace Unknown_Project
 
         public void BCUpdate()//ButtonController:BC
         {
+            if (pythonClient.response)
+            {
+                List<string> marksCopy;
+
+                lock (pythonClient.markLock)
+                {
+                    pythonClient.response = false;
+                    marksCopy = new List<string>(pythonClient.selectedMark);
+                }
+
+                AudioResponse(marksCopy);
+            }
+
+
             List<int> delActiveObj = new List<int>();
             int cnt = 0;
             foreach(var obj in activeButton)
@@ -193,6 +209,8 @@ namespace Unknown_Project
                 delActiveObj.Add(cnt);
                 cnt++;
             }
+
+            delActiveObj.Sort((a, b) => b.CompareTo(a));
 
             foreach(var index in delActiveObj)
             {
@@ -315,16 +333,23 @@ namespace Unknown_Project
 
         public void AudioResponse(List<string> marks)
         {
-            Debug.Log("marks:"+marks[0]+", "+marks[1]+", "+marks[2]);
             List<GameObject>buttons = managerB.GetSelectableButtons();
             Debug.Log("marks count:"+marks.Count);
             Debug.Log("buttons count:"+buttons.Count);
+            Debug.Log("marks:"+marks[0]+", "+marks[1]+", "+marks[2]);
 
             foreach(var mark in marks)
             {
+                Debug.Log("mark:"+mark);
                 foreach(var buttonObj in buttons)
                 {
-                    Debug.Log("mark:"+mark+", button:"+buttonObj.tag);
+                    if (buttonObj == null)
+                    {
+                        Debug.LogError("buttonObj is null");
+                        continue;
+                    }
+
+                    Debug.Log("button:"+buttonObj.tag);
                     if(buttonObj.tag == mark)
                     {
                         Debug.Log("Match");
@@ -337,6 +362,7 @@ namespace Unknown_Project
                     }
                 }
             }
+            Debug.Log("EndRoop");
         }
 
     }
