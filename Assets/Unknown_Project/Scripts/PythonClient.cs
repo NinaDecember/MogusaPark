@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using UnityEditor.Compilation;
 using UnityEngine;
 using TMPro;
 using System.Collections;
