@@ -18,6 +18,7 @@ namespace Unknown_Project
         StreamWriter writer;
         Thread receiveThread;
         private ButtonController Bctrl;
+        private GameManager manager;
         public bool response = false;
         public List<string>selectedMark;
         public readonly object markLock = new object();
@@ -32,17 +33,9 @@ namespace Unknown_Project
         void Start()
         {
             Bctrl = FindFirstObjectByType<ButtonController>();
+            manager = FindFirstObjectByType<GameManager>();
 
             response = false;
-
-            client = new TcpClient("127.0.0.1", 50007);
-            NetworkStream stream = client.GetStream();
-
-            reader = new StreamReader(stream, Encoding.UTF8);
-            writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
-
-            receiveThread = new Thread(ReceiveLoop);
-            receiveThread.Start();
 
             connectionMode = 0;//-1:無動作 0:待機 1:StartPythonProc 2:RecordStart 3:RecordingVoice 4:voiceAnalyzationStart 5:voiceAnalyzation
         
@@ -50,6 +43,38 @@ namespace Unknown_Project
             t = 0;
             frame = 0;
             resultTimeExeFlg = false;
+
+
+            try
+            {
+                client = new TcpClient("127.0.0.1", 50007);
+                NetworkStream stream = client.GetStream();
+
+                reader = new StreamReader(stream, Encoding.UTF8);
+                writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+
+                receiveThread = new Thread(ReceiveLoop);
+                receiveThread.Start();
+
+                Debug.Log("サーバー接続完了");    
+                        
+            }catch(System.Net.Sockets.SocketException e)
+            {
+                Debug.LogError($"接続に失敗しました (拒否): {e.Message}");
+                
+                HandleConnectionFailure();
+            }
+            catch (System.Exception e)
+            {
+                // その他のエラー
+                Debug.LogError($"予期しないエラーが発生しました: {e.Message}");
+            }
+
+        }
+
+        private void HandleConnectionFailure()
+        {
+            voiceInfo.text = "通信エラーが発生しました";
         }
 
         void ReceiveLoop()
@@ -92,6 +117,11 @@ namespace Unknown_Project
 
         void HandleResult(string emojis)
         {
+            if(emojis == "")
+            {
+                ClearConn(false);
+                return;
+            }
             var localList = new List<string>();
             string mark = "";
 
