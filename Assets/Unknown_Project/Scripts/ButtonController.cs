@@ -204,7 +204,7 @@ namespace Unknown_Project
             foreach(var obj in activeButton)
             {                                            
                 RectTransform rt = obj.GetComponent<RectTransform>();
-                rt.anchoredPosition = Vector2.zero;
+                rt.anchoredPosition = new Vector2(10,10);
 
                 delActiveObj.Add(cnt);
                 cnt++;
@@ -334,13 +334,10 @@ namespace Unknown_Project
         public void AudioResponse(List<string> marks)
         {
             List<GameObject>buttons = managerB.GetSelectableButtons();
-            Debug.Log("marks count:"+marks.Count);
-            Debug.Log("buttons count:"+buttons.Count);
-            Debug.Log("marks:"+marks[0]+", "+marks[1]+", "+marks[2]);
+            // Debug.Log("marks:"+marks[0]+", "+marks[1]+", "+marks[2]);
 
             foreach(var mark in marks)
             {
-                Debug.Log("mark:"+mark);
                 foreach(var buttonObj in buttons)
                 {
                     if (buttonObj == null)
@@ -349,10 +346,8 @@ namespace Unknown_Project
                         continue;
                     }
 
-                    Debug.Log("button:"+buttonObj.tag);
                     if(buttonObj.tag == mark)
                     {
-                        Debug.Log("Match");
                         GameObject button = buttonObj;
                         if(button.GetComponent<Button>().interactable){
                             activeButton.Add(button);
@@ -362,7 +357,6 @@ namespace Unknown_Project
                     }
                 }
             }
-            Debug.Log("EndRoop");
         }
 
     }
