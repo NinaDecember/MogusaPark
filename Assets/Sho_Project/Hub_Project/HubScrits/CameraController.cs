@@ -18,9 +18,9 @@ namespace HabScene
         {
             if (IsLocked) return;
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
             HandleMouseRotation();
-#elif UNITY_IOS || UNITY_ANDROID
+#elif UNITY_IOS || UNITY_ANDROID || UNITY_WEBGL
             HandleTouchRotation();
 #endif
         }
