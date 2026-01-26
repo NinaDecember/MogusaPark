@@ -11,26 +11,31 @@ public class GameStarterExiter : MonoBehaviour
     public Button StartButton;
     public Button ExitButton;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-    
+    public bool SystemSwitch = true; // true:アプリ終了、false:HubSceneへ移動
     void Start()
     {
-        // SceneManager.UnloadSceneAsync("BestShot_Game");
-        if (SceneManager.GetActiveScene().name == this.gameObject.scene.name)
-        {
-            StartButton.gameObject.SetActive(true);
-            ExitButton.gameObject.SetActive(true);
-            StartButton.enabled = true;
-            ExitButton.enabled = true;
-        }
-            EventSystem.current.SetSelectedGameObject(null);
-            if(EventSystem.current.gameObject.scene.name != "DontDestroyOnLoad")
-                {DontDestroyOnLoad(EventSystem.current.gameObject);}
-            else{
-                Destroy(EventSystem.current.gameObject);
-                DontDestroyOnLoad(EventSystem.current.gameObject);
-            }
+        SetupEventSystem();
+    }
 
+    
+    private void SetupEventSystem()
+    {
+        EventSystem es = FindObjectOfType<EventSystem>();
+        if (es == null)
+        {
+            GameObject esObj = new GameObject("EventSystem");
+            es = esObj.AddComponent<EventSystem>();
+            esObj.AddComponent<StandaloneInputModule>();
+            DontDestroyOnLoad(esObj);
         }
+        else
+        {
+            DontDestroyOnLoad(es.gameObject);
+        }
+
+        // 最初の選択をリセット
+        es.SetSelectedGameObject(null);
+    }
 
         public void GameStart()
     {
@@ -47,15 +52,19 @@ public class GameStarterExiter : MonoBehaviour
         {
             Debug.Log("GameExit");
         {
-            /*#if UNITY_EDITOR
+            if(SystemSwitch){
+            #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
             #elif UNITY_WEBPLAYER
                 Application.OpenURL("https://unityroom.com/");
             #else
                 Application.Quit();
-            #endif*/
+            #endif
+            }
+            else{
             Destroy(EventSystem.current.gameObject);
             SceneManager.LoadScene("HubScene", LoadSceneMode.Single);
+            }
         }
         }
     }
