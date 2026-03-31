@@ -51,6 +51,7 @@ namespace Unknown_Project
         private IEnumerator OnClickTitleButtonFade()
         {
             yield return StartCoroutine(WaitFadeFinish());
+            Time.timeScale = 1f;
             SceneManager.LoadScene(levelData.hubSceneName);
         }
 

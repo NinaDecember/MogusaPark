@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c336ceed044743c4b9ab9bfb38e1fe91, type: 3}
+  m_Name: RuntimeDisplaySetting
+  m_EditorClassIdentifier: Assembly-CSharp::HabScene.RuntimeDisplaySetting
+  screenSettings:
+  - distinationSceneName: Sho_ProjectScene
+    screenAngle: 0
+    fps: 30
+  - distinationSceneName: hubScene
+    screenAngle: 2
+    fps: 30
+  - distinationSceneName: PuzzleGameScene
+    screenAngle: 0
+    fps: 30
+  - distinationSceneName: BestShot_Title
+    screenAngle: 1
+    fps: 30
